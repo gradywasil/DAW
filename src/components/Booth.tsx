@@ -40,7 +40,9 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory } from "./icons";
+import HistoryDrawer from "./HistoryDrawer";
+import { canUndo, canRedo, isHistoryDrawerOpen, setIsHistoryDrawerOpen, toggleHistoryDrawer, undo, redo } from "../state/historyState";
 import MidiPopover from "./MidiPopover";
 import {
   midiStatus,
@@ -261,6 +263,21 @@ registerHelp([
     id: "booth.viz",
     title: "VIZ",
     text: "Turns the visualizer on: the song plays as light on a full-screen stage while the music keeps going. V toggles it from anywhere; Escape returns to the booth with focus back here — playback never stops either way.",
+  },
+  {
+    id: "booth.undo",
+    title: "UNDO",
+    text: "Reverts the last document change (Ctrl+Z). Reverts notes, tempo, scale, presets, and mixer settings step-by-step.",
+  },
+  {
+    id: "booth.redo",
+    title: "REDO",
+    text: "Re-applies the previously undone change (Ctrl+Y or Ctrl+Shift+Z).",
+  },
+  {
+    id: "booth.history",
+    title: "HISTORY TIMELINE",
+    text: "Opens the time travel history panel with a visual timeline scrubber, step diffs, and direct jumping to any past or future document state.",
   },
   {
     id: "booth.tempo",
@@ -497,6 +514,50 @@ export function BoothOptions(props: BoothOptionsProps) {
         >
           <IconViz />
         </button>
+      </div>
+
+      {/* Undo / Redo / History Time Travel */}
+      <div class="booth-group" role="group" aria-label="History">
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-undo"
+          disabled={!canUndo()}
+          data-help="booth.undo"
+          aria-label="Undo edit (Ctrl+Z)"
+          title="Undo edit (Ctrl+Z)"
+          onClick={() => undo()}
+        >
+          <IconUndo size={13} />
+        </button>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-redo"
+          disabled={!canRedo()}
+          data-help="booth.redo"
+          aria-label="Redo edit (Ctrl+Y)"
+          title="Redo edit (Ctrl+Y)"
+          onClick={() => redo()}
+        >
+          <IconRedo size={13} />
+        </button>
+        <span class="history-pop-wrap">
+          <button
+            type="button"
+            class="booth-btn booth-btn-icon booth-btn-history"
+            classList={{ "is-active": isHistoryDrawerOpen() }}
+            data-help="booth.history"
+            aria-haspopup="dialog"
+            aria-expanded={isHistoryDrawerOpen()}
+            aria-label="History Timeline and Time Travel"
+            title="History Timeline and Time Travel"
+            onClick={toggleHistoryDrawer}
+          >
+            <IconHistory size={13} />
+          </button>
+          <Show when={isHistoryDrawerOpen()}>
+            <HistoryDrawer onClose={() => setIsHistoryDrawerOpen(false)} />
+          </Show>
+        </span>
       </div>
 
       <div
