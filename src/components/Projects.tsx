@@ -1,3 +1,4 @@
+import { IconFolder, IconFilePlus, IconWaveform, IconMidi, IconDisk, IconPencil, IconTrash } from "./icons";
 /**
  * Projects (HU-3, absorbing MF-3's FileIO): one booth-corner "PROJECTS" button
  * opening a popover with every saved project (name + relative time, from
@@ -588,7 +589,7 @@ export default function Projects(): JSX.Element {
         disabled={busy()}
         onClick={toggle}
       >
-        PROJECTS
+        <IconFolder size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />PROJECTS
       </button>
       {open() && (
         <div
@@ -653,7 +654,7 @@ export default function Projects(): JSX.Element {
                         disabled={busy()}
                         onClick={() => startRename(meta)}
                       >
-                        RENAME
+                        <IconPencil size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />RENAME
                       </button>
                       <button
                         type="button"
@@ -663,7 +664,7 @@ export default function Projects(): JSX.Element {
                         disabled={busy()}
                         onClick={() => startConfirm(meta.id)}
                       >
-                        DELETE
+                        <IconTrash size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />DELETE
                       </button>
                     </div>
                   )}
@@ -699,7 +700,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleNew()}
             >
-              NEW
+              <IconFilePlus size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />NEW
             </button>
             <button
               type="button"
@@ -708,7 +709,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportWav()}
             >
-              EXPORT WAV
+              <IconWaveform size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT WAV
             </button>
             <button
               type="button"
@@ -717,7 +718,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportMidi()}
             >
-              EXPORT SONG MIDI
+              <IconMidi size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT SONG MIDI
             </button>
             <button
               type="button"
@@ -725,7 +726,7 @@ export default function Projects(): JSX.Element {
               data-help="projects.save"
               onClick={handleSave}
             >
-              SAVE FILE
+              <IconDisk size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />SAVE FILE
             </button>
             <button
               type="button"
@@ -734,7 +735,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => fileInput?.click()}
             >
-              OPEN FILE
+              <IconFolder size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />OPEN FILE
             </button>
           </div>
           <p class="projects-note">

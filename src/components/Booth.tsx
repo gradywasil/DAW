@@ -40,6 +40,7 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
+import { IconMinus, IconPlus } from "./icons";
 
 const session = getSession();
 
@@ -486,7 +487,7 @@ export function BoothOptions(props: BoothOptionsProps) {
             aria-label="Decrease tempo one BPM"
             onClick={() => stepBpm(-1)}
           >
-            –
+            <IconMinus size={10} />
           </button>
           <input
             class="booth-led-input"
@@ -509,7 +510,7 @@ export function BoothOptions(props: BoothOptionsProps) {
             aria-label="Increase tempo one BPM"
             onClick={() => stepBpm(1)}
           >
-            +
+            <IconPlus size={10} />
           </button>
         </div>
       </div>

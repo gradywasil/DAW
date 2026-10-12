@@ -1,3 +1,4 @@
+import { IconPlus } from "./icons";
 import { createEffect, createSignal, For, onCleanup, Show } from "solid-js";
 import { addInstrumentLane, docStore } from "../state/store";
 import {
@@ -57,9 +58,7 @@ export default function InstrumentsPage() {
             <span class="instrument-slot-name">
               Track {trackNumber(props.slot)}
             </span>
-            <span class="instrument-add-symbol" aria-hidden="true">
-              +
-            </span>
+            <span class="instrument-add-symbol" aria-hidden="true" style={{ display: "inline-flex", "align-items": "center", "justify-content": "center" }}><IconPlus size={20} /></span>
             <span>Add instrument</span>
           </button>
         </section>

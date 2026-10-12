@@ -1,3 +1,4 @@
+import { IconClose, IconChevronLeft, IconFolder, IconStar, IconClock } from "./icons";
 import {
   createMemo,
   createSignal,
@@ -197,7 +198,7 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
             type="button"
             onClick={close}
           >
-            Close
+            <IconClose size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Close
           </button>
         </header>
         <div class="sound-browser-tools">
@@ -223,6 +224,7 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                 <button
                   type="button"
                   aria-pressed={view() === name}
+                  style={{ display: "inline-flex", "align-items": "center", gap: "4px" }}
                   onClick={() => {
                     setView(name);
                     setQuery("");
@@ -230,7 +232,10 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                     resetResults();
                   }}
                 >
-                  {name}
+                  {name === "Browse" && <IconFolder size={12} />}
+                  {name === "Favorites" && <IconStar size={12} filled={true} />}
+                  {name === "Recent" && <IconClock size={12} />}
+                  <span>{name}</span>
                 </button>
               )}
             </For>
@@ -283,7 +288,7 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                   class="sound-category-back"
                   onClick={() => chooseCategory("")}
                 >
-                  Categories
+                  <IconChevronLeft size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Categories
                 </button>
               </Show>
               <h3>
@@ -382,26 +387,10 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                         )}
                         onClick={() => toggleFavorite(sound.id)}
                       >
-                        <svg
-                          viewBox="0 0 24 24"
-                          width="20"
-                          height="20"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="m12 3 2.8 5.7 6.3.9-4.5 4.4 1 6.2-5.6-2.9-5.6 2.9 1-6.2L2.9 9.6l6.3-.9Z"
-                            fill={
-                              soundBrowserPreferences().favorites.includes(
-                                sound.id,
-                              )
-                                ? "currentColor"
-                                : "none"
-                            }
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
+                        <IconStar
+                          size={18}
+                          filled={soundBrowserPreferences().favorites.includes(sound.id)}
+                        />
                       </button>
                     </div>
                   )}

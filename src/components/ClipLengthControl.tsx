@@ -12,6 +12,7 @@ import { announceStage, currentPatternFor } from "../state/selection";
 import { barOfStep, resizeRowLabel } from "../state/patternRail";
 import "../styles/clip-length.css";
 import { registerHelp } from "../help/registry";
+import { IconMinus, IconPlus, IconDouble } from "./icons";
 
 registerHelp([
   {
@@ -95,7 +96,7 @@ export default function ClipLengthControl(props: { lane: LaneId }) {
               disabled={(pattern()?.bars ?? 1) <= 1}
               onClick={() => apply((pattern()?.bars ?? 1) - 1)}
             >
-              −
+              <IconMinus size={10} />
             </button>
             <input
               type="number"
@@ -130,7 +131,7 @@ export default function ClipLengthControl(props: { lane: LaneId }) {
               disabled={(pattern()?.bars ?? 1) >= 128}
               onClick={() => apply((pattern()?.bars ?? 1) + 1)}
             >
-              +
+              <IconPlus size={10} />
             </button>
           </div>
           <span
@@ -161,6 +162,7 @@ export default function ClipLengthControl(props: { lane: LaneId }) {
             );
         }}
       >
+        <IconDouble size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
         Double ×2
       </button>
     </div>

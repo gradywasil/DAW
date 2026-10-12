@@ -903,3 +903,28 @@
     gap: 4px;
   }
 }
+
+/* Custom bespoke art icons alignment & tightening */
+.app-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.app.membrane :is(.head-step-btn, .booth-step-btn, .register-shift-btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app.membrane :is(.rail-append, .rail-paste-end, .phone-add-instrument) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app.membrane :is(.fx-mod-btn, .mixer-eq-add) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -66,6 +66,7 @@ import TrackColorControl from "./TrackColorControl";
 import ClipLengthControl from "./ClipLengthControl";
 import SoundBrowser from "./SoundBrowser";
 import { rememberSound } from "../state/soundBrowser";
+import { IconMinus, IconPlus, IconChevronDown, IconTrash } from "./icons";
 
 const session = getSession();
 
@@ -325,7 +326,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
           aria-label={`Previous ${props.lane === "drums" ? "kit" : "preset"} for ${laneNames(props.lane)}`}
           onClick={() => stepSound(-1)}
         >
-          –
+          <IconMinus size={10} />
         </button>
         <button
           ref={(el) => {
@@ -340,16 +341,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
           onClick={() => setSoundBrowserOpen(true)}
         >
           <span>{options()[soundIndex()]?.name}</span>
-          <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
-            <path
-              d="m3 4.5 3 3 3-3"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <IconChevronDown size={11} />
         </button>
         <button
           type="button"
@@ -357,7 +349,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
           aria-label={`Next ${props.lane === "drums" ? "kit" : "preset"} for ${laneNames(props.lane)}`}
           onClick={() => stepSound(1)}
         >
-          +
+          <IconPlus size={10} />
         </button>
       </div>
     </div>
@@ -520,7 +512,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
                         aria-label={`Transpose octave down for ${laneNames(props.lane)}`}
                         onClick={() => stepOctave(-1)}
                       >
-                        –
+                        <IconMinus size={10} />
                       </button>
                       <span class="head-ctl-value head-oct-value">
                         <RollValue value={octave()}>
@@ -533,7 +525,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
                         aria-label={`Transpose octave up for ${laneNames(props.lane)}`}
                         onClick={() => stepOctave(1)}
                       >
-                        +
+                        <IconPlus size={10} />
                       </button>
                     </div>
                   </div>
@@ -610,7 +602,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
               aria-label={`Shorter gate for ${laneNames(props.lane)}`}
               onClick={() => stepGate(-1)}
             >
-              –
+              <IconMinus size={10} />
             </button>
             <span class="head-ctl-value">
               <RollValue value={gate()}>{gate()}</RollValue>
@@ -624,7 +616,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
               aria-label={`Longer gate for ${laneNames(props.lane)}`}
               onClick={() => stepGate(1)}
             >
-              +
+              <IconPlus size={10} />
             </button>
           </div>
         </div>
@@ -648,6 +640,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
               );
             }}
           >
+            <IconTrash size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
             Remove track
           </button>
         </Show>

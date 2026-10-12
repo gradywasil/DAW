@@ -1,3 +1,4 @@
+import { IconMidi } from "./icons";
 import { createSignal } from "solid-js";
 import type { LaneId } from "../document/schema";
 import { docStore } from "../state/store";
@@ -49,7 +50,7 @@ export default function PatternMidiExport(props: {
       aria-busy={busy() || undefined}
       onClick={() => void download()}
     >
-      {busy() ? "Exporting MIDI…" : "Export pattern MIDI"}
+      <IconMidi size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />{busy() ? "Exporting MIDI…" : "Export pattern MIDI"}
     </button>
   );
 }

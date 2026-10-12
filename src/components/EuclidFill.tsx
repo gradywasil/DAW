@@ -35,6 +35,7 @@ import {
   type FillSession,
 } from "../state/euclidFill";
 import { notePreview } from "../state/notePreview";
+import { IconMinus, IconPlus } from "./icons";
 
 const session = getSession();
 
@@ -144,7 +145,7 @@ export default function EuclidFill(props: EuclidFillProps): JSX.Element {
           aria-label={`Fewer pulses for ${props.label} fill`}
           onClick={() => step("pulses", -1)}
         >
-          –
+          <IconMinus size={9} />
         </button>
         <span class="row-fill-value" aria-live="polite">
           {display()}
@@ -155,7 +156,7 @@ export default function EuclidFill(props: EuclidFillProps): JSX.Element {
           aria-label={`More pulses for ${props.label} fill`}
           onClick={() => step("pulses", 1)}
         >
-          +
+          <IconPlus size={9} />
         </button>
       </div>
       <div class="head-stepper row-fill-step">
@@ -165,7 +166,7 @@ export default function EuclidFill(props: EuclidFillProps): JSX.Element {
           aria-label={`Rotate ${props.label} fill back`}
           onClick={() => step("rotation", -1)}
         >
-          –
+          <IconMinus size={9} />
         </button>
         <span class="row-fill-value" aria-live="polite">
           {rotation()}
@@ -176,7 +177,7 @@ export default function EuclidFill(props: EuclidFillProps): JSX.Element {
           aria-label={`Rotate ${props.label} fill forward`}
           onClick={() => step("rotation", 1)}
         >
-          +
+          <IconPlus size={9} />
         </button>
       </div>
       <button

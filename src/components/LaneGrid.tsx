@@ -1,3 +1,4 @@
+import { IconMinus, IconPlus, IconChevronLeft, IconChevronRight, IconPencil, IconHand } from "./icons";
 import { vizMode } from "../state/vizMode";
 import { phonePage } from "../state/phonePage";
 import {
@@ -1869,7 +1870,7 @@ function GridSurface(props: {
             disabled={drumStart() === 0}
             onClick={() => shiftDrums(-1)}
           >
-            −
+            <IconMinus size={10} />
           </button>
           <output aria-live="polite">
             {drumStart() + 1}–
@@ -1882,7 +1883,7 @@ function GridSurface(props: {
             disabled={drumStart() + drumRows() >= DRUM_PIECES.length}
             onClick={() => shiftDrums(1)}
           >
-            +
+            <IconPlus size={10} />
           </button>
         </div>
       </Show>
@@ -1896,14 +1897,7 @@ function GridSurface(props: {
             disabled={horizontal().left <= 1}
             onClick={() => navigate(-1)}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m10 3-5 5 5 5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
-            </svg>
+            <IconChevronLeft size={14} />
           </button>
           <output class="grid-position" aria-live="polite">
             Steps {horizontal().first}–{horizontal().last} /{" "}
@@ -1917,14 +1911,7 @@ function GridSurface(props: {
             disabled={horizontal().left >= horizontal().max - 1}
             onClick={() => navigate(1)}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m6 3 5 5-5 5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
-            </svg>
+            <IconChevronRight size={14} />
           </button>
         </div>
         <div class="grid-touch-tools">
@@ -1939,6 +1926,7 @@ function GridSurface(props: {
                 navigationRenderer?.setPanMode(false);
               }}
             >
+              <IconPencil size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
               Draw
             </button>
             <button
@@ -1950,6 +1938,7 @@ function GridSurface(props: {
                 navigationRenderer?.setPanMode(true);
               }}
             >
+              <IconHand size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
               Scroll
             </button>
           </div>
@@ -2144,7 +2133,7 @@ function RegisterShiftControls(props: {
 
               onClick={() => shift(-12)}
             >
-              –
+              <IconMinus size={10} />
             </button>
             <button
               type="button"
@@ -2155,7 +2144,7 @@ function RegisterShiftControls(props: {
 
               onClick={() => shift(12)}
             >
-              +
+              <IconPlus size={10} />
             </button>
           </div>
         </div>
@@ -2178,7 +2167,7 @@ function RegisterShiftControls(props: {
 
               onClick={() => shift(-1)}
             >
-              –
+              <IconMinus size={10} />
             </button>
             <button
               type="button"
@@ -2189,7 +2178,7 @@ function RegisterShiftControls(props: {
 
               onClick={() => shift(1)}
             >
-              +
+              <IconPlus size={10} />
             </button>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { IconPlus, IconClose } from "./icons";
 import { createMemo, createSignal, For, type JSX } from "solid-js";
 import {
   equalizerBands,
@@ -157,21 +158,14 @@ export default function MixerEq(props: {
             disabled={bands().length >= MAX_EQ_BANDS}
             onClick={add}
           >
-            + Band
+            <IconPlus size={10} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />+ Band
           </button>
           <button
             aria-label="Remove selected EQ band"
             disabled={!active()}
             onClick={remove}
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m4 4 8 8M12 4l-8 8"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
-            </svg>
+            <IconClose size={12} />
           </button>
         </div>
         <MixerGraph
