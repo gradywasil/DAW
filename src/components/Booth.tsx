@@ -40,13 +40,15 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss, IconMic } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss, IconMic, IconShare } from "./icons";
 import SampleSlicerModal from "./SampleSlicerModal";
 import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
 import ChordGeneratorModal from "./ChordGeneratorModal";
 import SidechainModal from "./SidechainModal";
 import KaossModal from "./KaossModal";
 import AudioRecorderModal from "./AudioRecorderModal";
+import ShareModal from "./ShareModal";
+import { isShareModalOpen, setIsShareModalOpen } from "../persist/shareUrl";
 import { isRecorderOpen, setIsRecorderOpen } from "../audio/audioRecorder";
 import { isKaossOpen, setIsKaossOpen } from "../audio/kaossPad";
 import { isSidechainOpen, setIsSidechainOpen } from "../audio/sidechain";
@@ -290,6 +292,11 @@ registerHelp([
     id: "booth.jam",
     title: "JAM ENSEMBLE",
     text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
+    id: "booth.share",
+    title: "SHARE SONG LINK",
+    text: "Encodes your entire song into an ultra-compact, click-to-play URL link. Share your music on Discord, Reddit, or messages — recipients can listen or continue producing immediately without creating an account.",
   },
   {
     id: "booth.recorder",
@@ -644,6 +651,22 @@ export function BoothOptions(props: BoothOptionsProps) {
         </button>
         <Show when={isRecorderOpen()}>
           <AudioRecorderModal onClose={() => setIsRecorderOpen(false)} />
+        </Show>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-share"
+          classList={{ "is-active": isShareModalOpen() }}
+          data-help="booth.share"
+          aria-haspopup="dialog"
+          aria-expanded={isShareModalOpen()}
+          aria-label="Share Song Link"
+          title="Share Song Link"
+          onClick={() => setIsShareModalOpen(true)}
+        >
+          <IconShare size={13} />
+        </button>
+        <Show when={isShareModalOpen()}>
+          <ShareModal onClose={() => setIsShareModalOpen(false)} />
         </Show>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button

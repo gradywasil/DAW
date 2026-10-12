@@ -1,0 +1,187 @@
+/**
+ * Project Share Modal Styles.
+ * Compact project link generation, compression metrics,
+ * copy-to-clipboard feedback, and markdown embed exporter.
+ */
+
+.share-dialog {
+  color: var(--color-ink);
+  background-color: var(--metal-panel);
+  background-image: var(--metal-brush);
+  border: 1px solid var(--theme-line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(600px, calc(100vw - 32px));
+  max-width: none;
+  max-height: none;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  box-shadow: var(--elev-3);
+}
+
+.share-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.share-dialog::backdrop {
+  background: rgb(0 0 0 / 70%);
+  backdrop-filter: blur(3px);
+}
+
+.share-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--theme-line);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.share-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.share-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.share-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+/* Project Summary Card */
+.share-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: 1px solid var(--theme-line);
+  border-radius: 8px;
+}
+
+.share-song-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #00f0ff;
+}
+
+.share-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: 11px;
+  color: #7b8fa3;
+}
+
+.share-meta-item strong {
+  color: var(--color-ink);
+}
+
+/* Compression Stats Bar */
+.share-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #090c10;
+  border: 1px solid #1a2230;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.share-stats-ratio {
+  color: #2ecc71;
+  font-weight: 800;
+}
+
+/* Link Box & Copy Actions */
+.share-link-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.share-link-input-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.share-url-input {
+  flex: 1;
+  background: #090c10;
+  border: 1px solid #2a3444;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #00f0ff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  outline: none;
+}
+
+.share-url-input:focus {
+  border-color: #00f0ff;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+.share-copy-btn {
+  padding: 8px 16px;
+  background: #00f0ff;
+  border: 1px solid #00f0ff;
+  border-radius: 6px;
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.share-copy-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.share-copy-btn.is-copied {
+  background: #2ecc71;
+  border-color: #2ecc71;
+  color: #fff;
+}
+
+.share-alt-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.share-alt-btn {
+  flex: 1;
+  padding: 6px 12px;
+  background: var(--metal-recess);
+  border: 1px solid var(--theme-line);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-ink);
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+}
+
+.share-alt-btn:hover {
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+}

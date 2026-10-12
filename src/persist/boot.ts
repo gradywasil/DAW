@@ -30,6 +30,7 @@ import {
   mostRecentProject,
   type ProjectMeta,
 } from "./projectStore";
+import { checkAndLoadShareUrlOnBoot } from "./shareUrl";
 import { createNewProject } from "./newProject";
 import {
   exportQuarantinedBytes,
@@ -305,6 +306,7 @@ export async function initPersistence(
     armFirstRunNudge();
   }
   startController(projectId, previewDocument);
+  void checkAndLoadShareUrlOnBoot();
   // Narrow for the result type (startController always assigns synchronously).
   const started = controller as AutosaveController;
   return {

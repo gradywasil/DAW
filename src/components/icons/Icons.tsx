@@ -1323,3 +1323,28 @@ export function IconPlay(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Project share link / cloud node icon. */
+export function IconShare(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <circle cx="12" cy="4" r="2" />
+      <circle cx="4" cy="8" r="2" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M5.8 7l4.4-2M5.8 9l4.4 2" />
+    </svg>
+  );
+}
