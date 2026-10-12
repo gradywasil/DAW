@@ -1204,3 +1204,27 @@ export function IconUsers(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Audio slice / transient scissor icon for sample chopper and beat slicing. */
+export function IconScissors(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <circle cx="4.5" cy="11.5" r="2" />
+      <circle cx="4.5" cy="4.5" r="2" />
+      <path d="M6 10l6.5-6.5M6 6l6.5 6.5" />
+    </svg>
+  );
+}

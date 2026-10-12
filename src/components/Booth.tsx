@@ -40,7 +40,9 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors } from "./icons";
+import SampleSlicerModal from "./SampleSlicerModal";
+import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
 import JamDrawer from "./JamDrawer";
 import { isJamDrawerOpen, setIsJamDrawerOpen, toggleJamDrawer, jamPeers, jamPulse } from "../collab/jamSession";
 import HistoryDrawer from "./HistoryDrawer";
@@ -280,6 +282,11 @@ registerHelp([
     id: "booth.jam",
     title: "JAM ENSEMBLE",
     text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
+    id: "booth.slicer",
+    title: "SAMPLE CHOPPER",
+    text: "Opens the sample slicer and transient chopper. Slice breaks, loops, or audio files into drum chops, fine-tune waveform slice boundaries, audition pads with keys 1-8, and commit chops directly to the drum pattern.",
   },
   {
     id: "booth.history",
@@ -530,6 +537,22 @@ export function BoothOptions(props: BoothOptionsProps) {
             <JamDrawer onClose={() => setIsJamDrawerOpen(false)} />
           </Show>
         </span>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-slicer"
+          classList={{ "is-active": isSlicerOpen() }}
+          data-help="booth.slicer"
+          aria-haspopup="dialog"
+          aria-expanded={isSlicerOpen()}
+          aria-label="Sample Slicer & Beat Chopper"
+          title="Sample Slicer & Beat Chopper"
+          onClick={() => setIsSlicerOpen(true)}
+        >
+          <IconScissors size={13} />
+        </button>
+        <Show when={isSlicerOpen()}>
+          <SampleSlicerModal onClose={() => setIsSlicerOpen(false)} />
+        </Show>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button
           type="button"

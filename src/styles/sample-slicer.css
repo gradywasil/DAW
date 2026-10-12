@@ -1,0 +1,264 @@
+/**
+ * Sample Slicer & Transient Drum Chopper Styles.
+ * Follows Bitbounce tactile arcade hardware design: brushed panel metal,
+ * machined buttons, neon oscilloscope highlights, and responsive beat pads.
+ */
+
+.sample-slicer-dialog {
+  color: var(--color-ink);
+  background-color: var(--metal-panel);
+  background-image: var(--metal-brush);
+  border: 1px solid var(--theme-line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(920px, calc(100vw - 32px));
+  height: min(680px, calc(100dvh - 32px));
+  max-width: none;
+  max-height: none;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  box-shadow: var(--elev-3);
+}
+
+.sample-slicer-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.sample-slicer-dialog::backdrop {
+  background: rgb(0 0 0 / 70%);
+  backdrop-filter: blur(3px);
+}
+
+.sample-slicer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--theme-line);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.sample-slicer-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sample-slicer-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sample-slicer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+/* Waveform Canvas Area */
+.waveform-container {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  background: var(--metal-recess);
+  border: 1px solid var(--theme-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.waveform-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+.waveform-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #ff007f;
+  box-shadow: 0 0 8px #ff007f;
+  pointer-events: none;
+  transition: left 0.05s linear;
+}
+
+/* Controls Bar */
+.slicer-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: 6px;
+}
+
+.slicer-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.slicer-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+  color: var(--color-ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+}
+
+.slicer-btn:hover {
+  background: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-color: var(--color-ink);
+}
+
+.slicer-btn.is-active {
+  background: color-mix(in srgb, #00f5d4 25%, transparent);
+  border-color: #00f5d4;
+  color: #00f5d4;
+}
+
+.slicer-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 11px;
+}
+
+.slicer-range {
+  width: 100px;
+  accent-color: #00f5d4;
+}
+
+/* MPC / Drum Pad Grid */
+.slicer-pads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.slicer-pad {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-2);
+  min-height: 80px;
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.08s ease;
+  user-select: none;
+}
+
+.slicer-pad:hover {
+  background: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-color: var(--color-ink);
+}
+
+.slicer-pad.is-selected {
+  border-color: #00f5d4;
+  box-shadow: inset 0 0 8px color-mix(in srgb, #00f5d4 30%, transparent);
+}
+
+.slicer-pad.is-playing {
+  background: color-mix(in srgb, #00f5d4 40%, transparent);
+  border-color: #00f5d4;
+  box-shadow: 0 0 12px #00f5d4;
+  transform: scale(0.98);
+}
+
+.slicer-pad-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slicer-pad-index {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.slicer-pad-key {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+  color: color-mix(in srgb, var(--color-ink) 80%, transparent);
+}
+
+.slicer-pad-timing {
+  font-size: 10px;
+  color: color-mix(in srgb, var(--color-ink) 65%, transparent);
+  margin: 4px 0;
+}
+
+.slicer-pad-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.slicer-pad-mini-btn {
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.slicer-pad-mini-btn.is-active {
+  background: color-mix(in srgb, #f39c12 30%, transparent);
+  border-color: #f39c12;
+  color: #f39c12;
+}
+
+/* Slicer Footer Actions */
+.sample-slicer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--theme-line);
+  background: color-mix(in srgb, var(--color-ink) 3%, transparent);
+}
+
+.slicer-commit-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: color-mix(in srgb, #00f5d4 25%, transparent);
+  border: 1px solid #00f5d4;
+  color: #00f5d4;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+}
+
+.slicer-commit-btn:hover {
+  background: #00f5d4;
+  color: #000;
+}
