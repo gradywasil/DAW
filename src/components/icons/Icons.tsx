@@ -1157,3 +1157,50 @@ export function IconCurve(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Real-time collaborative Jam / broadcast signal icon. */
+export function IconJam(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <circle cx="8" cy="12" r="1.5" fill="currentColor" />
+      <path d="M4.5 8.5a5 5 0 0 1 7 0M2.2 6.2a8.2 8.2 0 0 1 11.6 0M8 10.5v1.5" />
+    </svg>
+  );
+}
+
+/** Collaborative peers / ensemble icon. */
+export function IconUsers(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <path d="M11.5 13.5v-1a2.5 2.5 0 0 0-2.5-2.5h-4a2.5 2.5 0 0 0-2.5 2.5v1" />
+      <circle cx="7" cy="5.5" r="2.25" />
+      <path d="M14.5 13.5v-1a2.2 2.2 0 0 0-1.7-2.1M10.8 3.5a2.2 2.2 0 0 1 0 4.2" />
+    </svg>
+  );
+}

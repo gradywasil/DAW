@@ -40,7 +40,9 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam } from "./icons";
+import JamDrawer from "./JamDrawer";
+import { isJamDrawerOpen, setIsJamDrawerOpen, toggleJamDrawer, jamPeers, jamPulse } from "../collab/jamSession";
 import HistoryDrawer from "./HistoryDrawer";
 import { canUndo, canRedo, isHistoryDrawerOpen, setIsHistoryDrawerOpen, toggleHistoryDrawer, undo, redo } from "../state/historyState";
 import MidiPopover from "./MidiPopover";
@@ -275,6 +277,11 @@ registerHelp([
     text: "Re-applies the previously undone change (Ctrl+Y or Ctrl+Shift+Z).",
   },
   {
+    id: "booth.jam",
+    title: "JAM ENSEMBLE",
+    text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
     id: "booth.history",
     title: "HISTORY TIMELINE",
     text: "Opens the time travel history panel with a visual timeline scrubber, step diffs, and direct jumping to any past or future document state.",
@@ -499,6 +506,28 @@ export function BoothOptions(props: BoothOptionsProps) {
           </button>
           <Show when={midiPopoverOpen()}>
             <MidiPopover onClose={() => setMidiPopoverOpen(false)} />
+          </Show>
+        </span>
+        <span class="jam-pop-wrap">
+          <button
+            type="button"
+            class="booth-btn booth-btn-icon booth-btn-jam"
+            classList={{
+              "is-active": isJamDrawerOpen(),
+              "has-peers": jamPeers().length > 0,
+              "has-pulse": jamPulse(),
+            }}
+            data-help="booth.jam"
+            aria-haspopup="dialog"
+            aria-expanded={isJamDrawerOpen()}
+            aria-label="Collaborative Jam Session"
+            title="Collaborative Jam Session"
+            onClick={toggleJamDrawer}
+          >
+            <IconJam size={13} />
+          </button>
+          <Show when={isJamDrawerOpen()}>
+            <JamDrawer onClose={() => setIsJamDrawerOpen(false)} />
           </Show>
         </span>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
