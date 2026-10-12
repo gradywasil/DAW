@@ -8,6 +8,7 @@ import {
   MODE_NAMES,
   chordRows,
   degreeToMidi,
+  midiToDegree,
   effectiveScale,
   isModeName,
   modeSize,
@@ -95,6 +96,41 @@ describe("degreeToMidi", () => {
     expect(degreeToMidi(penta, 0, 4)).toBe(60); // C
     expect(degreeToMidi(penta, 1, 4)).toBe(63); // Eb
     expect(degreeToMidi(penta, 5, 4)).toBe(72); // C + octave
+  });
+});
+
+describe("midiToDegree", () => {
+  const cMajor = {
+    root: 0,
+    mode: "major" as const,
+    intervals: MODE_INTERVALS.major,
+  };
+
+  it("maps exact scale notes round-trip with degreeToMidi", () => {
+    for (let degree = -14; degree <= 21; degree++) {
+      const midi = degreeToMidi(cMajor, degree, 4);
+      const resolved = midiToDegree(cMajor, midi, 4);
+      expect(resolved.inScale).toBe(true);
+      expect(resolved.degree).toBe(degree);
+    }
+  });
+
+  it("detects non-scale accidentals and snaps to closest degree", () => {
+    // C#4 (MIDI 61) in C major is not in scale; closest degree is 0 (C4) or 1 (D4)
+    const res = midiToDegree(cMajor, 61, 4);
+    expect(res.inScale).toBe(false);
+    expect([0, 1]).toContain(res.degree);
+  });
+
+  it("resolves minor scales across octaves", () => {
+    const aMinor = {
+      root: 9,
+      mode: "minor" as const,
+      intervals: MODE_INTERVALS.minor,
+    };
+    expect(midiToDegree(aMinor, 57, 3)).toEqual({ degree: 0, inScale: true }); // A3
+    expect(midiToDegree(aMinor, 60, 3)).toEqual({ degree: 2, inScale: true }); // C4
+    expect(midiToDegree(aMinor, 69, 4)).toEqual({ degree: 0, inScale: true }); // A4
   });
 });
 
@@ -189,7 +225,11 @@ describe("chordRows", () => {
     const rows = chordRows(aMinor, 3);
     expect(rows).toHaveLength(7);
     // Row 0 = A minor: A C E = 57 60 64.
-    expect(rows[0].midi).toEqual([57, 60, 64]);
+    expect(rows[0]).toEqual({
+      degree: 0,
+      degrees: [0, 2, 4],
+      midi: [57, 60, 64],
+    });
     // Row 2 = C major: C E G.
     expect(rows[2].midi).toEqual([60, 64, 67]);
     // Row 5 = F major: F A C5.

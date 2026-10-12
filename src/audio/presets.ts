@@ -230,6 +230,7 @@ export function noteParamsFor(
      * one-shot is a compile-time hold (see compile.ts).
      */
     readonly oneShot?: boolean;
+    readonly level?: number;
   },
 ): VoiceNoteOnEvent {
   const base = preset.baseFreq ?? midiToFreq(opts.midi ?? 69);
@@ -279,7 +280,7 @@ export function noteParamsFor(
     sustain: preset.envelope.sustain,
     release: preset.envelope.release,
     holdSeconds: opts.holdSeconds,
-    level: preset.level,
+    level: opts.level ?? preset.level,
     seed: noteSeed(
       preset.seed,
       Math.round(opts.time * 1000),
