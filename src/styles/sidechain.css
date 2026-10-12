@@ -1,0 +1,245 @@
+/**
+ * Master Bus Glue Compressor & Sidechain Ducking Modal Styles.
+ * Vintage arcade hardware look: brushed metal chassis, illuminated analog VU meter,
+ * red warning zone, tactile toggles, and illuminated ducking curve display.
+ */
+
+.sidechain-dialog {
+  color: var(--color-ink);
+  background-color: var(--metal-panel);
+  background-image: var(--metal-brush);
+  border: 1px solid var(--theme-line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(920px, calc(100vw - 32px));
+  height: min(650px, calc(100dvh - 32px));
+  max-width: none;
+  max-height: none;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  box-shadow: var(--elev-3);
+}
+
+.sidechain-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidechain-dialog::backdrop {
+  background: rgb(0 0 0 / 70%);
+  backdrop-filter: blur(3px);
+}
+
+.sidechain-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--theme-line);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.sidechain-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sidechain-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sidechain-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+/* Analog VU Meter Display */
+.vu-meter-chassis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  background: radial-gradient(circle at center, #2e281e 0%, #15120c 100%);
+  border: 2px solid #5a4b32;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 180, 50, 0.15);
+  position: relative;
+  user-select: none;
+}
+
+.vu-meter-scale-svg {
+  width: 100%;
+  max-width: 440px;
+  height: 110px;
+}
+
+.vu-meter-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #f5b041;
+  margin-top: -8px;
+  text-shadow: 0 0 6px rgba(245, 176, 65, 0.4);
+}
+
+/* Two-column Studio Panel */
+.sidechain-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+@media (max-width: 640px) {
+  .sidechain-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidechain-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-radius: 8px;
+}
+
+.sidechain-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent);
+  padding-bottom: var(--space-2);
+}
+
+.sidechain-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidechain-param-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 11px;
+}
+
+.sidechain-param-name {
+  color: color-mix(in srgb, var(--color-ink) 75%, transparent);
+}
+
+.sidechain-param-val {
+  font-weight: 700;
+  color: var(--color-ink);
+  min-width: 48px;
+  text-align: right;
+}
+
+.sidechain-slider {
+  flex: 1;
+  accent-color: #f5b041;
+  cursor: pointer;
+}
+
+/* Target Matrix Toggles */
+.sidechain-targets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  margin-top: 4px;
+}
+
+.target-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  background: var(--metal-recess);
+  border: 1px solid var(--theme-line);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  user-select: none;
+}
+
+.target-btn.is-active {
+  background: color-mix(in srgb, #f5b041 25%, transparent);
+  border-color: #f5b041;
+  color: #fff;
+  box-shadow: 0 0 8px color-mix(in srgb, #f5b041 35%, transparent);
+}
+
+/* Presets Bar */
+.sidechain-presets-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.preset-chip {
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.preset-chip:hover {
+  background: color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-color: var(--color-ink);
+}
+
+.preset-chip.is-active {
+  background: #f5b041;
+  border-color: #f5b041;
+  color: #000;
+  box-shadow: 0 0 8px rgba(245, 176, 65, 0.4);
+}
+
+/* Footer Actions */
+.sidechain-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--theme-line);
+  background: color-mix(in srgb, var(--color-ink) 3%, transparent);
+}
+
+.test-pump-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: color-mix(in srgb, #f5b041 20%, transparent);
+  border: 1px solid #f5b041;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.test-pump-btn:active {
+  background: #f5b041;
+  color: #000;
+}
