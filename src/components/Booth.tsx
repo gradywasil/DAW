@@ -40,10 +40,12 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor } from "./icons";
 import SampleSlicerModal from "./SampleSlicerModal";
 import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
 import ChordGeneratorModal from "./ChordGeneratorModal";
+import SidechainModal from "./SidechainModal";
+import { isSidechainOpen, setIsSidechainOpen } from "../audio/sidechain";
 import { isChordGeneratorOpen, setIsChordGeneratorOpen } from "../audio/chordProgression";
 import JamDrawer from "./JamDrawer";
 import { isJamDrawerOpen, setIsJamDrawerOpen, toggleJamDrawer, jamPeers, jamPulse } from "../collab/jamSession";
@@ -284,6 +286,11 @@ registerHelp([
     id: "booth.jam",
     title: "JAM ENSEMBLE",
     text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
+    id: "booth.compressor",
+    title: "GLUE & SIDECHAIN",
+    text: "Opens the Master Bus Glue Compressor & Sidechain Ducking Studio. Configure 4-on-the-floor or transient sidechain ducking across bass, chords, and melodic tracks with real-time analog VU meter feedback.",
   },
   {
     id: "booth.chordGenerator",
@@ -575,6 +582,22 @@ export function BoothOptions(props: BoothOptionsProps) {
         </button>
         <Show when={isChordGeneratorOpen()}>
           <ChordGeneratorModal onClose={() => setIsChordGeneratorOpen(false)} />
+        </Show>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-sidechain"
+          classList={{ "is-active": isSidechainOpen() }}
+          data-help="booth.compressor"
+          aria-haspopup="dialog"
+          aria-expanded={isSidechainOpen()}
+          aria-label="Master Glue & Sidechain Ducking"
+          title="Master Glue & Sidechain Ducking"
+          onClick={() => setIsSidechainOpen(true)}
+        >
+          <IconCompressor size={13} />
+        </button>
+        <Show when={isSidechainOpen()}>
+          <SidechainModal onClose={() => setIsSidechainOpen(false)} />
         </Show>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button
