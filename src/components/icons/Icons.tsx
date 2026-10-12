@@ -629,6 +629,31 @@ export function IconWaveform(props: IconProps): JSX.Element {
   );
 }
 
+/** Multi-track audio layers / stems icon. */
+export function IconLayers(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <path d="M2.5 4h11M2.5 8h11M2.5 12h11" />
+      <circle cx="5" cy="4" r="1.25" fill="currentColor" />
+      <circle cx="11" cy="8" r="1.25" fill="currentColor" />
+      <circle cx="7.5" cy="12" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
 /** 5-pin DIN MIDI port icon. */
 export function IconMidi(props: IconProps): JSX.Element {
   const { w, h } = resolveSize(props, 14);
