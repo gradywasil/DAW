@@ -1064,3 +1064,73 @@ export function IconInfoCircle(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Tactile Undo action icon (curved left rewind arrow). */
+export function IconUndo(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <path d="M4 6.5h5.5a3.5 3.5 0 0 1 3.5 3.5v.5a3.5 3.5 0 0 1-3.5 3.5H5" />
+      <path d="M6.5 4L4 6.5l2.5 2.5" />
+    </svg>
+  );
+}
+
+/** Tactile Redo action icon (curved right forward arrow). */
+export function IconRedo(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <path d="M12 6.5H6.5A3.5 3.5 0 0 0 3 10v.5A3.5 3.5 0 0 0 6.5 14H11" />
+      <path d="M9.5 4l2.5 2.5-2.5 2.5" />
+    </svg>
+  );
+}
+
+/** Time Travel History clock dial icon. */
+export function IconHistory(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <path d="M8 3a5.5 5.5 0 1 0 5.5 5.5" />
+      <path d="M8 5.5v3l2 1.5" />
+      <path d="M5.5 3H8V.5" />
+    </svg>
+  );
+}

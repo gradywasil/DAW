@@ -1,0 +1,310 @@
+/**
+ * History / Time Travel Drawer & Timeline Scrubber styles.
+ * Follows the arcade chassis vocabulary: brushed panel metal, machined buttons,
+ * tactile timeline notches, and crisp silkscreen typography.
+ */
+
+.booth-btn-undo,
+.booth-btn-redo,
+.booth-btn-history {
+  position: relative;
+}
+
+.booth-btn-undo:disabled,
+.booth-btn-redo:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.booth-btn-history.is-active {
+  color: var(--color-ink);
+  background: var(--metal-pressed);
+  border-color: var(--color-ink);
+}
+
+.history-pop-wrap {
+  position: relative;
+}
+
+.history-pop {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 55;
+  width: 380px;
+  max-width: 90vw;
+  max-height: 480px;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--metal-panel);
+  background-image: var(--metal-brush);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, var(--metal-panel));
+  border-radius: 6px;
+  box-shadow: var(--elev-3);
+  color: var(--color-ink);
+}
+
+.history-pop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  padding-bottom: var(--space-2);
+}
+
+.history-pop-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.history-pop-title {
+  font: var(--text-panel-label-sm);
+  letter-spacing: var(--track-panel-label);
+  text-transform: uppercase;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.history-pop-badge {
+  font: var(--text-label-xs);
+  color: var(--theme-muted);
+  font-family: monospace;
+}
+
+.history-pop-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink);
+  opacity: 0.7;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: opacity 120ms ease, background 120ms ease;
+}
+
+.history-pop-close:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  border-color: color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+
+/* -------------------------------------------------------------------------
+ * Scrubber Section
+ * ------------------------------------------------------------------------- */
+.history-scrubber-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: 5px;
+}
+
+.history-scrubber-labels {
+  display: flex;
+  justify-content: space-between;
+  font: var(--text-label-xs);
+  color: var(--theme-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.history-scrubber-range-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.history-scrubber-input {
+  width: 100%;
+  appearance: none;
+  background: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.history-scrubber-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  cursor: grab;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-ink) 50%, transparent);
+  border: 2px solid var(--metal-panel);
+}
+
+.history-scrubber-input:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.15);
+}
+
+.history-scrubber-current-label {
+  font: var(--text-label-xs);
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-scrubber-current-tag {
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+  color: var(--color-ink);
+  font-size: 9px;
+}
+
+/* -------------------------------------------------------------------------
+ * History List / Timeline items
+ * ------------------------------------------------------------------------- */
+.history-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow-y: auto;
+  max-height: 250px;
+  padding-right: var(--space-1);
+}
+
+.history-entry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  text-align: left;
+  transition: all 120ms ease;
+  font: var(--text-label-xs);
+}
+
+.history-entry-row:hover {
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  border-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+}
+
+.history-entry-row.is-current {
+  background: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  font-weight: 600;
+}
+
+.history-entry-row.is-future {
+  opacity: 0.65;
+  border-style: dashed;
+}
+
+.history-entry-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1;
+}
+
+.history-entry-tag {
+  font-family: monospace;
+  font-size: 10px;
+  min-width: 26px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  text-align: center;
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  color: var(--theme-muted);
+}
+
+.history-entry-row.is-current .history-entry-tag {
+  background: var(--color-ink);
+  color: var(--metal-panel);
+  font-weight: 700;
+}
+
+.history-entry-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-entry-action-hint {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--theme-muted);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.history-entry-row:hover .history-entry-action-hint {
+  opacity: 1;
+}
+
+/* -------------------------------------------------------------------------
+ * Footer Controls
+ * ------------------------------------------------------------------------- */
+.history-pop-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  padding-top: var(--space-2);
+}
+
+.history-footer-btn-group {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.history-footer-btn {
+  font: var(--text-label-xs);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  color: var(--color-ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 120ms ease;
+}
+
+.history-footer-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-ink) 14%, transparent);
+  border-color: var(--color-ink);
+}
+
+.history-footer-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.history-clear-btn {
+  color: #ff6b6b;
+  border-color: color-mix(in srgb, #ff6b6b 30%, transparent);
+  background: color-mix(in srgb, #ff6b6b 8%, transparent);
+}
+
+.history-clear-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, #ff6b6b 18%, transparent);
+  border-color: #ff6b6b;
+}
