@@ -1134,3 +1134,26 @@ export function IconHistory(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Resonant parametric EQ bell curve icon for curves, presets, and EQ modes. */
+export function IconCurve(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <path d="M2 13h2c1.5 0 2.2-8.5 4-8.5s2.5 8.5 4 8.5h2" />
+      <circle cx="8" cy="4.5" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
