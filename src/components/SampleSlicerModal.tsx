@@ -16,6 +16,7 @@ import {
   type JSX,
 } from "solid-js";
 import { Portal } from "solid-js/web";
+import { sharedSlicerSource, setSharedSlicerSource } from "../audio/audioRecorder";
 import {
   calculateSlices,
   generateSyntheticBreakbeat,
@@ -403,7 +404,15 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
 
   onMount(() => {
     dialogRef.showModal();
-    loadDefaultBreakbeat(130);
+    const shared = sharedSlicerSource();
+    if (shared) {
+      setAudioBuffer(shared.buffer);
+      setSampleName(shared.name);
+      recalculateSlices(shared.buffer);
+      setSharedSlicerSource(null);
+    } else {
+      loadDefaultBreakbeat(130);
+    }
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("mouseup", handleCanvasMouseUp);

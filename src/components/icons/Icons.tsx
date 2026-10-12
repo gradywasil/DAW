@@ -1277,3 +1277,49 @@ export function IconKaoss(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Studio condenser microphone icon for live vocal & instrument sampler. */
+export function IconMic(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <rect x="5.5" y="2" width="5" height="7" rx="2.5" />
+      <path d="M3.5 6.5a4.5 4.5 0 0 0 9 0" />
+      <path d="M8 11v3M5.5 14h5" />
+    </svg>
+  );
+}
+
+/** Play transport triangle icon. */
+export function IconPlay(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="currentColor"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.2}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <polygon points="5,3 13,8 5,13" />
+    </svg>
+  );
+}
