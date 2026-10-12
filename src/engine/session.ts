@@ -1,3 +1,4 @@
+import { midiNoteToDrumPiece } from "../midi/midiMapping";
 /**
  * Framework-neutral engine session: one AudioEngineContext + one Transport,
  * plus the booth's master gain and metronome click path. The UI (Booth.tsx)
@@ -74,6 +75,7 @@ import {
 import {
   type EffectiveScale,
   degreeToMidi,
+  midiToDegree,
   toEffectiveScale,
 } from "../document/scales";
 
@@ -1430,6 +1432,125 @@ export class Session {
     const events = this.buildAuditionEvents(laneId, degreeOrDrum, when);
     if (events.length === 0) return;
     host.sendEvents(LANE_IDS.indexOf(laneId), events);
+  }
+
+  /**
+   * T-02: Trigger a live MIDI note on a lane (hardware controller, keyboard).
+   * Supports pitched presets (exact MIDI or scale-quantized) and drum kits (GM mapping).
+   * Velocity (1..127) scales the voice level.
+   */
+  async triggerMidiNote(
+    laneId: LaneId,
+    midiNote: number,
+    velocity = 100,
+    options: {
+      holdSeconds?: number;
+      quantizeToScale?: boolean;
+    } = {},
+  ): Promise<void> {
+    const sound = this.laneSounds[laneId];
+    await this.engine.unlock();
+    if (this.laneSounds[laneId] !== sound) return;
+    const host = await this.ensureVoiceEngine();
+    if (!host || this.laneSounds[laneId] !== sound) return;
+
+    const when = this.engine.getContext().currentTime + 0.01;
+    const events = this.buildMidiNoteEvents(
+      laneId,
+      midiNote,
+      velocity,
+      when,
+      options,
+    );
+    if (events.length === 0) return;
+
+    const refs = [
+      ...new Set(
+        events.flatMap((event) => (event.sample ? [event.sample.ref] : [])),
+      ),
+    ];
+    if (refs.length > 0) {
+      const sampleHost = await host.ensureSampleVoice().catch(() => null);
+      if (this.laneSounds[laneId] !== sound) return;
+      if (sampleHost) await sampleHost.preload(refs).catch(() => undefined);
+    }
+    if (this.laneSounds[laneId] !== sound) return;
+    host.sendEvents(LANE_IDS.indexOf(laneId), events);
+  }
+
+  private buildMidiNoteEvents(
+    laneId: LaneId,
+    midiNote: number,
+    velocity: number,
+    when: number,
+    options: {
+      holdSeconds?: number;
+      quantizeToScale?: boolean;
+    } = {},
+  ): VoiceNoteOnEvent[] {
+    const velFraction = Math.max(0.1, Math.min(1.0, velocity / 127));
+    if (laneId === "drums") {
+      const kit = this.resolveDrumKit();
+      const pieceName = midiNoteToDrumPiece(midiNote);
+      const piece = kit.pieces[pieceName];
+      if (!piece) return [];
+      const hold =
+        options.holdSeconds ??
+        Math.max(piece.envelope.attack + piece.envelope.decay, 0.05);
+      return [
+        noteParamsFor(piece, {
+          time: when,
+          holdSeconds: hold,
+          seedSalt: DRUM_PIECES.indexOf(pieceName),
+          level: (piece.level ?? 1) * velFraction,
+        }),
+      ];
+    }
+
+    const preset = this.resolvePitchedPreset(laneId);
+    const hold = options.holdSeconds ?? 0.3;
+    let targetMidi = Math.min(127, Math.max(0, Math.round(midiNote)));
+
+    const scale =
+      this.laneScales[laneId] ?? toEffectiveScale({ root: 0, mode: "minor" });
+    const octaveBase =
+      (preset.pitchRange?.octaveBase ?? 4) + (this.laneOctaves[laneId] ?? 0);
+
+    if (options.quantizeToScale) {
+      const { degree } = midiToDegree(scale, targetMidi, octaveBase);
+      targetMidi = Math.min(
+        127,
+        Math.max(0, degreeToMidi(scale, degree, octaveBase)),
+      );
+    }
+
+    const offsets =
+      laneId === "chords" && options.quantizeToScale ? [0, 2, 4] : [0];
+    if (offsets.length > 1) {
+      const { degree } = midiToDegree(scale, targetMidi, octaveBase);
+      return offsets.map((off) =>
+        noteParamsFor(preset, {
+          time: when,
+          midi: Math.min(
+            127,
+            Math.max(0, degreeToMidi(scale, degree + off, octaveBase)),
+          ),
+          holdSeconds: hold,
+          seedSalt: degree + off,
+          level: (preset.level ?? 1) * velFraction,
+        }),
+      );
+    }
+
+    return [
+      noteParamsFor(preset, {
+        time: when,
+        midi: targetMidi,
+        holdSeconds: hold,
+        seedSalt: targetMidi,
+        level: (preset.level ?? 1) * velFraction,
+      }),
+    ];
   }
 
   /** Isolated library audition: no lane sound, document, transport or FX changes. */

@@ -40,7 +40,14 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus } from "./icons";
+import { IconMinus, IconPlus, IconMidi } from "./icons";
+import MidiPopover from "./MidiPopover";
+import {
+  midiStatus,
+  midiActivityPulse,
+  midiPopoverOpen,
+  setMidiPopoverOpen,
+} from "../midi/midiState";
 
 const session = getSession();
 
@@ -456,6 +463,27 @@ export function BoothOptions(props: BoothOptionsProps) {
             <IconInfo />
           </button>
         </Show>
+        <span class="midi-pop-wrap">
+          <button
+            type="button"
+            class="booth-btn booth-btn-icon booth-btn-midi"
+            classList={{
+              "is-active": midiStatus() === "connected",
+              "has-pulse": midiActivityPulse(),
+            }}
+            data-help="midi.connect"
+            aria-haspopup="dialog"
+            aria-expanded={midiPopoverOpen()}
+            aria-label="Web MIDI Controller"
+            title="Web MIDI Controller"
+            onClick={() => setMidiPopoverOpen(!midiPopoverOpen())}
+          >
+            <IconMidi size={13} />
+          </button>
+          <Show when={midiPopoverOpen()}>
+            <MidiPopover onClose={() => setMidiPopoverOpen(false)} />
+          </Show>
+        </span>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button
           type="button"
