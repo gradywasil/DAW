@@ -1,0 +1,276 @@
+/**
+ * XY Touch Kaoss FX Pad & Live Beat Stutter Modal Styles.
+ * Tactile arcade performance hardware: dark glass touchpad with luminous reticle,
+ * real-time coordinate tracking, momentary stutter pads, and vinyl tape stop.
+ */
+
+.kaoss-dialog {
+  color: var(--color-ink);
+  background-color: var(--metal-panel);
+  background-image: var(--metal-brush);
+  border: 1px solid var(--theme-line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(840px, calc(100vw - 32px));
+  height: min(620px, calc(100dvh - 32px));
+  max-width: none;
+  max-height: none;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  box-shadow: var(--elev-3);
+}
+
+.kaoss-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.kaoss-dialog::backdrop {
+  background: rgb(0 0 0 / 70%);
+  backdrop-filter: blur(3px);
+}
+
+.kaoss-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--theme-line);
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+
+.kaoss-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.kaoss-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.kaoss-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+/* XY Pad Surface */
+.kaoss-pad-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.kaoss-surface {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  background: radial-gradient(circle at center, #1b2028 0%, #0c0e12 100%);
+  border: 2px solid #2a3444;
+  border-radius: 8px;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  overflow: hidden;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 16px rgba(0, 220, 255, 0.1);
+}
+
+/* Background Grid Gridlines */
+.kaoss-gridlines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 25% 25%;
+  pointer-events: none;
+}
+
+/* Crosshair Reticle */
+.kaoss-reticle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.02s linear;
+}
+
+.kaoss-reticle-circle {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #00f0ff;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #00f0ff, inset 0 0 8px rgba(0, 240, 255, 0.5);
+  animation: kaoss-pulse 2s infinite ease-in-out;
+}
+
+.kaoss-reticle-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fff;
+}
+
+.kaoss-reticle-crosshair-x {
+  position: absolute;
+  width: 1000px;
+  height: 1px;
+  background: rgba(0, 240, 255, 0.25);
+}
+
+.kaoss-reticle-crosshair-y {
+  position: absolute;
+  width: 1px;
+  height: 1000px;
+  background: rgba(0, 240, 255, 0.25);
+}
+
+@keyframes kaoss-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* Digital Readouts */
+.kaoss-readout-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: #090c10;
+  border: 1px solid #1a2230;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.kaoss-readout-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.kaoss-readout-label {
+  color: #7b8fa3;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.kaoss-readout-value {
+  color: #00f0ff;
+  font-weight: 700;
+  font-size: 13px;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* Mode Selection Pills */
+.kaoss-modes-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.kaoss-mode-btn {
+  flex: 1;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  border: 1px solid var(--theme-line);
+  border-radius: 4px;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: all 0.1s ease;
+  user-select: none;
+  text-align: center;
+}
+
+.kaoss-mode-btn.is-active {
+  background: #00f0ff;
+  border-color: #00f0ff;
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Stutter & Repeater Grid */
+.kaoss-stutter-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.kaoss-stutter-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+.kaoss-stutter-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-2);
+}
+
+@media (max-width: 580px) {
+  .kaoss-stutter-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stutter-pad-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-2);
+  background: var(--metal-recess);
+  border: 1px solid var(--theme-line);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.05s ease;
+  color: var(--color-ink);
+}
+
+.stutter-pad-btn:active,
+.stutter-pad-btn.is-active {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(231, 76, 60, 0.6);
+  transform: translateY(2px);
+}
+
+.stutter-pad-tape {
+  background: repeating-linear-gradient(
+    -45deg,
+    #332211,
+    #332211 8px,
+    #442a15 8px,
+    #442a15 16px
+  );
+  border-color: #f5b041;
+  color: #f5b041;
+}
+
+.stutter-pad-tape:active,
+.stutter-pad-tape.is-active {
+  background: #f5b041;
+  color: #000;
+  box-shadow: 0 0 14px rgba(245, 176, 65, 0.8);
+}
