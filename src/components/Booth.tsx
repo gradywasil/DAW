@@ -40,11 +40,13 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss } from "./icons";
 import SampleSlicerModal from "./SampleSlicerModal";
 import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
 import ChordGeneratorModal from "./ChordGeneratorModal";
 import SidechainModal from "./SidechainModal";
+import KaossModal from "./KaossModal";
+import { isKaossOpen, setIsKaossOpen } from "../audio/kaossPad";
 import { isSidechainOpen, setIsSidechainOpen } from "../audio/sidechain";
 import { isChordGeneratorOpen, setIsChordGeneratorOpen } from "../audio/chordProgression";
 import JamDrawer from "./JamDrawer";
@@ -286,6 +288,11 @@ registerHelp([
     id: "booth.jam",
     title: "JAM ENSEMBLE",
     text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
+    id: "booth.kaoss",
+    title: "KAOSS FX & STUTTER",
+    text: "Opens the 2D XY Kaoss FX Pad and Live Beat Stutter Studio. Touch or drag to morph resonant filter sweeps, spatial delay, bitcrush, and tape flanger, or trigger momentary 1/2 to 1/32 beat repeaters and vinyl tape stops.",
   },
   {
     id: "booth.compressor",
@@ -598,6 +605,22 @@ export function BoothOptions(props: BoothOptionsProps) {
         </button>
         <Show when={isSidechainOpen()}>
           <SidechainModal onClose={() => setIsSidechainOpen(false)} />
+        </Show>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-kaoss"
+          classList={{ "is-active": isKaossOpen() }}
+          data-help="booth.kaoss"
+          aria-haspopup="dialog"
+          aria-expanded={isKaossOpen()}
+          aria-label="XY Kaoss FX Pad & Beat Stutter"
+          title="XY Kaoss FX Pad & Beat Stutter"
+          onClick={() => setIsKaossOpen(true)}
+        >
+          <IconKaoss size={13} />
+        </button>
+        <Show when={isKaossOpen()}>
+          <KaossModal onClose={() => setIsKaossOpen(false)} />
         </Show>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button
