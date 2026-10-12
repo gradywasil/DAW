@@ -1228,3 +1228,27 @@ export function IconScissors(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+/** Musical chords / triad keys icon for harmonic progression generator. */
+export function IconChord(props: IconProps): JSX.Element {
+  const { w, h } = resolveSize(props, 13);
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={w}
+      height={h}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={props.strokeWidth ?? 1.4}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class={props.class ? `app-icon ${props.class}` : "app-icon"}
+      style={props.style}
+    >
+      <rect x="2" y="2" width="12" height="12" rx="2" />
+      <path d="M5 2v12M8 2v7M11 2v12" />
+      <path d="M2 9h12" />
+    </svg>
+  );
+}

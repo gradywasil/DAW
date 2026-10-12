@@ -40,9 +40,11 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord } from "./icons";
 import SampleSlicerModal from "./SampleSlicerModal";
 import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
+import ChordGeneratorModal from "./ChordGeneratorModal";
+import { isChordGeneratorOpen, setIsChordGeneratorOpen } from "../audio/chordProgression";
 import JamDrawer from "./JamDrawer";
 import { isJamDrawerOpen, setIsJamDrawerOpen, toggleJamDrawer, jamPeers, jamPulse } from "../collab/jamSession";
 import HistoryDrawer from "./HistoryDrawer";
@@ -282,6 +284,11 @@ registerHelp([
     id: "booth.jam",
     title: "JAM ENSEMBLE",
     text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
+    id: "booth.chordGenerator",
+    title: "CHORD GENERATOR",
+    text: "Opens the scale-aware chord progression generator. Choose musical progressions (Neo-Soul, Lofi, Synthwave, City Pop), customize voicings (7ths, 9ths, Drop-2), and write full chord patterns directly into the Chords lane.",
   },
   {
     id: "booth.slicer",
@@ -552,6 +559,22 @@ export function BoothOptions(props: BoothOptionsProps) {
         </button>
         <Show when={isSlicerOpen()}>
           <SampleSlicerModal onClose={() => setIsSlicerOpen(false)} />
+        </Show>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-chord"
+          classList={{ "is-active": isChordGeneratorOpen() }}
+          data-help="booth.chordGenerator"
+          aria-haspopup="dialog"
+          aria-expanded={isChordGeneratorOpen()}
+          aria-label="Scale-Aware Chord Generator"
+          title="Scale-Aware Chord Generator"
+          onClick={() => setIsChordGeneratorOpen(true)}
+        >
+          <IconChord size={13} />
+        </button>
+        <Show when={isChordGeneratorOpen()}>
+          <ChordGeneratorModal onClose={() => setIsChordGeneratorOpen(false)} />
         </Show>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button
