@@ -1,0 +1,238 @@
+/**
+ * Modular Audio Node Canvas Styles.
+ * PureData / Max/MSP style visual patchbay with draggable audio nodes,
+ * animated glowing SVG bezier patch cords, and jack sockets.
+ */
+
+.modular-dialog {
+  color: var(--color-ink);
+  background-color: #0c1017;
+  background-image: 
+    radial-gradient(#1e293b 1px, transparent 1px),
+    radial-gradient(#151e2b 1px, #080c12 1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  border: 1px solid var(--theme-line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(980px, calc(100vw - 32px));
+  max-width: none;
+  max-height: 90vh;
+  height: 680px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 240, 255, 0.12);
+}
+
+.modular-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.modular-dialog::backdrop {
+  background: rgb(0 0 0 / 80%);
+  backdrop-filter: blur(6px);
+}
+
+.modular-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #1c2636;
+  background: rgba(18, 24, 38, 0.9);
+  z-index: 10;
+}
+
+.modular-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modular-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #00f0ff;
+  text-transform: uppercase;
+}
+
+.modular-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modular-btn {
+  background: #141c28;
+  border: 1px solid #233146;
+  border-radius: 4px;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modular-btn:hover {
+  background: #1d283a;
+  color: #00f0ff;
+  border-color: #00f0ff66;
+}
+
+/* Canvas Area */
+.modular-canvas {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* SVG Patch Cord Overlay */
+.modular-cables-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.patch-cable {
+  fill: none;
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  cursor: pointer;
+  pointer-events: stroke;
+  transition: stroke-width 0.15s ease, filter 0.15s ease;
+}
+
+.patch-cable:hover {
+  stroke-width: 5px;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Modular Node Box */
+.modular-node {
+  position: absolute;
+  width: 170px;
+  background: #0f1622;
+  border: 1px solid #223045;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.modular-node.is-selected {
+  border-color: #00f0ff;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+}
+
+.modular-node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #172233;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #00f0ff;
+  cursor: move;
+  border-bottom: 1px solid #223045;
+}
+
+.modular-node-type {
+  font-size: 8px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.modular-node-body {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modular-node-params {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.modular-param-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modular-param-row span {
+  font-weight: 700;
+}
+
+.modular-param-row input[type="range"] {
+  width: 65px;
+  height: 4px;
+  accent-color: #00f0ff;
+}
+
+/* Jacks Section */
+.modular-jacks-row {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #1a2536;
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+.modular-jacks-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modular-jack-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 8px;
+  color: #7b8fa3;
+}
+
+.modular-jack-socket {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #090c12;
+  border: 2px solid #33445e;
+  cursor: crosshair;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.modular-jack-socket.type-audio {
+  border-color: #00f0ff;
+}
+
+.modular-jack-socket.type-control {
+  border-color: #ffaa00;
+}
+
+.modular-jack-socket:hover,
+.modular-jack-socket.is-connecting {
+  transform: scale(1.3);
+  box-shadow: 0 0 8px currentColor;
+}
