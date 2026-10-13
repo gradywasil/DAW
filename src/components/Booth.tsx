@@ -40,7 +40,7 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss, IconMic, IconShare, IconDjDeck } from "./icons";
+import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss, IconMic, IconShare, IconDjDeck, IconModular } from "./icons";
 import SampleSlicerModal from "./SampleSlicerModal";
 import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
 import ChordGeneratorModal from "./ChordGeneratorModal";
@@ -49,6 +49,8 @@ import KaossModal from "./KaossModal";
 import AudioRecorderModal from "./AudioRecorderModal";
 import ShareModal from "./ShareModal";
 import DjDeckModal from "./DjDeckModal";
+import ModularCanvasModal from "./ModularCanvasModal";
+import { isModularCanvasOpen, setIsModularCanvasOpen } from "../audio/modularSynth";
 import { isDjDeckOpen, setIsDjDeckOpen } from "../audio/djDeck";
 import { isShareModalOpen, setIsShareModalOpen } from "../persist/shareUrl";
 import { isRecorderOpen, setIsRecorderOpen } from "../audio/audioRecorder";
@@ -294,6 +296,11 @@ registerHelp([
     id: "booth.jam",
     title: "JAM ENSEMBLE",
     text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
+  },
+  {
+    id: "booth.modular",
+    title: "MODULAR NODE CANVAS",
+    text: "Opens the Max/MSP and PureData style visual modular audio patchbay. Drag custom VCO, LFO, VCF, and VCA modules across the canvas and connect inputs and outputs with glowing Bezier patch cords to design custom synthesizer architectures.",
   },
   {
     id: "booth.djdeck",
@@ -658,6 +665,22 @@ export function BoothOptions(props: BoothOptionsProps) {
         </button>
         <Show when={isRecorderOpen()}>
           <AudioRecorderModal onClose={() => setIsRecorderOpen(false)} />
+        </Show>
+        <button
+          type="button"
+          class="booth-btn booth-btn-icon booth-btn-modular"
+          classList={{ "is-active": isModularCanvasOpen() }}
+          data-help="booth.modular"
+          aria-haspopup="dialog"
+          aria-expanded={isModularCanvasOpen()}
+          aria-label="Modular Audio Node Canvas"
+          title="Modular Audio Node Canvas"
+          onClick={() => setIsModularCanvasOpen(true)}
+        >
+          <IconModular size={13} />
+        </button>
+        <Show when={isModularCanvasOpen()}>
+          <ModularCanvasModal onClose={() => setIsModularCanvasOpen(false)} />
         </Show>
         <button
           type="button"

@@ -1373,3 +1373,25 @@ export function IconDjDeck(props: IconProps): JSX.Element {
     </svg>
   );
 }
+
+export function IconModular(props: IconProps) {
+  const size = props.size ?? 16;
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      width={size}
+      height={size}
+      fill="currentColor"
+      aria-hidden="true"
+      class={props.class}
+    >
+      {/* Visual modular synth patch jacks and cabled node */}
+      <rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.2" />
+      <circle cx="5" cy="5" r="1.5" fill="none" stroke="currentColor" stroke-width="1" />
+      <circle cx="11" cy="5" r="1.5" fill="none" stroke="currentColor" stroke-width="1" />
+      <circle cx="5" cy="11" r="1.5" fill="none" stroke="currentColor" stroke-width="1" />
+      <circle cx="11" cy="11" r="1.5" fill="none" stroke="currentColor" stroke-width="1" />
+      <path d="M5 5 C 7 9, 9 7, 11 11" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+    </svg>
+  );
+}
