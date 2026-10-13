@@ -44,6 +44,7 @@ import { docStore } from "../state/store";
 import { createLaneAccessibleNames } from "../state/laneDisplayNames";
 import RollValue from "./RollValue";
 import { getHelp, registerHelp } from "../help/registry";
+import { IconMinus, IconPlus } from "./icons";
 
 // HP-2 help content (same registry): the drawer's own affordance.
 registerHelp([
@@ -170,7 +171,7 @@ function LaneOctaveGroup() {
               aria-label={`Transpose octave down for ${laneNames(l)}`}
               onClick={() => stepLaneOctave(l, -1)}
             >
-              –
+              <IconMinus size={10} />
             </button>
             <span class="head-ctl-value head-oct-value" aria-live="polite">
               <RollValue value={octave()}>{octaveText(octave())}</RollValue>
@@ -181,7 +182,7 @@ function LaneOctaveGroup() {
               aria-label={`Transpose octave up for ${laneNames(l)}`}
               onClick={() => stepLaneOctave(l, 1)}
             >
-              +
+              <IconPlus size={10} />
             </button>
           </div>
           {/* The E9 fence, spoken where the control lives: OCT transposes

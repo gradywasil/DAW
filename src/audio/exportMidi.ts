@@ -91,25 +91,8 @@ export const TICKS_PER_STEP = PPQ / 4; // 120
 /** GM drum channel, zero-based (the wire format's channel 9 = GM "ch 10"). */
 export const DRUM_CHANNEL = 9;
 
-/** GM note numbers for all 16 drum voices. The original six mappings stay fixed. */
-export const GM_DRUM_NOTES: Readonly<Record<DrumPiece, number>> = {
-  kick: 36, // Bass Drum 1
-  snare: 38, // Acoustic Snare
-  hat: 42, // Closed Hi-Hat
-  openhat: 46, // Open Hi-Hat
-  clap: 39, // Hand Clap
-  tom: 45, // Low Tom
-  kick2: 35,
-  snare2: 40,
-  hat2: 44,
-  midtom: 47,
-  hightom: 50,
-  rim: 37,
-  shaker: 70,
-  cowbell: 56,
-  crash: 49,
-  perc: 75,
-} as const;
+import { GM_DRUM_NOTES } from "../midi/midiMapping";
+export { GM_DRUM_NOTES };
 
 /** Fixed sensible drum velocities (piece-typical accents). */
 export const GM_DRUM_VELOCITIES: Readonly<Record<DrumPiece, number>> = {

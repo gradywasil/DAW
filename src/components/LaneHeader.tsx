@@ -66,6 +66,7 @@ import TrackColorControl from "./TrackColorControl";
 import ClipLengthControl from "./ClipLengthControl";
 import SoundBrowser from "./SoundBrowser";
 import { rememberSound } from "../state/soundBrowser";
+import { IconMinus, IconPlus, IconChevronDown, IconTrash } from "./icons";
 
 const session = getSession();
 
@@ -107,13 +108,14 @@ function laneHelpEntries(lane: LaneId): HelpEntry[] {
     // clamps, and draw the fence — OCT changes which rows SOUND, never
     // which rows are shown.
     ...(lane !== "drums"
-      ? [
-          {
-            id: `lane.${lane}.oct`,
-            title: `${n} TRANSPOSE OCTAVE`,
-            text: `Transpose changes the octave ${n} plays in, including playback and exports. Each press moves one OCTAVE, from −3 to +3. Notes stay where you painted them. To move the rows you SEE without changing the SOUND, use View Oct or View Semi beside the grid. Keyboard: O raises the octave; Shift+O lowers it.`,
-          },
-        ]
+      ?
+          [
+            {
+              id: `lane.${lane}.oct`,
+              title: `${n} TRANSPOSE OCTAVE`,
+              text: `Transpose changes the octave ${n} plays in, including playback and exports. Each press moves one OCTAVE, from −3 to +3. Notes stay where you painted them. To move the rows you SEE without changing the SOUND, use View Oct or View Semi beside the grid. Keyboard: O raises the octave; Shift+O lowers it.`,
+            },
+          ]
       : []),
     {
       id: `lane.${lane}.scale`,
@@ -128,13 +130,14 @@ function laneHelpEntries(lane: LaneId): HelpEntry[] {
     // MB-2 (mobile slice): the drums-only, narrow-stages-only fill-rails
     // reveal — the touch/mouse twin of the desktop hover reveal.
     ...(lane === "drums"
-      ? [
-          {
-            id: "lane.drums.fill",
-            title: "DRUMS FILL RAILS",
-            text: "Shows every drum row's E fill rail over its pads (no hover on touch — this is the reveal). SET in a rail to spread that row's hits evenly; the button or Escape hides the rails again.",
-          },
-        ]
+      ?
+          [
+            {
+              id: "lane.drums.fill",
+              title: "DRUMS FILL RAILS",
+              text: "Shows every drum row's E fill rail over its pads (no hover on touch — this is the reveal). SET in a rail to spread that row's hits evenly; the button or Escape hides the rails again.",
+            },
+          ]
       : []),
   ];
 }
@@ -325,7 +328,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
           aria-label={`Previous ${props.lane === "drums" ? "kit" : "preset"} for ${laneNames(props.lane)}`}
           onClick={() => stepSound(-1)}
         >
-          –
+          <IconMinus size={10} />
         </button>
         <button
           ref={(el) => {
@@ -340,16 +343,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
           onClick={() => setSoundBrowserOpen(true)}
         >
           <span>{options()[soundIndex()]?.name}</span>
-          <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
-            <path
-              d="m3 4.5 3 3 3-3"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <IconChevronDown size={11} />
         </button>
         <button
           type="button"
@@ -357,7 +351,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
           aria-label={`Next ${props.lane === "drums" ? "kit" : "preset"} for ${laneNames(props.lane)}`}
           onClick={() => stepSound(1)}
         >
-          +
+          <IconPlus size={10} />
         </button>
       </div>
     </div>
@@ -520,7 +514,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
                         aria-label={`Transpose octave down for ${laneNames(props.lane)}`}
                         onClick={() => stepOctave(-1)}
                       >
-                        –
+                        <IconMinus size={10} />
                       </button>
                       <span class="head-ctl-value head-oct-value">
                         <RollValue value={octave()}>
@@ -533,7 +527,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
                         aria-label={`Transpose octave up for ${laneNames(props.lane)}`}
                         onClick={() => stepOctave(1)}
                       >
-                        +
+                        <IconPlus size={10} />
                       </button>
                     </div>
                   </div>
@@ -610,7 +604,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
               aria-label={`Shorter gate for ${laneNames(props.lane)}`}
               onClick={() => stepGate(-1)}
             >
-              –
+              <IconMinus size={10} />
             </button>
             <span class="head-ctl-value">
               <RollValue value={gate()}>{gate()}</RollValue>
@@ -624,7 +618,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
               aria-label={`Longer gate for ${laneNames(props.lane)}`}
               onClick={() => stepGate(1)}
             >
-              +
+              <IconPlus size={10} />
             </button>
           </div>
         </div>
@@ -648,6 +642,7 @@ export default function LaneHeader(props: { lane: LaneId }): JSX.Element {
               );
             }}
           >
+            <IconTrash size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
             Remove track
           </button>
         </Show>

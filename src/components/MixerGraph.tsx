@@ -1,4 +1,4 @@
-import { createMemo, For, type JSX } from "solid-js";
+import { createMemo, createSignal, For, Show, type JSX } from "solid-js";
 import { eqBandHasGain, eqBandHasQ, type EqBand } from "../document/mixer";
 
 export interface MixerSpectrum {
@@ -28,6 +28,8 @@ export default function MixerGraph(props: {
   spectrum?: MixerSpectrum;
   set?: (values: Record<string, number>) => void;
 }): JSX.Element {
+  const [hoveredKey, setHoveredKey] = createSignal<string | null>(null);
+
   const sampleRate = createMemo(() => props.spectrum?.sampleRate ?? 48000);
   const context = createMemo(() => new OfflineAudioContext(1, 1, sampleRate()));
   const nodes = createMemo(() =>
@@ -70,6 +72,11 @@ export default function MixerGraph(props: {
           .filter((b) => b.enabled)
           .map((b) => [b.type, b.frequency, b.q, b.gain]);
     return responsePath(settings);
+  });
+  const curveArea = createMemo(() => {
+    const c = curve();
+    if (!c) return "";
+    return `${c} L392,${y(0).toFixed(2)} L28,${y(0).toFixed(2)} Z`;
   });
   const spectrum = createMemo(() => {
     const s = props.spectrum;
@@ -141,6 +148,20 @@ export default function MixerGraph(props: {
         });
     }
   };
+
+  const bandTooltipText = (key: string): string => {
+    if (props.filter) {
+      return `${Math.round(props.filter.cutoffHz)} Hz · Q ${props.filter.q.toFixed(1)}`;
+    }
+    const b = props.eqBands?.find((item) => String(item.id) === key);
+    if (!b) return "";
+    const gainStr = eqBandHasGain(b)
+      ? ` · ${b.gain > 0 ? "+" : ""}${b.gain.toFixed(1)} dB`
+      : "";
+    const qStr = eqBandHasQ(b) ? ` · Q ${b.q.toFixed(1)}` : "";
+    return `${Math.round(b.frequency)} Hz${gainStr}${qStr}`;
+  };
+
   // Stable IDs retain focus and pointer capture when bands cross or values change.
   const keys = () =>
     props.filter
@@ -161,6 +182,13 @@ export default function MixerGraph(props: {
           preserveAspectRatio="none"
           aria-hidden="true"
         >
+          <defs>
+            <linearGradient id="mixerEqAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--theme-accent)" stop-opacity="0.22" />
+              <stop offset="60%" stop-color="var(--theme-accent)" stop-opacity="0.04" />
+              <stop offset="100%" stop-color="var(--theme-accent)" stop-opacity="0.14" />
+            </linearGradient>
+          </defs>
           <For each={[100, 1000]}>
             {(f) => (
               <>
@@ -188,6 +216,7 @@ export default function MixerGraph(props: {
             20k Hz
           </text>
           <path class="mixer-spectrum" d={spectrum()} />
+          <path class="mixer-response-area" d={curveArea()} fill="url(#mixerEqAreaGrad)" />
           <path class="mixer-selected-response" d={selectedCurve()} />
           <path class="mixer-response" d={curve()} />
         </svg>
@@ -197,7 +226,7 @@ export default function MixerGraph(props: {
             return (
               <button
                 class="mixer-band"
-                aria-label={`${band().name}. Arrow keys adjust; Shift changes Q; exact values below.`}
+                aria-label={`${band().name}. Arrow keys adjust; Shift or Wheel changes Q; exact values below.`}
                 aria-pressed={
                   props.filter ? undefined : props.selectedId === Number(key)
                 }
@@ -212,6 +241,24 @@ export default function MixerGraph(props: {
                   top: `${(y(band().gain) / 170) * 100}%`,
                 }}
                 onClick={() => props.selectBand?.(Number(key))}
+                onWheel={(e) => {
+                  e.preventDefault();
+                  const delta = -Math.sign(e.deltaY) * 0.2;
+                  if (props.filter) {
+                    props.set?.({ q: clamp(props.filter.q + delta, 0.1, 18) });
+                  } else {
+                    const b = props.eqBands?.find((item) => String(item.id) === key);
+                    if (b && eqBandHasQ(b)) {
+                      props.updateBand?.(b.id, {
+                        q: Number(clamp(b.q + delta, 0.1, 18).toFixed(1)),
+                      });
+                    }
+                  }
+                }}
+                onPointerEnter={() => setHoveredKey(key)}
+                onPointerLeave={() => {
+                  if (dragging?.key !== key) setHoveredKey(null);
+                }}
                 onPointerDown={(e) => {
                   if (e.button !== 0) return;
                   e.preventDefault();
@@ -230,12 +277,15 @@ export default function MixerGraph(props: {
                 }}
                 onPointerUp={() => {
                   dragging = undefined;
+                  setHoveredKey(null);
                 }}
                 onPointerCancel={() => {
                   dragging = undefined;
+                  setHoveredKey(null);
                 }}
                 onLostPointerCapture={() => {
                   dragging = undefined;
+                  setHoveredKey(null);
                 }}
                 onKeyDown={(e) => {
                   const dx =
@@ -291,6 +341,11 @@ export default function MixerGraph(props: {
                 }}
               >
                 {band().letter}
+                <Show when={hoveredKey() === key || dragging?.key === key}>
+                  <span class="mixer-band-tooltip" role="tooltip">
+                    {bandTooltipText(key)}
+                  </span>
+                </Show>
               </button>
             );
           }}

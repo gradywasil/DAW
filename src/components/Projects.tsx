@@ -1,3 +1,4 @@
+import { IconFolder, IconFilePlus, IconWaveform, IconLayers, IconMidi, IconDisk, IconPencil, IconTrash } from "./icons";
 /**
  * Projects (HU-3, absorbing MF-3's FileIO): one booth-corner "PROJECTS" button
  * opening a popover with every saved project (name + relative time, from
@@ -116,6 +117,11 @@ registerHelp([
     id: "projects.wav",
     title: "EXPORT WAV",
     text: "Renders a stereo WAV in left-to-right block order. Each block uses its configured bars or repeats; held blocks play once. Shorter lanes finish naturally. The song ends after the longest lane, with its effects tail retained. Live jumps, random actions, and section launches are excluded. Playback is never interrupted.",
+  },
+  {
+    id: "projects.stems",
+    title: "EXPORT STEMS",
+    text: "Renders individual discrete stereo WAV tracks for every instrument lane plus the master mix, compressed into a single ZIP archive. Ideal for importing into any external DAW or mixer.",
   },
   {
     id: "projects.midi",
@@ -527,6 +533,32 @@ export default function Projects(): JSX.Element {
     }
   };
 
+  /** Render stems for all tracks offline and download as ZIP. */
+  const handleExportStems = async () => {
+    if (busy()) return;
+    setBusy(true);
+    const renderingId = showInfo("RENDERING STEMS…", { sticky: true });
+    try {
+      const { exportStems } = await import("../audio/exportStems");
+      const result = await exportStems(docStore.getState().doc);
+      if (result.ok) {
+        showSuccess(
+          `STEMS EXPORTED · ${result.trackCount} TRACKS (${result.bars}-BAR SONG)`,
+        );
+      } else {
+        showError(result.message, { suggestion: result.suggestion });
+      }
+    } catch {
+      showError("Stems export could not start.", {
+        suggestion:
+          "The app may have been updated — reload the page, then try again.",
+      });
+    } finally {
+      dismissToast(renderingId);
+      setBusy(false);
+    }
+  };
+
   const handleExportMidi = async () => {
     if (busy()) return;
     setBusy(true);
@@ -588,7 +620,7 @@ export default function Projects(): JSX.Element {
         disabled={busy()}
         onClick={toggle}
       >
-        PROJECTS
+        <IconFolder size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />PROJECTS
       </button>
       {open() && (
         <div
@@ -653,7 +685,7 @@ export default function Projects(): JSX.Element {
                         disabled={busy()}
                         onClick={() => startRename(meta)}
                       >
-                        RENAME
+                        <IconPencil size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />RENAME
                       </button>
                       <button
                         type="button"
@@ -663,7 +695,7 @@ export default function Projects(): JSX.Element {
                         disabled={busy()}
                         onClick={() => startConfirm(meta.id)}
                       >
-                        DELETE
+                        <IconTrash size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />DELETE
                       </button>
                     </div>
                   )}
@@ -699,7 +731,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleNew()}
             >
-              NEW
+              <IconFilePlus size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />NEW
             </button>
             <button
               type="button"
@@ -708,7 +740,16 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportWav()}
             >
-              EXPORT WAV
+              <IconWaveform size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT WAV
+            </button>
+            <button
+              type="button"
+              class="booth-btn projects-action"
+              data-help="projects.stems"
+              disabled={busy()}
+              onClick={() => void handleExportStems()}
+            >
+              <IconLayers size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT STEMS
             </button>
             <button
               type="button"
@@ -717,7 +758,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportMidi()}
             >
-              EXPORT SONG MIDI
+              <IconMidi size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT SONG MIDI
             </button>
             <button
               type="button"
@@ -725,7 +766,7 @@ export default function Projects(): JSX.Element {
               data-help="projects.save"
               onClick={handleSave}
             >
-              SAVE FILE
+              <IconDisk size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />SAVE FILE
             </button>
             <button
               type="button"
@@ -734,7 +775,7 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => fileInput?.click()}
             >
-              OPEN FILE
+              <IconFolder size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />OPEN FILE
             </button>
           </div>
           <p class="projects-note">

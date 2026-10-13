@@ -1,3 +1,4 @@
+import { IconPlus, IconClose, IconCurve } from "./icons";
 import { createMemo, createSignal, For, type JSX } from "solid-js";
 import {
   equalizerBands,
@@ -9,6 +10,7 @@ import {
   type EqBand,
 } from "../document/mixer";
 import MixerGraph, { type MixerSpectrum } from "./MixerGraph";
+import { EQ_PRESETS, applyEqPreset } from "./mixerPresets";
 
 const names: Record<EqBand["type"], string> = {
   peaking: "Bell",
@@ -157,22 +159,42 @@ export default function MixerEq(props: {
             disabled={bands().length >= MAX_EQ_BANDS}
             onClick={add}
           >
-            + Band
+            <IconPlus size={10} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Band
           </button>
           <button
             aria-label="Remove selected EQ band"
             disabled={!active()}
             onClick={remove}
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m4 4 8 8M12 4l-8 8"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
-            </svg>
+            <IconClose size={12} />
           </button>
+
+          <div class="mixer-eq-presets" role="group" aria-label="EQ Curve Presets">
+            <span class="mixer-eq-preset-label">
+              <IconCurve size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />
+              Curve:
+            </span>
+            <select
+              class="mixer-eq-preset-select"
+              aria-label="EQ Curve Presets"
+              onChange={(e) => {
+                const val = e.currentTarget.value;
+                if (!val) return;
+                const updated = applyEqPreset(props.value, val);
+                props.set(updated);
+                e.currentTarget.value = "";
+              }}
+            >
+              <option value="" disabled selected>Presets...</option>
+              <For each={EQ_PRESETS}>
+                {(preset) => (
+                  <option value={preset.id} title={preset.description}>
+                    {preset.name}
+                  </option>
+                )}
+              </For>
+            </select>
+          </div>
         </div>
         <MixerGraph
           eqBands={bands()}
@@ -222,7 +244,7 @@ export default function MixerEq(props: {
           </label>
           <span>
             {active()
-              ? `Band ${active()!.id} · Shift-drag Q`
+              ? `Band ${active()!.id} · Shift-drag or Wheel Q`
               : "Add a band to shape the sound"}
           </span>
         </div>

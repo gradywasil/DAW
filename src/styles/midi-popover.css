@@ -1,0 +1,236 @@
+/**
+ * MIDI Controller Popover & Status styles.
+ * Follows the arcade chassis vocabulary: brushed panel metal, machined buttons,
+ * tactile LEDs, and crisp silkscreen typography.
+ */
+
+.booth-btn-midi {
+  position: relative;
+}
+
+.booth-btn-midi.is-active {
+  color: var(--color-ink);
+  background: var(--metal-pressed);
+  border-color: var(--color-ink);
+}
+
+.booth-btn-midi.has-pulse::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  box-shadow: 0 0 6px var(--color-ink);
+}
+
+.midi-pop-wrap {
+  position: relative;
+}
+
+.midi-pop {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 50;
+  width: 320px;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background-color: var(--metal-panel);
+  background-image: var(--metal-brush);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, var(--metal-panel));
+  border-radius: 6px;
+  box-shadow: var(--elev-3);
+  color: var(--color-ink);
+}
+
+.midi-pop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  padding-bottom: var(--space-2);
+}
+
+.midi-pop-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.midi-pop-title {
+  font: var(--text-panel-label-sm);
+  letter-spacing: var(--track-panel-label);
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.midi-pop-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--text-label-xs);
+  color: var(--theme-muted);
+}
+
+.midi-pop-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #555;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.midi-pop-led.is-connected {
+  background: #34d399;
+  box-shadow: 0 0 6px #34d399;
+}
+
+.midi-pop-led.is-pending {
+  background: #fbbf24;
+  box-shadow: 0 0 6px #fbbf24;
+}
+
+.midi-pop-led.is-error {
+  background: #f87171;
+  box-shadow: 0 0 6px #f87171;
+}
+
+.midi-pop-devices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.midi-pop-section-label {
+  font: var(--text-label-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--theme-muted);
+}
+
+.midi-device-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 110px;
+  overflow-y: auto;
+  background: var(--metal-sunken, rgba(0, 0, 0, 0.2));
+  border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  border-radius: 4px;
+  padding: var(--space-2);
+}
+
+.midi-device-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: var(--text-value-sm);
+  padding: 3px 6px;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-ink);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.midi-device-item:hover {
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.midi-device-item.is-selected {
+  background: color-mix(in srgb, var(--color-ink) 20%, transparent);
+  font-weight: bold;
+}
+
+.midi-device-none {
+  font: var(--text-label-xs);
+  color: var(--theme-muted);
+  font-style: italic;
+  padding: 6px;
+  text-align: center;
+}
+
+.midi-pop-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.midi-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: var(--text-label-sm);
+  cursor: pointer;
+  user-select: none;
+}
+
+.midi-toggle-row input[type="checkbox"] {
+  accent-color: var(--color-ink);
+  cursor: pointer;
+}
+
+.midi-mode-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.midi-mode-btn {
+  font: var(--text-label-xs);
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+  background: var(--metal-raised);
+  color: var(--color-ink);
+  cursor: pointer;
+  text-align: center;
+}
+
+.midi-mode-btn:hover {
+  background: color-mix(in srgb, var(--color-ink) 15%, var(--metal-raised));
+}
+
+.midi-mode-btn.is-active {
+  background: var(--color-ink);
+  color: var(--color-ink-on-fill);
+  border-color: var(--color-ink);
+}
+
+.midi-pop-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.midi-action-btn {
+  flex: 1;
+  font: var(--text-label-sm);
+  padding: 7px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--color-ink);
+  background: var(--metal-raised);
+  color: var(--color-ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: center;
+}
+
+.midi-action-btn:hover {
+  background: color-mix(in srgb, var(--color-ink) 15%, var(--metal-raised));
+}
+
+.midi-action-btn.is-primary {
+  background: var(--color-ink);
+  color: var(--color-ink-on-fill);
+}
+
+.midi-action-btn.is-primary:hover {
+  opacity: 0.9;
+}

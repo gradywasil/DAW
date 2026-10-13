@@ -22,7 +22,6 @@ import {
 } from "./scheduler";
 import {
   type Position,
-  STEPS_PER_BAR,
   barBeatStep,
   clampBpm,
   clampSwing,
@@ -56,6 +55,7 @@ export interface TransportOptions {
   readonly cycleSteps?: number;
   readonly intervalMs?: number;
   readonly horizonSeconds?: number;
+  readonly liveHorizonSeconds?: number;
   readonly setIntervalFn?: NonNullable<
     import("./scheduler").SchedulerOptions["setIntervalFn"]
   >;
@@ -109,6 +109,7 @@ export class Transport {
       provideEvents: (after, until) => this.compileTicks(after, until),
       intervalMs: opts.intervalMs,
       horizonSeconds: opts.horizonSeconds,
+      liveHorizonSeconds: opts.liveHorizonSeconds,
       setIntervalFn: opts.setIntervalFn,
       clearIntervalFn: opts.clearIntervalFn,
     });
@@ -358,6 +359,3 @@ export class Transport {
     this.emit();
   }
 }
-
-// Re-export for consumer convenience without DOM/framework coupling.
-export { STEPS_PER_BAR };

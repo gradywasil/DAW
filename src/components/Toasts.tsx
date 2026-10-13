@@ -1,3 +1,4 @@
+import { IconClose } from "./icons";
 /**
  * Toasts (HU-2) — the single renderer for the shared toast bus
  * (src/state/toasts.ts). Errors render inside a role=alert region (assertive
@@ -71,7 +72,7 @@ function ToastCard(props: { toast: Toast }) {
         aria-label="Dismiss notification"
         onClick={() => dismissToast(t().id)}
       >
-        ✕
+        <IconClose size={12} />
       </button>
     </div>
   );

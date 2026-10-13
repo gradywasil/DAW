@@ -13,8 +13,8 @@
  * an edit can only change steps that have NOT been delivered yet. A fixed
  * 1.5 s horizon therefore meant a note placed ahead of the playhead stayed
  * silent until the next loop. The horizon is now ADAPTIVE: while the page is
- * visible it is short (`liveHorizonSeconds`, ~120 ms, refilled every 25 ms —
- * edits land within about one beat-sixteenth), and when the page is hidden
+ * visible it is short (`liveHorizonSeconds`, ~50 ms, refilled every 20 ms —
+ * edits land within less than one beat-sixteenth), and when the page is hidden
  * it widens to `horizonSeconds` (1.5 s) so a background-throttled
  * setInterval (>= 1 Hz) still never starves the audio. The switch to the
  * long horizon runs synchronously on `visibilitychange`, before the browser
@@ -40,14 +40,14 @@ export interface SchedulerOptions {
   getContext(): { readonly currentTime: number };
   scheduleEvent: ScheduleEventFn;
   provideEvents: ProvideEventsFn;
-  /** Refill interval (default 25 ms — must sit well inside the live horizon). */
+  /** Refill interval (default 20 ms — must sit well inside the live horizon). */
   readonly intervalMs?: number;
   /**
    * Background event horizon in seconds; 1-2 s covers 1 Hz timer throttling.
    * Passing it WITHOUT `liveHorizonSeconds` pins a fixed horizon (tests).
    */
   readonly horizonSeconds?: number;
-  /** Foreground horizon in seconds (default 0.12): how late an edit can land. */
+  /** Foreground horizon in seconds (default 0.05): how late an edit can land. */
   readonly liveHorizonSeconds?: number;
   /** True while the page is hidden (default: document.visibilityState). */
   readonly isHidden?: () => boolean;
@@ -91,11 +91,11 @@ export class LookaheadScheduler {
     this.getContext = opts.getContext;
     this.scheduleEvent = opts.scheduleEvent;
     this.provideEvents = opts.provideEvents;
-    this.intervalMs = opts.intervalMs ?? 25;
+    this.intervalMs = opts.intervalMs ?? 20;
     this.horizonSeconds = opts.horizonSeconds ?? 1.5;
     this.liveHorizonSeconds =
       opts.liveHorizonSeconds ??
-      (opts.horizonSeconds !== undefined ? opts.horizonSeconds : 0.12);
+      (opts.horizonSeconds !== undefined ? opts.horizonSeconds : 0.05);
     this.isHidden = opts.isHidden ?? defaultIsHidden;
     this.onVisibilityChange =
       opts.onVisibilityChange ?? defaultOnVisibilityChange;
@@ -114,11 +114,11 @@ export class LookaheadScheduler {
     this.generatedUntil = this.getContext().currentTime;
     this.refill();
     this.timer = this.setIntervalFn(() => this.refill(), this.intervalMs);
-    // Going hidden: widen to the background horizon NOW, while timers still
-    // run at full rate. Coming back: nothing to do — the short horizon simply
-    // stops delivering until playback catches up with what is committed.
     this.unsubscribeVisibility = this.onVisibilityChange(() => {
-      if (this.timer !== null) this.refill();
+      // Visibility flipped. Re-run refill immediately: if the page just went
+      // hidden, this widens coverage to the 1.5 s horizon synchronously,
+      // BEFORE the browser has a chance to clamp setInterval to 1 Hz.
+      if (this.running) this.refill();
     });
   }
 
@@ -129,39 +129,56 @@ export class LookaheadScheduler {
     this.unsubscribeVisibility?.();
     this.unsubscribeVisibility = null;
     this.queue = [];
-    this.generatedUntil = 0;
+  }
+
+  private currentHorizon(): number {
+    return this.isHidden() ? this.horizonSeconds : this.liveHorizonSeconds;
   }
 
   private refill(): void {
     const now = this.getContext().currentTime;
-    const horizon =
-      now + (this.isHidden() ? this.horizonSeconds : this.liveHorizonSeconds);
+    const horizon = this.currentHorizon();
+    const until = now + horizon;
 
-    // Ask the compiler for events until the horizon is fully covered.
-    // An empty response means "nothing more to generate" (end of song).
-    while (this.generatedUntil < horizon) {
-      const events = this.provideEvents(this.generatedUntil, horizon);
-      for (const e of events) this.queue.push(e);
-      this.generatedUntil = horizon;
-      if (events.length === 0) break;
+    // Drain already-delivered events from the queue (currentTime has passed).
+    // The queue is sorted by time; find the first event whose time is in the
+    // future.
+    let dropCount = 0;
+    while (
+      dropCount < this.queue.length &&
+      this.queue[dropCount].time <= now
+    ) {
+      dropCount++;
+    }
+    if (dropCount > 0) {
+      this.queue.splice(0, dropCount);
     }
 
-    // Events must arrive sorted; only hand out what is inside the horizon.
-    while (this.queue.length > 0 && this.queue[0].time <= horizon) {
-      const event = this.queue.shift()!;
-      this.scheduleEvent(event, event.time);
+    // Ask the compiler for new events between generatedUntil and until.
+    if (this.generatedUntil < until) {
+      const newEvents = this.provideEvents(this.generatedUntil, until);
+      for (const ev of newEvents) {
+        this.queue.push(ev);
+        this.scheduleEvent(ev, ev.time);
+      }
+      this.generatedUntil = until;
     }
   }
 }
 
 function defaultIsHidden(): boolean {
-  return (
-    typeof document !== "undefined" && document.visibilityState === "hidden"
-  );
+  if (typeof document === "undefined") return false;
+  return document.visibilityState === "hidden";
 }
 
 function defaultOnVisibilityChange(fn: () => void): () => void {
-  if (typeof document === "undefined") return () => {};
-  document.addEventListener("visibilitychange", fn);
-  return () => document.removeEventListener("visibilitychange", fn);
+  if (
+    typeof document === "undefined" ||
+    typeof document.addEventListener !== "function"
+  ) {
+    return () => {};
+  }
+  const handler = () => fn();
+  document.addEventListener("visibilitychange", handler);
+  return () => document.removeEventListener("visibilitychange", handler);
 }

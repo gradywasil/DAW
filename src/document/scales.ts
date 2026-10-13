@@ -77,6 +77,38 @@ export function degreeToMidi(
 }
 
 /**
+ * MIDI note number → Scale-degree index.
+ * Maps any MIDI note number into the closest scale degree.
+ * `inScale` is true if the MIDI note matches an exact scale interval.
+ */
+export function midiToDegree(
+  scale: EffectiveScale,
+  midi: number,
+  octaveBase: number,
+): { degree: number; inScale: boolean } {
+  const baseMidi = 12 * (octaveBase + 1) + scale.root;
+  const diff = midi - baseMidi;
+  const octave = Math.floor(diff / 12);
+  const semitone = ((diff % 12) + 12) % 12;
+
+  let bestIndex = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < scale.intervals.length; i++) {
+    const dist = Math.abs(semitone - scale.intervals[i]!);
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestIndex = i;
+    }
+  }
+
+  const degree = octave * scale.intervals.length + bestIndex;
+  return {
+    degree,
+    inScale: bestDist === 0,
+  };
+}
+
+/**
  * Diatonic chord rows for the chords lane: chord shapes as scale-degree stacks.
  * Row i is the triad built on scale degree i: degrees [i, i+2, i+4], each taken
  * diatonically in the mode (wrapping adds an octave via degreeToMidi).

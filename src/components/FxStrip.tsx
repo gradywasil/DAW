@@ -1,3 +1,4 @@
+import { IconChevronLeft, IconChevronRight, IconClose, IconDrive, IconDelay, IconReverb, IconBitcrush, IconFilter, IconCompressor, IconEq, IconAddFx } from "./icons";
 import { Portal } from "solid-js/web";
 import MixerParam from "./MixerParam";
 import MixerGraph, { type MixerSpectrum } from "./MixerGraph";
@@ -250,7 +251,7 @@ export default function FxStrip(props: {
                 }
               }}
             >
-              + ADD FX
+              <IconAddFx size={12} style={{ "margin-right": "5px", "vertical-align": "-1px" }} />+ ADD FX
             </button>
             <Show when={addOpen()}>
               <div
@@ -274,9 +275,11 @@ export default function FxStrip(props: {
                       role="menuitem"
                       class="fx-add-item"
                       data-help={`fx.device.${type}`}
+                      style={{ display: "flex", "align-items": "center", gap: "6px" }}
                       onClick={() => handleAdd(type)}
                     >
-                      {FX_DEVICE_SPECS[type].label}
+                      <FxDeviceIcon type={type} />
+                      <span>{FX_DEVICE_SPECS[type].label}</span>
                     </button>
                   )}
                 </For>
@@ -315,6 +318,20 @@ function moduleMeter(mod: FxModule): number {
     ? cutoffToSlider(raw) / 1000
     : (raw - spec.min) / (spec.max - spec.min || 1);
   return Math.round(Math.min(1, Math.max(0, t)) * 100) / 100;
+}
+
+
+function FxDeviceIcon(props: { type: string }) {
+  switch (props.type) {
+    case "drive": return <IconDrive size={13} />;
+    case "delay": return <IconDelay size={13} />;
+    case "reverb": return <IconReverb size={13} />;
+    case "bitcrush": return <IconBitcrush size={13} />;
+    case "filter": return <IconFilter size={13} />;
+    case "compressor": return <IconCompressor size={13} />;
+    case "eq": return <IconEq size={13} />;
+    default: return null;
+  }
 }
 
 function FxModuleView(props: {
@@ -370,7 +387,8 @@ function FxModuleView(props: {
       onDragEnd={props.onDragEnd}
     >
       <header class="fx-mod-head">
-        <span class="fx-mod-name" aria-hidden="true">
+        <span class="fx-mod-name" aria-hidden="true" style={{ display: "inline-flex", "align-items": "center", gap: "6px" }}>
+          <FxDeviceIcon type={m().device.type} />
           {label()}
         </span>
         <span class="fx-mod-actions">
@@ -382,14 +400,7 @@ function FxModuleView(props: {
             aria-label={`Move ${label()} module earlier`}
             onClick={() => props.onMove(-1)}
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m10 3-5 5 5 5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
+            <IconChevronLeft size={12} />
           </button>
           <button
             type="button"
@@ -399,14 +410,7 @@ function FxModuleView(props: {
             aria-label={`Move ${label()} module later`}
             onClick={() => props.onMove(1)}
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m6 3 5 5-5 5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
+            <IconChevronRight size={12} />
           </button>
           <button
             type="button"
@@ -429,14 +433,7 @@ function FxModuleView(props: {
             aria-label={`Remove ${label()} module`}
             onClick={props.onRemove}
           >
-            <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true">
-              <path
-                d="m4 4 8 8M12 4l-8 8"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
+            <IconClose size={12} />
           </button>
         </span>
       </header>

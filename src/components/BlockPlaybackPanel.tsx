@@ -1,3 +1,4 @@
+import { IconClose, IconCopy, IconDuplicate, IconLoop, IconDouble } from "./icons";
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import type { LaneId, PlaybackRule } from "../document/schema";
@@ -125,7 +126,7 @@ export default function BlockPlaybackPanel(props: {
             {displayName(props.lane)} · Block {props.slot + 1}
           </h2>
           <button type="button" onClick={props.onClose}>
-            Close
+            <IconClose size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Close
           </button>
         </div>
         <p>
@@ -137,7 +138,7 @@ export default function BlockPlaybackPanel(props: {
             patternId={pattern()?.id ?? ""}
           />
           <button type="button" onClick={copy}>
-            Copy
+            <IconCopy size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Copy
           </button>
           <button
             type="button"
@@ -146,13 +147,13 @@ export default function BlockPlaybackPanel(props: {
             }
             onClick={() => insert("paste")}
           >
-            Paste after
+            <IconCopy size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Paste after
           </button>
           <button type="button" onClick={() => insert("duplicate")}>
-            Duplicate block
+            <IconDuplicate size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Duplicate block
           </button>
           <button type="button" onClick={() => insert("reuse")}>
-            Reuse pattern
+            <IconLoop size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Reuse pattern
           </button>
           <button
             type="button"
@@ -168,7 +169,7 @@ export default function BlockPlaybackPanel(props: {
                 setMessage(`Pattern doubled to ${p.bars * 2} bars.`);
             }}
           >
-            Double ×2
+            <IconDouble size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Double ×2
           </button>
         </div>
         <p class="block-panel-hint">

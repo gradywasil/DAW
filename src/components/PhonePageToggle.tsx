@@ -1,3 +1,4 @@
+import { IconGridStage, IconRack, IconTimeline, IconMixer } from "./icons";
 /**
  * The EDIT ⇄ SONG page key (2026-09-11).
  *
@@ -31,7 +32,7 @@ export function DesktopPageNavigation(): JSX.Element {
         aria-pressed={phonePage() === "edit"}
         onClick={() => showPhonePage("edit")}
       >
-        Instruments 1–4
+        <IconGridStage size={13} style={{ "margin-right": "5px", "vertical-align": "-1px" }} />Instruments 1–4
       </button>
       <button
         type="button"
@@ -39,7 +40,7 @@ export function DesktopPageNavigation(): JSX.Element {
         aria-pressed={phonePage() === "instruments"}
         onClick={() => showPhonePage("instruments")}
       >
-        Instruments 5–8
+        <IconRack size={13} style={{ "margin-right": "5px", "vertical-align": "-1px" }} />Instruments 5–8
       </button>
       <button
         type="button"
@@ -47,7 +48,7 @@ export function DesktopPageNavigation(): JSX.Element {
         aria-pressed={phonePage() === "song"}
         onClick={() => showPhonePage("song")}
       >
-        Song arrangement
+        <IconTimeline size={13} style={{ "margin-right": "5px", "vertical-align": "-1px" }} />Song arrangement
       </button>
       <button
         type="button"
@@ -55,7 +56,7 @@ export function DesktopPageNavigation(): JSX.Element {
         aria-pressed={phonePage() === "mixer"}
         onClick={() => showPhonePage("mixer")}
       >
-        Mixer
+        <IconMixer size={13} style={{ "margin-right": "5px", "vertical-align": "-1px" }} />Mixer
       </button>
     </nav>
   );
@@ -84,7 +85,7 @@ export function SongPageButton(props: { class: string }): JSX.Element {
       aria-pressed={phonePage() === "song"}
       onClick={() => togglePhonePage()}
     >
-      SONG
+      <IconTimeline size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />SONG
     </button>
   );
 }
@@ -98,7 +99,7 @@ export default function PhonePageToggle(): JSX.Element {
       data-help="phone.page"
       onClick={() => togglePhonePage()}
     >
-      {phonePage() === "song" ? "NOTES" : "SONG"}
+      {phonePage() === "song" ? (<><IconGridStage size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />NOTES</>) : (<><IconTimeline size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />SONG</>)}
     </button>
   );
 }

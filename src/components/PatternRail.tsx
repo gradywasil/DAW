@@ -1,3 +1,4 @@
+import { IconPlus, IconMinus, IconCopy, IconDuplicate, IconTrash } from "./icons";
 import {
   createLaneDisplayNames,
   createLaneAccessibleNames,
@@ -1174,7 +1175,7 @@ function LaneRail(props: { lane: LaneId }): JSX.Element {
           aria-label={`Append new blank pattern to ${laneNames(props.lane)} chain`}
           onClick={() => handleAppendBlank()}
         >
-          +
+          <IconPlus size={14} />
         </button>
         <Show when={patternClipboard()?.lane === props.lane}>
           <button
@@ -1190,7 +1191,7 @@ function LaneRail(props: { lane: LaneId }): JSX.Element {
               focusSlotAfterEdit(slot);
             }}
           >
-            Paste
+            <IconCopy size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Paste
           </button>
         </Show>
         <Show when={structurePending()}>
@@ -1291,7 +1292,7 @@ function LaneRail(props: { lane: LaneId }): JSX.Element {
                 aria-label={`Shrink ${laneNames(props.lane)} selected pattern one length step (Shift+B)`}
                 onClick={() => stepPatternLength(props.lane, -1)}
               >
-                LENGTH −
+                <IconMinus size={10} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />LENGTH −
               </button>
               <span class="rail-length-value" aria-live="polite">
                 {`LENGTH ${selectedBars()} BAR${selectedBars() === 1 ? "" : "S"}`}
@@ -1303,7 +1304,7 @@ function LaneRail(props: { lane: LaneId }): JSX.Element {
                 aria-label={`Grow ${laneNames(props.lane)} selected pattern one length step (B)`}
                 onClick={() => stepPatternLength(props.lane, 1)}
               >
-                LENGTH +
+                <IconPlus size={10} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />LENGTH +
               </button>
             </div>
             <button
@@ -1316,7 +1317,7 @@ function LaneRail(props: { lane: LaneId }): JSX.Element {
                 closeTools();
               }}
             >
-              Duplicate block
+              <IconDuplicate size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Duplicate block
             </button>
             <PatternMidiExport lane={props.lane} patternId={selectedId()} />
             <button
@@ -1330,7 +1331,7 @@ function LaneRail(props: { lane: LaneId }): JSX.Element {
                 closeTools();
               }}
             >
-              RM
+              <IconTrash size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />RM
             </button>
           </div>
         </Show>

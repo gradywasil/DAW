@@ -1,3 +1,4 @@
+import { IconSparkle, IconLock } from "./icons";
 import MixerParam from "./MixerParam";
 import type { MixerSpectrum } from "./MixerGraph";
 import MixerEq from "./MixerEq";
@@ -447,7 +448,7 @@ export default function MixerPage(): JSX.Element {
             aria-controls="mixer-auto-panel"
             onClick={() => setAutoOpen(!autoOpen())}
           >
-            Auto Mix
+            <IconSparkle size={12} style={{ "margin-right": "5px", "vertical-align": "-1px" }} />Auto Mix
           </button>
         </div>
       </header>
@@ -743,7 +744,7 @@ export default function MixerPage(): JSX.Element {
                         }))
                       }
                     >
-                      Lock
+                      <IconLock size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Lock
                     </button>
                   </div>
                 </Show>

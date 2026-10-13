@@ -1,3 +1,4 @@
+import { IconClose } from "./icons";
 /**
  * HU-1 — support banners: renders at most one boot-time banner derived from
  * the pure `bannerFor` selection (detect.ts + banners.ts). Banners are
@@ -72,7 +73,7 @@ export default function SupportBanners() {
           aria-label={DISMISS_LABEL[model!.kind]}
           onClick={dismiss}
         >
-          ✕<span class="sr-only"> DISMISS</span>
+          <IconClose size={12} /><span class="sr-only"> DISMISS</span>
         </button>
       </div>
     </Show>

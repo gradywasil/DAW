@@ -47,3 +47,11 @@ it does not establish a browser-version matrix, external assistant integration,
 live-origin acceptance, physical-phone acceptance or musical listening approval.
 Cancellation discards analysis results; an already-started native offline render
 may finish internally. The temporary fixture preview is closed after verification.
+
+## Release preparation
+
+The production release is prepared from an isolated checkout with a clean install.
+It includes the WebMCP work and the already-live sound-library, sound-browser and
+playback-fix changes so production behavior is retained. Benchmark dependencies,
+performance research and task notes remain outside this release. The production
+Worker is `daw`; the separate Pages site is not the production custom domain.

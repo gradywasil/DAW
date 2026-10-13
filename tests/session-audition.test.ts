@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { Session } from "../src/engine/session";
+import { AUDITION_LEAD_SECONDS, Session } from "../src/engine/session";
 import {
   getDrumKit,
   getPreset,
@@ -102,12 +102,12 @@ describe("Session.audition", () => {
     expect(sent[0][0].wave).toBe(1);
     expect(sent[0][0].sample).toBeUndefined();
   });
-  it("pitched: triggers one voice at now+30ms with the lane preset", async () => {
+  it("pitched: triggers one voice at now+lead time with the lane preset", async () => {
     const { session, sent } = auditionSession();
     await session.audition("bass", 4);
     expect(sent.length).toBe(1);
     const [ev] = sent[0];
-    expect(ev.time).toBeCloseTo(10.03, 9);
+    expect(ev.time).toBeCloseTo(10 + AUDITION_LEAD_SECONDS, 9);
     expect(ev.type).toBe("note-on");
     expect(ev.wave).toBe(0); // preset-bass-1 is a pulse
     // degree 4 of C minor at octaveBase 2

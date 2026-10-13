@@ -1,3 +1,4 @@
+import { IconPlus } from "./icons";
 import {
   createLaneDisplayNames,
   createLaneAccessibleNames,
@@ -169,7 +170,7 @@ export function LaneSwitcher(): JSX.Element {
           data-help="stage.addInstrument"
           onClick={add}
         >
-          <span aria-hidden="true">+</span>
+          <span aria-hidden="true" style={{ display: "inline-flex", "align-items": "center", "justify-content": "center" }}><IconPlus size={14} /></span>
           <span class="head-sr">Add new instrument</span>
         </button>
       </Show>
