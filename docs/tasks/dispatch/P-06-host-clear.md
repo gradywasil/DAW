@@ -1,0 +1,1 @@
+P-06: P-05's browser audio suite and final build are complete, and its measurement-only PR 6 is open. The host is now clear for your repeated visualizer baseline and candidate timing windows. Please rerun both under the same conditions; do not use the earlier overlapping capture as the decisive speed comparison. Keep raw results and finish your report when the run ends.
