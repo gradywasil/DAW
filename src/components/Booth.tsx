@@ -10,7 +10,7 @@ import ThemeSelector from "./ThemeSelector";
  * state (playing, loop, bpm…) rides Solid signals fed by transport.subscribe.
  */
 
-import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { Show, Suspense, createEffect, createSignal, lazy, onCleanup, onMount } from "solid-js";
 import type { Position } from "../audio/time";
 import { getSession } from "../engine/session";
 import {
@@ -41,15 +41,18 @@ import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
 import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss, IconMic, IconShare, IconDjDeck, IconModular } from "./icons";
-import SampleSlicerModal from "./SampleSlicerModal";
+const SampleSlicerModal = lazy(() => import("./SampleSlicerModal"));
+const ChordGeneratorModal = lazy(() => import("./ChordGeneratorModal"));
+const SidechainModal = lazy(() => import("./SidechainModal"));
+const KaossModal = lazy(() => import("./KaossModal"));
+const AudioRecorderModal = lazy(() => import("./AudioRecorderModal"));
+const ShareModal = lazy(() => import("./ShareModal"));
+const DjDeckModal = lazy(() => import("./DjDeckModal"));
+const ModularCanvasModal = lazy(() => import("./ModularCanvasModal"));
+const JamDrawer = lazy(() => import("./JamDrawer"));
+const HistoryDrawer = lazy(() => import("./HistoryDrawer"));
+
 import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
-import ChordGeneratorModal from "./ChordGeneratorModal";
-import SidechainModal from "./SidechainModal";
-import KaossModal from "./KaossModal";
-import AudioRecorderModal from "./AudioRecorderModal";
-import ShareModal from "./ShareModal";
-import DjDeckModal from "./DjDeckModal";
-import ModularCanvasModal from "./ModularCanvasModal";
 import { isModularCanvasOpen, setIsModularCanvasOpen } from "../audio/modularSynth";
 import { isDjDeckOpen, setIsDjDeckOpen } from "../audio/djDeck";
 import { isShareModalOpen, setIsShareModalOpen } from "../persist/shareUrl";
@@ -57,9 +60,7 @@ import { isRecorderOpen, setIsRecorderOpen } from "../audio/audioRecorder";
 import { isKaossOpen, setIsKaossOpen } from "../audio/kaossPad";
 import { isSidechainOpen, setIsSidechainOpen } from "../audio/sidechain";
 import { isChordGeneratorOpen, setIsChordGeneratorOpen } from "../audio/chordProgression";
-import JamDrawer from "./JamDrawer";
 import { isJamDrawerOpen, setIsJamDrawerOpen, toggleJamDrawer, jamPeers, jamPulse } from "../collab/jamSession";
-import HistoryDrawer from "./HistoryDrawer";
 import { canUndo, canRedo, isHistoryDrawerOpen, setIsHistoryDrawerOpen, toggleHistoryDrawer, undo, redo } from "../state/historyState";
 import MidiPopover from "./MidiPopover";
 import {
@@ -583,7 +584,9 @@ export function BoothOptions(props: BoothOptionsProps) {
             <IconJam size={13} />
           </button>
           <Show when={isJamDrawerOpen()}>
-            <JamDrawer onClose={() => setIsJamDrawerOpen(false)} />
+            <Suspense fallback={null}>
+              <JamDrawer onClose={() => setIsJamDrawerOpen(false)} />
+            </Suspense>
           </Show>
         </span>
         <button
@@ -600,7 +603,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconScissors size={13} />
         </button>
         <Show when={isSlicerOpen()}>
-          <SampleSlicerModal onClose={() => setIsSlicerOpen(false)} />
+          <Suspense fallback={null}>
+            <SampleSlicerModal onClose={() => setIsSlicerOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -616,7 +621,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconChord size={13} />
         </button>
         <Show when={isChordGeneratorOpen()}>
-          <ChordGeneratorModal onClose={() => setIsChordGeneratorOpen(false)} />
+          <Suspense fallback={null}>
+            <ChordGeneratorModal onClose={() => setIsChordGeneratorOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -632,7 +639,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconCompressor size={13} />
         </button>
         <Show when={isSidechainOpen()}>
-          <SidechainModal onClose={() => setIsSidechainOpen(false)} />
+          <Suspense fallback={null}>
+            <SidechainModal onClose={() => setIsSidechainOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -648,7 +657,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconKaoss size={13} />
         </button>
         <Show when={isKaossOpen()}>
-          <KaossModal onClose={() => setIsKaossOpen(false)} />
+          <Suspense fallback={null}>
+            <KaossModal onClose={() => setIsKaossOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -664,7 +675,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconMic size={13} />
         </button>
         <Show when={isRecorderOpen()}>
-          <AudioRecorderModal onClose={() => setIsRecorderOpen(false)} />
+          <Suspense fallback={null}>
+            <AudioRecorderModal onClose={() => setIsRecorderOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -680,7 +693,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconModular size={13} />
         </button>
         <Show when={isModularCanvasOpen()}>
-          <ModularCanvasModal onClose={() => setIsModularCanvasOpen(false)} />
+          <Suspense fallback={null}>
+            <ModularCanvasModal onClose={() => setIsModularCanvasOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -696,7 +711,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconDjDeck size={13} />
         </button>
         <Show when={isDjDeckOpen()}>
-          <DjDeckModal onClose={() => setIsDjDeckOpen(false)} />
+          <Suspense fallback={null}>
+            <DjDeckModal onClose={() => setIsDjDeckOpen(false)} />
+          </Suspense>
         </Show>
         <button
           type="button"
@@ -712,7 +729,9 @@ export function BoothOptions(props: BoothOptionsProps) {
           <IconShare size={13} />
         </button>
         <Show when={isShareModalOpen()}>
-          <ShareModal onClose={() => setIsShareModalOpen(false)} />
+          <Suspense fallback={null}>
+            <ShareModal onClose={() => setIsShareModalOpen(false)} />
+          </Suspense>
         </Show>
         {/* VZ-IM-2: the VIZ page entry toggle. */}
         <button
@@ -768,7 +787,9 @@ export function BoothOptions(props: BoothOptionsProps) {
             <IconHistory size={13} />
           </button>
           <Show when={isHistoryDrawerOpen()}>
-            <HistoryDrawer onClose={() => setIsHistoryDrawerOpen(false)} />
+            <Suspense fallback={null}>
+              <HistoryDrawer onClose={() => setIsHistoryDrawerOpen(false)} />
+            </Suspense>
           </Show>
         </span>
       </div>

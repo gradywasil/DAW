@@ -15,9 +15,12 @@ export interface AudioContextLike {
 
 export type AudioContextFactory = () => AudioContextLike;
 
-/** Default factory: real AudioContext at a fixed 44100 Hz. */
+/** Default factory: real AudioContext at a fixed 44100 Hz with lowest hardware output latency. */
 export const defaultAudioContextFactory: AudioContextFactory = () =>
-  new AudioContext({ sampleRate: DEFAULT_SAMPLE_RATE });
+  new AudioContext({
+    sampleRate: DEFAULT_SAMPLE_RATE,
+    latencyHint: "interactive",
+  });
 
 export class AudioEngineContext {
   private ctx: AudioContextLike | null = null;
