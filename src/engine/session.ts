@@ -96,6 +96,15 @@ function hasAudioNodes(ctx: AudioContextLike): ctx is AudioNodeContext {
   );
 }
 
+/**
+ * Live audition / MIDI scheduling offset in seconds.
+ * 0.005s (5ms / ~220 samples @ 44.1kHz) is slightly over one AudioWorklet
+ * render quantum (128 samples / 2.9ms), preventing any buffer underrun or
+ * past-timestamp drop while feeling instantaneous during live performance.
+ */
+export const AUDITION_LEAD_SECONDS = 0.005;
+export const MIDI_TRIGGER_LEAD_SECONDS = 0.004;
+
 export type TickSoundPlayer = (when: number, downbeat: boolean) => void;
 
 // --- IM-7 helpers: chain-schedule surgery (pure, module-private) ------------
@@ -291,6 +300,7 @@ export class Session {
     SessionOptions["createSampleVoiceHost"]
   >;
   private voiceEnginePromise: Promise<LaneVoiceRouter | null> | null = null;
+  private voiceRouter: LaneVoiceRouter | null = null;
   private soundPreviewPromise: Promise<LaneVoiceRouter> | null = null;
   private soundPreviewGeneration = 0;
   /** PS-4: the live context's native sample-voice host (lazy, retryable). */
@@ -1400,9 +1410,11 @@ export class Session {
     degreeOrDrum: number | DrumPiece,
   ): Promise<void> {
     const sound = this.laneSounds[laneId];
-    await this.engine.unlock();
-    if (this.laneSounds[laneId] !== sound) return;
-    const host = await this.ensureVoiceEngine();
+    if (this.engine.state !== "running") {
+      await this.engine.unlock();
+      if (this.laneSounds[laneId] !== sound) return;
+    }
+    const host = this.voiceRouter ?? (await this.ensureVoiceEngine());
     if (!host || this.laneSounds[laneId] !== sound) return;
     // PS-4: a sample-backed audition resolves the sample host AND the
     // specific assets first (fast — selection prefetched them; a first-ever
@@ -1428,7 +1440,7 @@ export class Session {
     // Selection may change while decoding. The newer selection has its own
     // audition; never schedule it with buffers loaded for the old selection.
     if (this.laneSounds[laneId] !== sound) return;
-    const when = this.engine.getContext().currentTime + 0.03;
+    const when = this.engine.getContext().currentTime + AUDITION_LEAD_SECONDS;
     const events = this.buildAuditionEvents(laneId, degreeOrDrum, when);
     if (events.length === 0) return;
     host.sendEvents(LANE_IDS.indexOf(laneId), events);
@@ -1449,12 +1461,14 @@ export class Session {
     } = {},
   ): Promise<void> {
     const sound = this.laneSounds[laneId];
-    await this.engine.unlock();
-    if (this.laneSounds[laneId] !== sound) return;
-    const host = await this.ensureVoiceEngine();
+    if (this.engine.state !== "running") {
+      await this.engine.unlock();
+      if (this.laneSounds[laneId] !== sound) return;
+    }
+    const host = this.voiceRouter ?? (await this.ensureVoiceEngine());
     if (!host || this.laneSounds[laneId] !== sound) return;
 
-    const when = this.engine.getContext().currentTime + 0.01;
+    const when = this.engine.getContext().currentTime + MIDI_TRIGGER_LEAD_SECONDS;
     const events = this.buildMidiNoteEvents(
       laneId,
       midiNote,
@@ -1626,7 +1640,7 @@ export class Session {
       await sample.preload(refs);
     }
     if (generation !== this.soundPreviewGeneration) return;
-    host.sendEvents(0, build(this.engine.getContext().currentTime + 0.03));
+    host.sendEvents(0, build(this.engine.getContext().currentTime + AUDITION_LEAD_SECONDS));
   }
 
   stopSoundPreview(): void {
@@ -2114,6 +2128,7 @@ export class Session {
               router.connect(i, this.laneProcessing[i]?.input ?? laneGain);
           }
         }
+        this.voiceRouter = router;
         return router;
       };
       if (
