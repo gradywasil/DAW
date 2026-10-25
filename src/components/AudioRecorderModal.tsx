@@ -4,14 +4,10 @@
  * provides silence trimming and peak normalization, and routes directly to the Slicer.
  */
 
-import {
-  createSignal,
-  onMount,
-  onCleanup,
-  Show,
-  type JSX,
-} from "solid-js";
+import { createSignal, onMount, onCleanup, Show, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
+import { getSession } from "../engine/session";
+import { downloadSample } from "../audio/downloadSample";
 import {
   recorderStatus,
   setRecorderStatus,
@@ -50,6 +46,11 @@ export default function AudioRecorderModal(
   let timerIntervalId: number | null = null;
   let mediaRecorder: MediaRecorder | null = null;
   let recordedChunks: Blob[] = [];
+  let disposed = false;
+  const [starting, setStarting] = createSignal(false);
+  const [message, setMessage] = createSignal(
+    "Press Record take to allow microphone access.",
+  );
   let playbackSource: AudioBufferSourceNode | null = null;
 
   const formatTimer = (sec: number): string => {
@@ -61,15 +62,23 @@ export default function AudioRecorderModal(
 
   const getAudioContext = (): AudioContext => {
     if (!audioCtx) {
-      audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioCtx = getSession().engine.getContext() as AudioContext;
     }
     return audioCtx;
   };
 
   const startMicMonitoring = async () => {
     try {
-      if (!navigator.mediaDevices?.getUserMedia) return;
-      mediaStream = await navigator.mediaDevices.getUserMedia({
+      if (
+        !navigator.mediaDevices?.getUserMedia ||
+        typeof MediaRecorder === "undefined"
+      ) {
+        setMessage(
+          "Microphone recording is unavailable in this browser. You can import audio in Sample tools.",
+        );
+        return;
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
@@ -77,7 +86,13 @@ export default function AudioRecorderModal(
         },
       });
 
+      if (disposed) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+      mediaStream = stream;
       const ctx = getAudioContext();
+      if (ctx.state === "suspended") await ctx.resume();
       const source = ctx.createMediaStreamSource(mediaStream);
       analyserNode = ctx.createAnalyser();
       analyserNode.fftSize = 512;
@@ -85,7 +100,9 @@ export default function AudioRecorderModal(
 
       drawOscilloscope();
     } catch {
-      // Mic not available or denied
+      setMessage(
+        "Microphone access failed. Allow microphone access in your browser and try again.",
+      );
     }
   };
 
@@ -107,6 +124,8 @@ export default function AudioRecorderModal(
     const width = canvas.width;
     const height = canvas.height;
 
+    const bufferLength = analyserNode?.frequencyBinCount ?? 256;
+    const dataArray = new Uint8Array(bufferLength);
     const render = () => {
       animFrameId = requestAnimationFrame(render);
       if (!analyserNode) {
@@ -114,8 +133,6 @@ export default function AudioRecorderModal(
         return;
       }
 
-      const bufferLength = analyserNode.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
       analyserNode.getByteTimeDomainData(dataArray);
 
       // Compute RMS level for VU meter
@@ -131,7 +148,8 @@ export default function AudioRecorderModal(
 
       // Draw Waveform Oscilloscope Trace
       ctx.lineWidth = 2;
-      ctx.strokeStyle = recorderStatus() === "recording" ? "#ff0055" : "#00f0ff";
+      ctx.strokeStyle =
+        recorderStatus() === "recording" ? "#ff0055" : "#00f0ff";
       ctx.shadowBlur = 8;
       ctx.shadowColor = ctx.strokeStyle;
       ctx.beginPath();
@@ -164,27 +182,38 @@ export default function AudioRecorderModal(
   };
 
   const startRecording = async () => {
-    if (!mediaStream) {
-      await startMicMonitoring();
+    if (starting() || disposed) return;
+    setStarting(true);
+    try {
+      if (!mediaStream) await startMicMonitoring();
+    } finally {
+      setStarting(false);
     }
-    if (!mediaStream) return;
+    if (!mediaStream || disposed) return;
 
     recordedChunks = [];
     const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
       ? "audio/webm;codecs=opus"
       : "";
 
-    mediaRecorder = new MediaRecorder(mediaStream, mimeType ? { mimeType } : undefined);
+    mediaRecorder = new MediaRecorder(
+      mediaStream,
+      mimeType ? { mimeType } : undefined,
+    );
     mediaRecorder.ondataavailable = (e) => {
       if (e.data.size > 0) recordedChunks.push(e.data);
     };
 
     mediaRecorder.onstop = async () => {
-      const blob = new Blob(recordedChunks, { type: mediaRecorder?.mimeType || "audio/webm" });
+      if (disposed) return;
+      const blob = new Blob(recordedChunks, {
+        type: mediaRecorder?.mimeType || "audio/webm",
+      });
       const arrayBuffer = await blob.arrayBuffer();
       const ctx = getAudioContext();
       try {
         const decoded = await ctx.decodeAudioData(arrayBuffer);
+        if (disposed) return;
         setRecordedBuffer(decoded);
         setRecorderStatus("recorded");
       } catch {
@@ -218,7 +247,11 @@ export default function AudioRecorderModal(
 
     if (isPlayingTake()) {
       if (playbackSource) {
-        try { playbackSource.stop(); } catch {}
+        try {
+          playbackSource.stop();
+        } catch {
+          /* The source may have ended already. */
+        }
       }
       setIsPlayingTake(false);
       return;
@@ -264,15 +297,22 @@ export default function AudioRecorderModal(
 
   onMount(() => {
     dialogRef.showModal();
-    startMicMonitoring();
     window.addEventListener("keydown", handleKeyDown);
   });
 
   onCleanup(() => {
+    disposed = true;
+    if (mediaRecorder && mediaRecorder.state !== "inactive")
+      mediaRecorder.stop();
+    setRecorderStatus(recordedBuffer() ? "recorded" : "idle");
     stopMicMonitoring();
     if (timerIntervalId) clearInterval(timerIntervalId);
     if (playbackSource) {
-      try { playbackSource.stop(); } catch {}
+      try {
+        playbackSource.stop();
+      } catch {
+        /* The source may have ended already. */
+      }
     }
     window.removeEventListener("keydown", handleKeyDown);
   });
@@ -280,7 +320,9 @@ export default function AudioRecorderModal(
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="recorder-dialog"
         role="dialog"
         aria-label="Microphone Audio Recorder Studio"
@@ -304,7 +346,14 @@ export default function AudioRecorderModal(
         <div class="recorder-body">
           {/* Oscilloscope Stage */}
           <div class="recorder-stage">
-            <canvas ref={canvasRef} class="recorder-canvas" width="600" height="200" />
+            <canvas
+              ref={(el) => {
+                canvasRef = el;
+              }}
+              class="recorder-canvas"
+              width="600"
+              height="200"
+            />
             <div class="recorder-badge">
               <div
                 class="recorder-badge-dot"
@@ -335,38 +384,68 @@ export default function AudioRecorderModal(
               type="button"
               class="rec-btn-big"
               classList={{ "is-recording": recorderStatus() === "recording" }}
+              disabled={starting()}
               onClick={handleToggleRecord}
             >
               <div
                 style={{
                   width: "10px",
                   height: "10px",
-                  "border-radius": recorderStatus() === "recording" ? "2px" : "50%",
+                  "border-radius":
+                    recorderStatus() === "recording" ? "2px" : "50%",
                   background: "#fff",
                 }}
               />
-              <span>{recorderStatus() === "recording" ? "STOP RECORDING" : "RECORD TAKE"}</span>
+              <span>
+                {recorderStatus() === "recording"
+                  ? "STOP RECORDING"
+                  : "RECORD TAKE"}
+              </span>
             </button>
           </div>
 
+          <p role="status">{message()}</p>
           {/* Recorded Take Deck */}
           <Show when={recordedBuffer()}>
             <div class="recorder-actions-card">
-              <div style={{ display: "flex", "align-items": "center", "justify-content": "space-between" }}>
+              <div
+                style={{
+                  display: "flex",
+                  "align-items": "center",
+                  "justify-content": "space-between",
+                }}
+              >
                 <span style={{ "font-size": "12px", "font-weight": "bold" }}>
-                  TAKE: {recordedTakeName()} ({recordedBuffer()!.duration.toFixed(2)}s, Peak:{" "}
-                  {(20 * Math.log10(Math.max(1e-4, computeBufferPeak(recordedBuffer()!)))).toFixed(1)} dB)
+                  TAKE: {recordedTakeName()} (
+                  {recordedBuffer()!.duration.toFixed(2)}s, Peak:{" "}
+                  {(
+                    20 *
+                    Math.log10(
+                      Math.max(1e-4, computeBufferPeak(recordedBuffer()!)),
+                    )
+                  ).toFixed(1)}{" "}
+                  dB)
                 </span>
                 <input
                   type="text"
                   class="name-input"
                   style={{ width: "160px", padding: "4px 8px" }}
+                  aria-label="Take name"
                   value={recordedTakeName()}
                   onInput={(e) => setRecordedTakeName(e.currentTarget.value)}
                 />
               </div>
 
               <div class="recorder-action-btns">
+                <button
+                  type="button"
+                  class="recorder-action-btn"
+                  onClick={() =>
+                    downloadSample(recordedBuffer()!, recordedTakeName())
+                  }
+                >
+                  EXPORT TAKE WAV
+                </button>
                 <button
                   type="button"
                   class="recorder-action-btn"

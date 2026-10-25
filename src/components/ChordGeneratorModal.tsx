@@ -5,20 +5,12 @@
  * directly into the project sequence.
  */
 
-import {
-  createSignal,
-  onMount,
-  onCleanup,
-  For,
-  type JSX,
-} from "solid-js";
+import { createSignal, onMount, onCleanup, For, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
 import {
   CHORD_PROGRESSIONS,
   applyProgressionToProject,
-  buildChordDegrees,
   type ChordTemplate,
-  type VoicingStyle,
   type ChordRhythm,
 } from "../audio/chordProgression";
 import { getSession } from "../engine/session";
@@ -29,68 +21,30 @@ interface ChordGeneratorModalProps {
   onClose: () => void;
 }
 
-export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JSX.Element {
+export default function ChordGeneratorModal(
+  props: ChordGeneratorModalProps,
+): JSX.Element {
   let dialogRef!: HTMLDialogElement;
 
-  const [selectedProgression, setSelectedProgression] = createSignal<ChordTemplate>(
-    CHORD_PROGRESSIONS[0]!,
-  );
-  const [voicing, setVoicing] = createSignal<VoicingStyle>("seventh");
+  const [selectedProgression, setSelectedProgression] =
+    createSignal<ChordTemplate>(CHORD_PROGRESSIONS[0]!);
   const [rhythm, setRhythm] = createSignal<ChordRhythm>("half-bar");
   const [includeBass, setIncludeBass] = createSignal(true);
-  const [auditioningIndex, setAuditioningIndex] = createSignal<number | null>(null);
+  const [auditioningIndex, setAuditioningIndex] = createSignal<number | null>(
+    null,
+  );
 
-  // Simple Web Audio audition oscillator chord player
+  let auditionTimer: ReturnType<typeof setTimeout> | undefined;
   const playChordDegreeAudition = (rootDegree: number, index: number) => {
+    clearTimeout(auditionTimer);
     setAuditioningIndex(index);
-    try {
-      const session = getSession();
-      const ctx = (session as any).audioContext ?? new (window.AudioContext || (window as any).webkitAudioContext)();
-      if (ctx.state === "suspended") void ctx.resume();
-
-      const degrees = buildChordDegrees(rootDegree, voicing());
-      // Convert degrees into fundamental frequencies around A3 (220Hz)
-      const baseFreq = 220;
-
-      degrees.forEach((deg) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "triangle";
-
-        // Semitone approximation: ~deg * 1.7 semitones in scale
-        const semitones = deg * 1.8;
-        osc.frequency.value = baseFreq * Math.pow(2, semitones / 12);
-
-        const now = ctx.currentTime;
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.exponentialRampToValueAtTime(0.12, now + 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.7);
-      });
-
-      setTimeout(() => {
-        if (auditioningIndex() === index) {
-          setAuditioningIndex(null);
-        }
-      }, 700);
-    } catch {
-      // Mock fallback
-      setTimeout(() => setAuditioningIndex(null), 300);
-    }
+    void getSession().audition("chords", rootDegree);
+    auditionTimer = setTimeout(() => setAuditioningIndex(null), 700);
   };
+  onCleanup(() => clearTimeout(auditionTimer));
 
   const handleApply = () => {
-    applyProgressionToProject(
-      selectedProgression(),
-      voicing(),
-      rhythm(),
-      includeBass(),
-    );
+    applyProgressionToProject(selectedProgression(), rhythm(), includeBass());
     props.onClose();
   };
 
@@ -112,7 +66,9 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="chord-generator-dialog"
         role="dialog"
         aria-label="Chord Progression Generator"
@@ -120,7 +76,9 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
         <div class="chord-generator-header">
           <div class="chord-generator-title-wrap">
             <IconChord size={16} />
-            <span class="chord-generator-title">SCALE-AWARE CHORD GENERATOR</span>
+            <span class="chord-generator-title">
+              SCALE-AWARE CHORD GENERATOR
+            </span>
           </div>
           <button
             type="button"
@@ -134,11 +92,16 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
         </div>
 
         <div class="chord-generator-body">
+          <p>
+            Uses the Chords lane's diatonic triads. Replaces the selected Chords
+            pattern and optional Bass pattern. One Undo restores both.
+          </p>
           {/* Active Progression Preview Strip */}
           <div class="chord-timeline-strip">
             <For each={selectedProgression().chordNames}>
               {(chordName, idx) => (
-                <div
+                <button
+                  type="button"
                   class="chord-block"
                   classList={{ "is-playing": auditioningIndex() === idx() }}
                   onClick={() =>
@@ -149,12 +112,14 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
                   }
                   title="Click to audition chord"
                 >
-                  <span class="chord-block-roman">{chordName}</span>
+                  <span class="chord-block-roman">
+                    {chordName.replace(/maj[0-9]*|[0-9]+/g, "")}
+                  </span>
                   <span class="chord-block-root">
                     Degree {selectedProgression().rootDegrees[idx()]}
                   </span>
                   <span class="chord-block-play-hint">TAP TO HEAR</span>
-                </div>
+                </button>
               )}
             </For>
           </div>
@@ -162,27 +127,14 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
           {/* Options & Voicings Bar */}
           <div class="chord-options-bar">
             <div class="chord-opt-group">
-              <span class="chord-opt-label">VOICING:</span>
-              <select
-                class="chord-select"
-                value={voicing()}
-                onChange={(e) => setVoicing(e.currentTarget.value as VoicingStyle)}
-              >
-                <option value="triad">Basic Triad (3-Note)</option>
-                <option value="seventh">7th Chords (4-Note)</option>
-                <option value="ninth">9th Rich Extensions (5-Note)</option>
-                <option value="first-inversion">1st Inversion</option>
-                <option value="second-inversion">2nd Inversion</option>
-                <option value="drop-2">Drop-2 Spread Voicing</option>
-              </select>
-            </div>
-
-            <div class="chord-opt-group">
               <span class="chord-opt-label">RHYTHM:</span>
               <select
                 class="chord-select"
+                aria-label="Chord rhythm"
                 value={rhythm()}
-                onChange={(e) => setRhythm(e.currentTarget.value as ChordRhythm)}
+                onChange={(e) =>
+                  setRhythm(e.currentTarget.value as ChordRhythm)
+                }
               >
                 <option value="whole-bar">Whole Bar (1 chord / bar)</option>
                 <option value="half-bar">Half Bar (2 chords / bar)</option>
@@ -204,24 +156,25 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
           <div class="chord-presets-grid">
             <For each={CHORD_PROGRESSIONS}>
               {(prog) => (
-                <div
+                <button
+                  type="button"
                   class="chord-preset-card"
                   classList={{
                     "is-selected": prog.id === selectedProgression().id,
                   }}
                   onClick={() => setSelectedProgression(prog)}
                 >
-                  <div class="chord-preset-top">
-                    <span class="chord-preset-genre">{prog.genre}</span>
-                  </div>
                   <div class="chord-preset-name">{prog.name}</div>
-                  <div class="chord-preset-desc">{prog.description}</div>
                   <div class="chord-preset-chords">
                     <For each={prog.chordNames}>
-                      {(name) => <span class="chord-badge">{name}</span>}
+                      {(name) => (
+                        <span class="chord-badge">
+                          {name.replace(/maj[0-9]*|[0-9]+/g, "")}
+                        </span>
+                      )}
                     </For>
                   </div>
-                </div>
+                </button>
               )}
             </For>
           </div>
@@ -230,15 +183,11 @@ export default function ChordGeneratorModal(props: ChordGeneratorModalProps): JS
         {/* Modal Footer */}
         <div class="chord-generator-footer">
           <div style={{ "font-size": "11px", color: "var(--color-ink)" }}>
-            Selected: <strong>{selectedProgression().name}</strong> ({voicing()},{" "}
+            Selected: <strong>{selectedProgression().name}</strong> (triads,{" "}
             {rhythm()})
           </div>
-          <button
-            type="button"
-            class="chord-commit-btn"
-            onClick={handleApply}
-          >
-            APPLY TO CHORDS LANE
+          <button type="button" class="chord-commit-btn" onClick={handleApply}>
+            REPLACE SELECTED PATTERNS
           </button>
         </div>
       </dialog>

@@ -17,9 +17,12 @@ export interface RecorderState {
 }
 
 export const [isRecorderOpen, setIsRecorderOpen] = createSignal(false);
-export const [recorderStatus, setRecorderStatus] = createSignal<RecorderStatus>("idle");
-export const [recordedBuffer, setRecordedBuffer] = createSignal<AudioBuffer | null>(null);
-export const [recordedTakeName, setRecordedTakeName] = createSignal("Vocal Take 1");
+export const [recorderStatus, setRecorderStatus] =
+  createSignal<RecorderStatus>("idle");
+export const [recordedBuffer, setRecordedBuffer] =
+  createSignal<AudioBuffer | null>(null);
+export const [recordedTakeName, setRecordedTakeName] =
+  createSignal("Vocal Take 1");
 export const [liveInputLevel, setLiveInputLevel] = createSignal(0);
 
 // Shared source bridge for SampleSlicerModal
@@ -31,22 +34,18 @@ export const [sharedSlicerSource, setSharedSlicerSource] = createSignal<{
 /**
  * Creates an AudioBuffer safely in browser or headless/test environments.
  */
-export function createAudioBuffer(channels: number, length: number, sampleRate: number): AudioBuffer {
-  const AudioCtx =
-    typeof window !== "undefined"
-      ? (window.AudioContext || (window as any).webkitAudioContext)
-      : (globalThis as any).AudioContext;
+export function createAudioBuffer(
+  channels: number,
+  length: number,
+  sampleRate: number,
+): AudioBuffer {
+  if (typeof AudioBuffer !== "undefined")
+    return new AudioBuffer({ numberOfChannels: channels, length, sampleRate });
 
-  if (AudioCtx) {
-    try {
-      const ctx = new AudioCtx();
-      return ctx.createBuffer(channels, length, sampleRate);
-    } catch {
-      // Fallback
-    }
-  }
-
-  const channelData = Array.from({ length: channels }, () => new Float32Array(length));
+  const channelData = Array.from(
+    { length: channels },
+    () => new Float32Array(length),
+  );
   return {
     numberOfChannels: channels,
     length,
@@ -76,7 +75,10 @@ export function computeBufferPeak(buffer: AudioBuffer): number {
 /**
  * Normalizes an AudioBuffer to a target peak in decibels (e.g. -0.5 dB).
  */
-export function normalizeBuffer(buffer: AudioBuffer, targetPeakDb = -0.5): AudioBuffer {
+export function normalizeBuffer(
+  buffer: AudioBuffer,
+  targetPeakDb = -0.5,
+): AudioBuffer {
   const currentPeak = computeBufferPeak(buffer);
   if (currentPeak <= 0.00001) return buffer;
 
@@ -103,7 +105,10 @@ export function normalizeBuffer(buffer: AudioBuffer, targetPeakDb = -0.5): Audio
 /**
  * Trims leading and trailing silence from an AudioBuffer below a threshold in decibels.
  */
-export function trimSilence(buffer: AudioBuffer, thresholdDb = -45): AudioBuffer {
+export function trimSilence(
+  buffer: AudioBuffer,
+  thresholdDb = -45,
+): AudioBuffer {
   const thresholdLinear = Math.pow(10, thresholdDb / 20);
   const channels = buffer.numberOfChannels;
   const length = buffer.length;
@@ -134,7 +139,10 @@ export function trimSilence(buffer: AudioBuffer, thresholdDb = -45): AudioBuffer
 
   // Add gentle padding (up to 10ms) without restoring all silence
   const maxPad = Math.floor((length - (endSample - startSample)) / 4);
-  const padSamples = Math.min(Math.floor(buffer.sampleRate * 0.01), Math.max(0, maxPad));
+  const padSamples = Math.min(
+    Math.floor(buffer.sampleRate * 0.01),
+    Math.max(0, maxPad),
+  );
   const trimmedStart = Math.max(0, startSample - padSamples);
   const trimmedEnd = Math.min(length, endSample + padSamples);
   const trimmedLength = trimmedEnd - trimmedStart;

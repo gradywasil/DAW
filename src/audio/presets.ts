@@ -11,6 +11,7 @@
  */
 
 import { MAX_VOICE_FREQ, midiToFreq, noteSeed } from "./dsp";
+import { STUDIO_PRESETS } from "./studioPresets";
 import { EXPANDED_PRESETS } from "./expandedPresets";
 import {
   ADDITIONAL_DRUM_KITS,
@@ -41,7 +42,10 @@ export type WaveKind =
   | "reed"
   | "flute"
   | "bowed"
-  | "mallet";
+  | "mallet"
+  | "epiano"
+  | "ensemble"
+  | "fm";
 export type NoiseMode = "long" | "short";
 
 export interface Envelope {
@@ -144,6 +148,9 @@ export const WAVE_CODE = {
   flute: 10,
   bowed: 11,
   mallet: 12,
+  epiano: 13,
+  ensemble: 14,
+  fm: 15,
 } as const;
 
 export interface VoiceNoteOnEvent {
@@ -365,6 +372,9 @@ export const VoicePresetSchema = v.pipe(
       "flute",
       "bowed",
       "mallet",
+      "epiano",
+      "ensemble",
+      "fm",
     ]),
     duty: v.pipe(v.number(), v.minValue(1e-9), v.maxValue(1)),
     envelope: EnvelopeSchema,
@@ -405,6 +415,7 @@ function preset(p: VoicePreset): VoicePreset {
 }
 
 export const PRESET_LIBRARY: Readonly<Record<string, VoicePreset>> = {
+  ...Object.fromEntries(STUDIO_PRESETS.map((p) => [p.id, preset(p)])),
   ...Object.fromEntries(EXPANDED_PRESETS.map((p) => [p.id, preset(p)])),
   // --- BASS: deep, gluey, fast-decay staples (one sub-triangle) -------------
   "preset-bass-1": preset({

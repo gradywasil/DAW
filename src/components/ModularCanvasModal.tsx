@@ -29,7 +29,9 @@ interface ModularCanvasModalProps {
   onClose: () => void;
 }
 
-export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.Element {
+export default function ModularCanvasModal(
+  props: ModularCanvasModalProps,
+): JSX.Element {
   let dialogRef!: HTMLDialogElement;
   let canvasRef!: HTMLDivElement;
 
@@ -82,12 +84,20 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
     const dragging = draggingNode();
     if (dragging) {
       const rect = canvasRef.getBoundingClientRect();
-      const newX = Math.max(10, Math.min(rect.width - 180, e.clientX - dragging.offsetX));
-      const newY = Math.max(10, Math.min(rect.height - 200, e.clientY - dragging.offsetY));
+      const newX = Math.max(
+        10,
+        Math.min(rect.width - 180, e.clientX - dragging.offsetX),
+      );
+      const newY = Math.max(
+        10,
+        Math.min(rect.height - 200, e.clientY - dragging.offsetY),
+      );
 
       setGraph((prev) => ({
         ...prev,
-        nodes: prev.nodes.map((n) => (n.id === dragging.id ? { ...n, x: newX, y: newY } : n)),
+        nodes: prev.nodes.map((n) =>
+          n.id === dragging.id ? { ...n, x: newX, y: newY } : n,
+        ),
       }));
       setModularGraph(graph());
     }
@@ -108,7 +118,11 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
     setPendingCable(null);
   };
 
-  const handleJackStart = (e: MouseEvent, node: ModularNode, jack: ModularJack) => {
+  const handleJackStart = (
+    e: MouseEvent,
+    node: ModularNode,
+    jack: ModularJack,
+  ) => {
     e.stopPropagation();
     const rect = canvasRef.getBoundingClientRect();
     const targetRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -125,7 +139,11 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
     });
   };
 
-  const handleJackEnd = (e: MouseEvent, targetNode: ModularNode, targetJack: ModularJack) => {
+  const handleJackEnd = (
+    e: MouseEvent,
+    targetNode: ModularNode,
+    targetJack: ModularJack,
+  ) => {
     e.stopPropagation();
     const pending = pendingCable();
     if (!pending) return;
@@ -178,7 +196,9 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="modular-dialog"
         role="dialog"
         aria-label="Modular Audio Node Canvas"
@@ -187,7 +207,9 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
         <div class="modular-header">
           <div class="modular-title-wrap">
             <IconModular size={18} />
-            <span class="modular-title">MODULAR AUDIO NODE CANVAS // MAX/MSP PATCHBAY</span>
+            <span class="modular-title">
+              MODULAR AUDIO NODE CANVAS // MAX/MSP PATCHBAY
+            </span>
           </div>
 
           <div class="modular-actions">
@@ -205,7 +227,9 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
 
         {/* Interactive Canvas */}
         <div
-          ref={canvasRef}
+          ref={(el) => {
+            canvasRef = el;
+          }}
           class="modular-canvas"
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -214,11 +238,18 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
           <svg class="modular-cables-svg">
             <For each={graph().connections}>
               {(conn) => {
-                const start = () => getNodeJackCoords(conn.fromNodeId, conn.fromJackId);
-                const end = () => getNodeJackCoords(conn.toNodeId, conn.toJackId);
+                const start = () =>
+                  getNodeJackCoords(conn.fromNodeId, conn.fromJackId);
+                const end = () =>
+                  getNodeJackCoords(conn.toNodeId, conn.toJackId);
                 return (
                   <path
-                    d={computePatchCablePath(start().x, start().y, end().x, end().y)}
+                    d={computePatchCablePath(
+                      start().x,
+                      start().y,
+                      end().x,
+                      end().y,
+                    )}
                     stroke={conn.color || "#00f0ff"}
                     class="patch-cable"
                     onClick={() => deleteConnection(conn.id)}
@@ -239,7 +270,11 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
                     pending().currentX,
                     pending().currentY,
                   )}
-                  stroke={pending().fromJack.type === "control" ? "#ffaa00" : "#00f0ff"}
+                  stroke={
+                    pending().fromJack.type === "control"
+                      ? "#ffaa00"
+                      : "#00f0ff"
+                  }
                   stroke-dasharray="4 4"
                   class="patch-cable"
                 />
@@ -313,7 +348,10 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
                     </div>
 
                     {/* Outputs */}
-                    <div class="modular-jacks-col" style={{ "align-items": "flex-end" }}>
+                    <div
+                      class="modular-jacks-col"
+                      style={{ "align-items": "flex-end" }}
+                    >
                       <For each={node.outputs}>
                         {(jack) => (
                           <div class="modular-jack-item">
@@ -324,7 +362,9 @@ export default function ModularCanvasModal(props: ModularCanvasModalProps): JSX.
                                 "type-audio": jack.type === "audio",
                                 "type-control": jack.type === "control",
                               }}
-                              onMouseDown={(e) => handleJackStart(e, node, jack)}
+                              onMouseDown={(e) =>
+                                handleJackStart(e, node, jack)
+                              }
                             />
                           </div>
                         )}

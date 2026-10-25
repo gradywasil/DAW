@@ -111,7 +111,18 @@ export default defineConfig({
         publicDir: "dist",
         // Test-only parsers/auditor must be ready before long browser journeys.
         // Discovering them mid-run reloads the shared Vitest browser page.
-        optimizeDeps: { include: ["@tonejs/midi", "midi-file", "axe-core"] },
+        optimizeDeps: {
+          noDiscovery: true,
+          include: [
+            "solid-js",
+            "solid-js/web",
+            "solid-js/store",
+            "valibot",
+            "@tonejs/midi",
+            "midi-file",
+            "axe-core",
+          ],
+        },
         test: {
           // vite-plugin-solid's config hook defaults mode==='test' projects to
           // a jsdom environment when none is set; pin node (browser mode

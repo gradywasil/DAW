@@ -12,7 +12,7 @@ import {
   focusCell,
   currentPatternFor,
 } from "../state/selection";
-import { addNote, toggleDrumStep } from "../state/store";
+import { addNote, setDrumHit } from "../state/store";
 import {
   WebMidiManager,
   type WebMidiDevice,
@@ -48,11 +48,16 @@ function saveStorage(key: string, val: unknown): void {
 }
 
 const [midiStatus, setMidiStatus] = createSignal<WebMidiStatus>("idle");
-const [midiDevices, setMidiDevices] = createSignal<readonly WebMidiDevice[]>([]);
-const [midiSelectedDevice, setMidiSelectedDeviceSignal] = createSignal<string | "all">("all");
-const [midiRoutingMode, setMidiRoutingModeSignal] = createSignal<MidiRoutingMode>(
-  loadStorage<MidiRoutingMode>(STORAGE_KEY_ROUTING, "auto"),
+const [midiDevices, setMidiDevices] = createSignal<readonly WebMidiDevice[]>(
+  [],
 );
+const [midiSelectedDevice, setMidiSelectedDeviceSignal] = createSignal<
+  string | "all"
+>("all");
+const [midiRoutingMode, setMidiRoutingModeSignal] =
+  createSignal<MidiRoutingMode>(
+    loadStorage<MidiRoutingMode>(STORAGE_KEY_ROUTING, "auto"),
+  );
 const [midiScaleQuantize, setMidiScaleQuantizeSignal] = createSignal<boolean>(
   loadStorage<boolean>(STORAGE_KEY_QUANTIZE, true),
 );
@@ -105,17 +110,15 @@ function handleStepRecord(laneId: LaneId, note: number): void {
 
   if (laneId === "drums") {
     const piece = midiNoteToDrumPiece(note);
-    toggleDrumStep(piece, step);
+    setDrumHit(pattern.id, piece, step);
     // Advance focused cell to next step
-    const nextStep = (step + 1) % 16;
+    const nextStep = (step + 1) % (pattern.bars * 16);
     focusCell({ lane: "drums", row: piece, step: nextStep });
   } else {
     // Pitched lanes
     const doc = docStore.getState().doc;
     const scale = effectiveScale(doc, laneId);
-    const laneObj = doc.lanes.find(
-      (l): l is PitchedLane => l.id === laneId,
-    );
+    const laneObj = doc.lanes.find((l): l is PitchedLane => l.id === laneId);
     const preset = getPreset(laneObj?.presetId ?? "preset-bass-1");
     const octaveBase =
       (preset?.pitchRange?.octaveBase ?? 3) + (laneObj?.octave ?? 0);
@@ -127,7 +130,7 @@ function handleStepRecord(laneId: LaneId, note: number): void {
       length: 1,
     });
     // Advance focused cell to next step
-    const nextStep = (step + 1) % 16;
+    const nextStep = (step + 1) % (pattern.bars * 16);
     focusCell({ lane: laneId, row: degree, step: nextStep });
   }
 }

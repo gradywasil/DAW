@@ -366,3 +366,17 @@
     display: none;
   }
 }
+
+.sound-show-more {
+  width: 100%;
+  min-height: 44px;
+  color: var(--color-ink);
+  background: var(--metal-panel);
+  border: 1px solid var(--theme-line);
+  font: inherit;
+  cursor: pointer;
+}
+.sound-result {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 76px;
+}

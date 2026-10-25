@@ -1,4 +1,7 @@
-import { COMPOSITION_KEY, type VisualComposition } from "../../src/viz/composition";
+import {
+  COMPOSITION_KEY,
+  type VisualComposition,
+} from "../../src/viz/composition";
 /**
  * VZ-HW-2 — the VIZ browser harness: the shared machinery every VIZ browser
  * test builds its journey on (plan.md §"VZ-HW-2"; consumed by VZ-TH-2's
@@ -75,10 +78,7 @@ import { computeLoopSteps } from "../../src/audio/render";
 import { laneCycleSteps } from "../../src/audio/song";
 import { LANE_IDS } from "../../src/document/schema";
 import { secondsPerStep, timeAtStep } from "../../src/audio/time";
-import {
-  VIZ_PREFS_STORAGE_KEY,
-  writeVizPrefs,
-} from "../../src/viz/persist";
+import { VIZ_PREFS_STORAGE_KEY, writeVizPrefs } from "../../src/viz/persist";
 
 // ---------------------------------------------------------------------------
 // Constants + shared small utilities
@@ -366,9 +366,7 @@ function instrumentIframeWindow(win: IframeWindow): IframeInstrumentation {
   // anchor's tightest lower bound). No other semantics touched.
   const OrigAudioContext = win.AudioContext;
   class HarnessAudioContext extends OrigAudioContext {
-    constructor(
-      ...args: ConstructorParameters<typeof OrigAudioContext>
-    ) {
+    constructor(...args: ConstructorParameters<typeof OrigAudioContext>) {
       super(...args);
       state.contexts.push(this as unknown as AudioContext);
       retryWorkletModule(win, this as unknown as AudioContext);
@@ -380,15 +378,12 @@ function instrumentIframeWindow(win: IframeWindow): IframeInstrumentation {
       state.ctxAfterResume = this.currentTime;
     }
   }
-  win.AudioContext =
-    HarnessAudioContext as unknown as typeof AudioContext;
+  win.AudioContext = HarnessAudioContext as unknown as typeof AudioContext;
 
   // (b) rAF pass-through counter (module activity counter for the BUILT
   // bundle: the viz loop's arms are invisible from outside otherwise).
   const origRaf = win.requestAnimationFrame.bind(win);
-  win.requestAnimationFrame = ((
-    cb: FrameRequestCallback,
-  ): number => {
+  win.requestAnimationFrame = ((cb: FrameRequestCallback): number => {
     state.rafArms++;
     return origRaf((t) => {
       state.rafCallbacks++;
@@ -457,7 +452,9 @@ export interface VizAppHarness {
   /** The `.viz-canvas` (throws while closed). */
   canvas(): HTMLCanvasElement;
   /** rAF-cadence pixel probe over fixed small regions (see CanvasActivityReport). */
-  sampleCanvasActivity(opts?: CanvasActivityOptions): Promise<CanvasActivityReport>;
+  sampleCanvasActivity(
+    opts?: CanvasActivityOptions,
+  ): Promise<CanvasActivityReport>;
   /** Synchronous region signatures (detector-sensitivity checks). */
   readCanvasRegions(
     regions?: readonly CanvasRegionSpec[],
@@ -509,7 +506,11 @@ export async function bootVizApp(
   // the default deal is deterministic even when an earlier test on this
   // shared origin left one behind (VizPage reads it at mount).
   try {
-    if(opts.composition) win.localStorage.setItem(COMPOSITION_KEY, JSON.stringify(opts.composition));
+    if (opts.composition)
+      win.localStorage.setItem(
+        COMPOSITION_KEY,
+        JSON.stringify(opts.composition),
+      );
     else win.localStorage.removeItem(COMPOSITION_KEY);
     if (opts.vizPrefs) {
       writeVizPrefs(
@@ -555,20 +556,16 @@ export async function bootVizApp(
   // Boot + known-pattern signal: the demo rail (e2e law).
   await poll(() => !!doc().querySelector(".booth"), 15_000, "app to mount");
   await poll(
-    // 2026-09-11: rail-free boot readiness — the chain moved to its own
-          // SONG page, so cue labels no longer exist at boot. The drums KIT
-          // readout is the stage-independent "demo loaded" signal.
-          () =>
-            $$(".head-ctl-value").some((v) =>
-              (v as HTMLSelectElement).selectedOptions?.[0]?.textContent?.trim() === "SOFT STEP",
-            ),
-    10_000,
-    "demo cue labels in the rail (first-run demo)",
+    () =>
+      $$(".head-sound-browse").some((v) =>
+        v.textContent?.includes("SOFT STEP"),
+      ),
+    5_000,
+    "demo kit loaded",
   );
 
   const audioCtx = (): AudioContext | null => state.contexts[0] ?? null;
-  const audioNowOrNull = (): number | null =>
-    audioCtx()?.currentTime ?? null;
+  const audioNowOrNull = (): number | null => audioCtx()?.currentTime ?? null;
   const audioNow = (): number => {
     const ctx = audioCtx();
     if (!ctx)
@@ -613,13 +610,13 @@ export async function bootVizApp(
       observer.disconnect();
     }
     const flip = ctxAtFlip ?? audioNowOrNull();
-    if (flip === null) throw new Error("play(): flip observed but no AudioContext");
+    if (flip === null)
+      throw new Error("play(): flip observed but no AudioContext");
     const afterResume = state.ctxAfterResume;
     // Lower bound: the LATEST of the click, post-dispatch and resume-resolve
     // reads that is still ≤ the flip read (monotonic audio clock).
     const candidates = [ctxAtClick, ctxAfterClick, afterResume].filter(
-      (v): v is number =>
-        v !== null && Number.isFinite(v) && v <= flip,
+      (v): v is number => v !== null && Number.isFinite(v) && v <= flip,
     );
     const lo = candidates.length > 0 ? Math.max(...candidates) : flip;
     return {
@@ -635,16 +632,11 @@ export async function bootVizApp(
   const stop = async (): Promise<void> => {
     if (!playing()) throw new Error("stop(): transport not playing");
     playBtn().click();
-    await poll(
-      () => !playing(),
-      5_000,
-      "transport to stop (button PLAY)",
-    );
+    await poll(() => !playing(), 5_000, "transport to stop (button PLAY)");
   };
 
   const vizOpen = (): boolean => doc().querySelector(".viz-page") !== null;
-  const canvas = (): HTMLCanvasElement =>
-    $<HTMLCanvasElement>(".viz-canvas");
+  const canvas = (): HTMLCanvasElement => $<HTMLCanvasElement>(".viz-canvas");
 
   const openViz = async (): Promise<HTMLCanvasElement> => {
     if (vizOpen()) throw new Error("openViz(): VIZ already open");
@@ -660,7 +652,9 @@ export async function bootVizApp(
     // `frames > 0` law) — the renderer armed before this await, so its
     // callback runs first and the ground has landed by the second tick.
     await new Promise<void>((resolve) => {
-      win.requestAnimationFrame(() => win.requestAnimationFrame(() => resolve()));
+      win.requestAnimationFrame(() =>
+        win.requestAnimationFrame(() => resolve()),
+      );
     });
     return canvas();
   };
@@ -749,7 +743,8 @@ export async function bootVizApp(
       win.requestAnimationFrame(frame);
     });
     const changes = samples.filter((s) => s.regions.length > 0);
-    const span = samples.length > 1 ? samples[samples.length - 1]!.t - samples[0]!.t : 0;
+    const span =
+      samples.length > 1 ? samples[samples.length - 1]!.t - samples[0]!.t : 0;
     const pixelsPerSample = regions.reduce((n, r) => n + r.size * r.size, 0);
     return {
       samples,

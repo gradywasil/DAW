@@ -7,31 +7,19 @@
 import { createSignal } from "solid-js";
 import { encode, decode } from "../document/codec";
 import type { ProjectDocument } from "../document/schema";
-import { loadDocument } from "../state/store";
 import { showInfo, showError } from "../state/toasts";
 
 export const [isShareModalOpen, setIsShareModalOpen] = createSignal(false);
-
-const safeBtoa = (s: string): string => {
-  if (typeof btoa !== "undefined") return btoa(s);
-  const buf = (globalThis as any).Buffer;
-  if (buf) return buf.from(s, "binary").toString("base64");
-  return "";
-};
-
-const safeAtob = (s: string): string => {
-  if (typeof atob !== "undefined") return atob(s);
-  const buf = (globalThis as any).Buffer;
-  if (buf) return buf.from(s, "base64").toString("binary");
-  return "";
-};
 
 export function uint8ArrayToBase64Url(u8: Uint8Array): string {
   let binary = "";
   for (let i = 0; i < u8.length; i++) {
     binary += String.fromCharCode(u8[i]!);
   }
-  return safeBtoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 export function base64UrlToUint8Array(b64url: string): Uint8Array {
@@ -39,7 +27,7 @@ export function base64UrlToUint8Array(b64url: string): Uint8Array {
   while (b64.length % 4 !== 0) {
     b64 += "=";
   }
-  const binary = safeAtob(b64);
+  const binary = atob(b64);
   const u8 = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
     u8[i] = binary.charCodeAt(i);
@@ -51,71 +39,25 @@ export function base64UrlToUint8Array(b64url: string): Uint8Array {
  * Compresses an arbitrary string into a URL-safe base64 string using deflate-raw.
  */
 export async function compressStringToUrlSafe(text: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const inputBytes = encoder.encode(text);
-
-  const cs = new CompressionStream("deflate-raw");
-  const writer = cs.writable.getWriter();
-  await writer.write(inputBytes);
-  await writer.close();
-
-  const reader = cs.readable.getReader();
-  const chunks: Uint8Array[] = [];
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (value) chunks.push(value);
-  }
-
-  const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
-  const output = new Uint8Array(totalLength);
-  let offset = 0;
-  for (const chunk of chunks) {
-    output.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  return uint8ArrayToBase64Url(output);
+  const stream = new Blob([text])
+    .stream()
+    .pipeThrough(new CompressionStream("deflate-raw"));
+  return uint8ArrayToBase64Url(
+    new Uint8Array(await new Response(stream).arrayBuffer()),
+  );
 }
 
 /**
  * Decompresses a URL-safe base64 string back into a plain string using deflate-raw.
  */
-export async function decompressStringFromUrlSafe(b64url: string): Promise<string> {
-  const compressedBytes = base64UrlToUint8Array(b64url);
-
-  const ds = new DecompressionStream("deflate-raw");
-  const writer = ds.writable.getWriter();
-  const writePromise = writer
-    .write(compressedBytes as unknown as BufferSource)
-    .then(() => writer.close())
-    .catch((err) => err);
-
-  const reader = ds.readable.getReader();
-  const chunks: Uint8Array[] = [];
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (value) chunks.push(value);
-    }
-  } finally {
-    const writeErr = await writePromise;
-    if (writeErr instanceof Error && chunks.length === 0) {
-      throw writeErr;
-    }
-  }
-
-  const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
-  const output = new Uint8Array(totalLength);
-  let offset = 0;
-  for (const chunk of chunks) {
-    output.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  const decoder = new TextDecoder();
-  return decoder.decode(output);
+export async function decompressStringFromUrlSafe(
+  b64url: string,
+): Promise<string> {
+  const bytes = new Uint8Array(base64UrlToUint8Array(b64url));
+  const stream = new Blob([bytes])
+    .stream()
+    .pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Response(stream).text();
 }
 
 /**
@@ -160,7 +102,7 @@ export async function decodeDocumentFromShareUrl(
 
     const jsonText = await decompressStringFromUrlSafe(payload);
     return decode(jsonText);
-  } catch (err) {
+  } catch {
     // Return null on corrupt or mismatched payloads
     return null;
   }
@@ -170,19 +112,25 @@ export async function decodeDocumentFromShareUrl(
  * Checks for a shared project link in current window location on boot.
  * If found, loads it into the store and notifies the user.
  */
-export async function checkAndLoadShareUrlOnBoot(): Promise<boolean> {
+export async function checkAndLoadShareUrlOnBoot(
+  load: (doc: ProjectDocument) => Promise<void>,
+): Promise<boolean> {
   if (typeof window === "undefined" || !window.location) return false;
 
   const hash = window.location.hash;
   const search = window.location.search;
-  const source = hash.includes("song=") ? hash : search.includes("song=") ? search : null;
+  const source = hash.includes("song=")
+    ? hash
+    : search.includes("song=")
+      ? search
+      : null;
 
   if (!source) return false;
 
   try {
     const doc = await decodeDocumentFromShareUrl(source);
     if (doc) {
-      loadDocument(doc);
+      await load(doc);
       showInfo(`Loaded shared song: "${doc.name || "Untitled"}"`);
 
       // Clean the URL hash without triggering page reload
@@ -192,8 +140,11 @@ export async function checkAndLoadShareUrlOnBoot(): Promise<boolean> {
       }
       return true;
     }
+    throw new Error("Invalid shared song");
   } catch {
-    showError("Could not load song from shared link (corrupted or incompatible).");
+    showError(
+      "Could not load song from shared link (corrupted or incompatible).",
+    );
   }
 
   return false;

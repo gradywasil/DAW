@@ -1,0 +1,37 @@
+{
+  "completedAt": "2026-10-25T17:35:45.0405163-06:00",
+  "baseCommit": "c301ca474e0934bb280a11dbc0b8e2c5774aa7da",
+  "unit": {
+    "exitCode": 0,
+    "files": 125,
+    "tests": 2046,
+    "log": "unit-final.log"
+  },
+  "browser": {
+    "exitCode": 0,
+    "files": 10,
+    "tests": 41,
+    "log": "browser-final.log"
+  },
+  "recoveryBrowsers": [
+    "Chromium 151.0.7922.34",
+    "Firefox 153.0"
+  ],
+  "viewports": [
+    "320x667",
+    "390x844",
+    "768x1024",
+    "1440x900"
+  ],
+  "typescript": "passed",
+  "eslint": "passed",
+  "productionBuild": "passed",
+  "initialJsKiBGzip": 148.99,
+  "bundleBudgetKiBGzip": 300,
+  "whitespace": "passed",
+  "localTabJam": "passed",
+  "syntheticRecorder": "passed",
+  "inactiveRendering": "passed",
+  "physicalHardwareTested": false,
+  "deployed": false
+}

@@ -39,7 +39,17 @@ function build() {
     return;
   }
   console.log("check-bundle: building (tsc --noEmit && vite build)…");
-  execFileSync("npm", ["run", "build"], { stdio: "inherit", cwd: ROOT });
+  const options = { stdio: "inherit", cwd: ROOT };
+  execFileSync(
+    process.execPath,
+    [join(ROOT, "node_modules/typescript/bin/tsc"), "--noEmit"],
+    options,
+  );
+  execFileSync(
+    process.execPath,
+    [join(ROOT, "node_modules/vite/bin/vite.js"), "build"],
+    options,
+  );
 }
 
 /** All <script type="module" src=...> entry points in dist/index.html. */
@@ -58,13 +68,10 @@ function eagerImports(chunkName, seen = new Set()) {
   if (seen.has(chunkName)) return seen;
   seen.add(chunkName);
   const src = readFileSync(join(DIST, chunkName), "utf8");
+  // Minifiers omit whitespace in import{...}from"..." and export{...}from"...".
   for (const m of src.matchAll(
-    /import\s[^"']*from?\s*["'](\.\/[^"']+\.(?:js|mjs))["']/g,
+    /\b(?:import|export)\s*(?:[^"'();]*?\bfrom\s*)?["'](\.\/[^"']+\.m?js)["']/g,
   )) {
-    eagerImports(`assets/${m[1].slice(2)}`, seen);
-  }
-  // Chunk-to-chunk static imports may also appear as plain import "..." forms.
-  for (const m of src.matchAll(/import\s*["'](\.\/[^"']+\.(?:js|mjs))["']/g)) {
     eagerImports(`assets/${m[1].slice(2)}`, seen);
   }
   return seen;

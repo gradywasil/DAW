@@ -19,7 +19,6 @@ import {
   undo,
   redo,
   loadDocument,
-  toggleDrumStep,
 } from "../src/state/store";
 
 describe("historyState and document diff analyzer", () => {
@@ -40,7 +39,9 @@ describe("historyState and document diff analyzer", () => {
     it("detects name change", () => {
       const doc1 = createFreshProjectDocument();
       const doc2 = { ...doc1, name: "Neon Horizon" };
-      expect(describeDocumentDiff(doc1, doc2)).toBe('Project renamed to "Neon Horizon"');
+      expect(describeDocumentDiff(doc1, doc2)).toBe(
+        'Project renamed to "Neon Horizon"',
+      );
     });
 
     it("detects transport BPM and swing changes", () => {
@@ -64,26 +65,34 @@ describe("historyState and document diff analyzer", () => {
         ...doc1,
         scale: { root: 2 as const, mode: "dorian" as const },
       };
-      expect(describeDocumentDiff(doc1, doc2)).toBe("Scale changed to D dorian");
+      expect(describeDocumentDiff(doc1, doc2)).toBe(
+        "Scale changed to D dorian",
+      );
     });
 
     it("detects lane mix changes (volume, mute, solo)", () => {
       const doc1 = createFreshProjectDocument();
       const doc2 = {
         ...doc1,
-        lanes: doc1.lanes.map((l) => (l.id === "bass" ? { ...l, volume: 0.8 } : l)),
+        lanes: doc1.lanes.map((l) =>
+          l.id === "bass" ? { ...l, volume: 0.8 } : l,
+        ),
       };
       expect(describeDocumentDiff(doc1, doc2)).toBe("bass volume 80%");
 
       const doc3 = {
         ...doc1,
-        lanes: doc1.lanes.map((l) => (l.id === "lead" ? { ...l, mute: true } : l)),
+        lanes: doc1.lanes.map((l) =>
+          l.id === "lead" ? { ...l, mute: true } : l,
+        ),
       };
       expect(describeDocumentDiff(doc1, doc3)).toBe("lead muted");
 
       const doc4 = {
         ...doc1,
-        lanes: doc1.lanes.map((l) => (l.id === "drums" ? { ...l, solo: true } : l)),
+        lanes: doc1.lanes.map((l) =>
+          l.id === "drums" ? { ...l, solo: true } : l,
+        ),
       };
       expect(describeDocumentDiff(doc1, doc4)).toBe("drums soloed");
     });
@@ -163,7 +172,9 @@ describe("historyState and document diff analyzer", () => {
       expect(pastCount()).toBe(4);
       expect(futureCount()).toBe(0);
       expect(docStore.getState().doc.scale.mode).toBe("minor");
-      expect(docStore.getState().doc.lanes.find((l) => l.id === "bass")?.volume).toBe(0.75);
+      expect(
+        docStore.getState().doc.lanes.find((l) => l.id === "bass")?.volume,
+      ).toBe(0.75);
     });
   });
 });

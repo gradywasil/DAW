@@ -59,7 +59,7 @@ function expectClose(a: number, b: number): void {
 
 describe("worklet DSP parity with dsp.ts", () => {
   it("extended tonal voices match at low, middle and high frequencies", () => {
-    for (let wave = 6; wave <= 12; wave++)
+    for (let wave = 6; wave <= 15; wave++)
       for (const dt of [0.0005, 0.01, 0.1, 0.28])
         for (const phase of [0, 0.13, 0.5, 0.98, 13.25])
           for (const duty of [0.08, 0.5, 0.98]) {

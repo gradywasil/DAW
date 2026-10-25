@@ -1,0 +1,129 @@
+{
+  "browser": "151.0.7922.34",
+  "cpuThrottle": 4,
+  "physicalOutputLatencyMeasured": false,
+  "samples": [
+    {
+      "run": 0,
+      "state": "cold",
+      "clickToScheduledAudioMs": 44.5954648764496,
+      "leadAtDispatchMs": -213.00453514739226
+    },
+    {
+      "run": 0,
+      "state": "warm",
+      "clickToScheduledAudioMs": 23.595011314026635,
+      "leadAtDispatchMs": 19.195011337868493
+    },
+    {
+      "run": 1,
+      "state": "cold",
+      "clickToScheduledAudioMs": 27.870294736896795,
+      "leadAtDispatchMs": -125.92970521541949
+    },
+    {
+      "run": 1,
+      "state": "warm",
+      "clickToScheduledAudioMs": 27.999999999999968,
+      "leadAtDispatchMs": 24.999999999999968
+    },
+    {
+      "run": 2,
+      "state": "cold",
+      "clickToScheduledAudioMs": 18.927891204146306,
+      "leadAtDispatchMs": -175.2721088435374
+    },
+    {
+      "run": 2,
+      "state": "warm",
+      "clickToScheduledAudioMs": 19.992516994881747,
+      "leadAtDispatchMs": 16.292517006802676
+    },
+    {
+      "run": 3,
+      "state": "cold",
+      "clickToScheduledAudioMs": 29.36281179138325,
+      "leadAtDispatchMs": -134.63718820861675
+    },
+    {
+      "run": 3,
+      "state": "warm",
+      "clickToScheduledAudioMs": 28.30000001192095,
+      "leadAtDispatchMs": 25.00000000000002
+    },
+    {
+      "run": 4,
+      "state": "cold",
+      "clickToScheduledAudioMs": 26.452834455199223,
+      "leadAtDispatchMs": -146.24716553287985
+    },
+    {
+      "run": 4,
+      "state": "warm",
+      "clickToScheduledAudioMs": 22.695011337868493,
+      "leadAtDispatchMs": 19.195011337868493
+    },
+    {
+      "run": 5,
+      "state": "cold",
+      "clickToScheduledAudioMs": 18.96031746031744,
+      "leadAtDispatchMs": -137.53968253968256
+    },
+    {
+      "run": 5,
+      "state": "warm",
+      "clickToScheduledAudioMs": 16.690022687657898,
+      "leadAtDispatchMs": 13.390022675736969
+    },
+    {
+      "run": 6,
+      "state": "cold",
+      "clickToScheduledAudioMs": 23.645351438160134,
+      "leadAtDispatchMs": -154.95464852607708
+    },
+    {
+      "run": 6,
+      "state": "warm",
+      "clickToScheduledAudioMs": 17.790022711499756,
+      "leadAtDispatchMs": 13.390022675736969
+    },
+    {
+      "run": 7,
+      "state": "cold",
+      "clickToScheduledAudioMs": 25.445351450081006,
+      "leadAtDispatchMs": -154.95464852607714
+    },
+    {
+      "run": 7,
+      "state": "warm",
+      "clickToScheduledAudioMs": 27.60000002384188,
+      "leadAtDispatchMs": 25.00000000000002
+    },
+    {
+      "run": 8,
+      "state": "cold",
+      "clickToScheduledAudioMs": 24.450340100291612,
+      "leadAtDispatchMs": -149.1496598639456
+    },
+    {
+      "run": 8,
+      "state": "warm",
+      "clickToScheduledAudioMs": 18.490022699578827,
+      "leadAtDispatchMs": 13.390022675736969
+    },
+    {
+      "run": 9,
+      "state": "cold",
+      "clickToScheduledAudioMs": 37.84535148584385,
+      "leadAtDispatchMs": -154.95464852607708
+    },
+    {
+      "run": 9,
+      "state": "warm",
+      "clickToScheduledAudioMs": 20.592517018723715,
+      "leadAtDispatchMs": 16.292517006802786
+    }
+  ],
+  "coldMedianMs": 25.949092952640115,
+  "warmMedianMs": 21.643764178296102
+}

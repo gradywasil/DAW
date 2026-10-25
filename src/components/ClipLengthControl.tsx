@@ -141,30 +141,33 @@ export default function ClipLengthControl(props: { lane: LaneId }) {
           >
             <Show when={error()}>{error()}</Show>
           </span>
+          <button
+            type="button"
+            class="clip-double"
+            data-help="clip.double"
+            aria-label="Double pattern length and repeat notes"
+            disabled={(pattern()?.bars ?? 128) > 64}
+            title={
+              (pattern()?.bars ?? 128) > 64
+                ? "Doubling would exceed the 128-bar limit."
+                : "Double the length and repeat every note. Undo restores the original."
+            }
+            onClick={() => {
+              const clip = pattern();
+              if (clip && doublePattern(props.lane, clip.id))
+                announceStage(
+                  `Pattern ${clip.name} doubled to ${clip.bars * 2} bars.`,
+                );
+            }}
+          >
+            <IconDouble
+              size={11}
+              style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+            />
+            Double ×2
+          </button>
         </div>
       </details>
-      <button
-        type="button"
-        class="clip-double"
-        data-help="clip.double"
-        aria-label="Double pattern length and repeat notes"
-        disabled={(pattern()?.bars ?? 128) > 64}
-        title={
-          (pattern()?.bars ?? 128) > 64
-            ? "Doubling would exceed the 128-bar limit."
-            : "Double the length and repeat every note. Undo restores the original."
-        }
-        onClick={() => {
-          const clip = pattern();
-          if (clip && doublePattern(props.lane, clip.id))
-            announceStage(
-              `Pattern ${clip.name} doubled to ${clip.bars * 2} bars.`,
-            );
-        }}
-      >
-        <IconDouble size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
-        Double ×2
-      </button>
     </div>
   );
 }

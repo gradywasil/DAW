@@ -51,7 +51,6 @@ export interface MidiPopoverProps {
 }
 
 export default function MidiPopover(props: MidiPopoverProps) {
-
   onMount(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -116,14 +115,20 @@ export default function MidiPopover(props: MidiPopoverProps) {
 
       <div class="midi-pop-devices">
         <span class="midi-pop-section-label">INPUT CONTROLLERS</span>
-        <div class="midi-device-list" role="radiogroup" aria-label="MIDI Inputs">
+        <div
+          class="midi-device-list"
+          role="radiogroup"
+          aria-label="MIDI Inputs"
+        >
           <Show
             when={midiDevices().length > 0}
             fallback={
               <div class="midi-device-none">
                 {midiStatus() === "connected" || midiStatus() === "disconnected"
                   ? "No hardware controllers detected. Connect a USB or Bluetooth MIDI device."
-                  : "Click Connect to grant Web MIDI permission."}
+                  : midiStatus() === "unsupported"
+                    ? "This browser does not support Web MIDI. You can still edit and play with the grid."
+                    : "Click Connect to grant Web MIDI permission."}
               </div>
             }
           >
@@ -146,7 +151,9 @@ export default function MidiPopover(props: MidiPopoverProps) {
                   onClick={() => setMidiSelectedDevice(device.id)}
                 >
                   <span>{device.name}</span>
-                  <span class="midi-pop-section-label">{device.manufacturer}</span>
+                  <span class="midi-pop-section-label">
+                    {device.manufacturer}
+                  </span>
                 </button>
               )}
             </For>
@@ -202,6 +209,9 @@ export default function MidiPopover(props: MidiPopoverProps) {
             <button
               type="button"
               class="midi-action-btn is-primary"
+              disabled={
+                midiStatus() === "unsupported" || midiStatus() === "requesting"
+              }
               onClick={async () => {
                 await connectMidi();
               }}

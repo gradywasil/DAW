@@ -4,12 +4,7 @@
  * central crossfader with curve selector, slip loop rolls, and vinyl brake.
  */
 
-import {
-  createSignal,
-  onMount,
-  onCleanup,
-  type JSX,
-} from "solid-js";
+import { createSignal, onMount, onCleanup, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
 import { getSession } from "../engine/session";
 import { docStore } from "../state/store";
@@ -33,7 +28,9 @@ export default function DjDeckModal(props: DjDeckModalProps): JSX.Element {
   const session = getSession();
   const [isPlaying, setIsPlaying] = createSignal(false);
   const [crossfader, setCrossfader] = createSignal(djDeckState().crossfader);
-  const [curve, setCurve] = createSignal<CrossfaderCurve>(djDeckState().crossfaderCurve);
+  const [curve, setCurve] = createSignal<CrossfaderCurve>(
+    djDeckState().crossfaderCurve,
+  );
 
   // Deck A EQ
   const [lowA, setLowA] = createSignal(djDeckState().deckA.lowGainDb);
@@ -130,7 +127,9 @@ export default function DjDeckModal(props: DjDeckModalProps): JSX.Element {
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="dj-dialog"
         role="dialog"
         aria-label="Performance DJ Deck"
@@ -249,7 +248,9 @@ export default function DjDeckModal(props: DjDeckModalProps): JSX.Element {
           {/* CENTER MIXER & PERFORMANCE CONTROLS */}
           <div class="dj-center-mixer">
             <div class="dj-mixer-header">
-              <span>{doc.name || "BITBOUNCE"} — {effectiveBpm()} BPM</span>
+              <span>
+                {doc.name || "BITBOUNCE"} — {effectiveBpm()} BPM
+              </span>
             </div>
 
             {/* Main Play & Brake Controls */}
@@ -335,8 +336,12 @@ export default function DjDeckModal(props: DjDeckModalProps): JSX.Element {
             {/* Crossfader Section */}
             <div class="dj-crossfader-section">
               <div class="dj-crossfader-labels">
-                <span class="a-lbl">DECK A ({Math.round(gains().gainA * 100)}%)</span>
-                <span class="b-lbl">DECK B ({Math.round(gains().gainB * 100)}%)</span>
+                <span class="a-lbl">
+                  DECK A ({Math.round(gains().gainA * 100)}%)
+                </span>
+                <span class="b-lbl">
+                  DECK B ({Math.round(gains().gainB * 100)}%)
+                </span>
               </div>
 
               <input
@@ -346,7 +351,9 @@ export default function DjDeckModal(props: DjDeckModalProps): JSX.Element {
                 step="0.01"
                 value={crossfader()}
                 class="dj-crossfader-slider"
-                onInput={(e) => handleCrossfaderChange(parseFloat(e.currentTarget.value))}
+                onInput={(e) =>
+                  handleCrossfaderChange(parseFloat(e.currentTarget.value))
+                }
               />
 
               <div class="dj-curve-row">

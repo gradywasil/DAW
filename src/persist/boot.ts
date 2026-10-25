@@ -22,12 +22,18 @@ import {
   type AutosaveController,
   type AutosaveStatus,
 } from "./autosave";
-import { BOOT_PROJECT_ID, type ProjectDb, type ProjectRecord, openProjectDb } from "./db";
+import {
+  BOOT_PROJECT_ID,
+  type ProjectDb,
+  type ProjectRecord,
+  openProjectDb,
+} from "./db";
 import {
   deleteProject,
   listProjects,
   loadProject,
   mostRecentProject,
+  saveProject,
   type ProjectMeta,
 } from "./projectStore";
 import { checkAndLoadShareUrlOnBoot } from "./shareUrl";
@@ -79,7 +85,10 @@ export function getBootDb(): ProjectDb | null {
   return activeDb;
 }
 
-function startController(projectId: string, previewDocument?: ProjectDocument): void {
+function startController(
+  projectId: string,
+  previewDocument?: ProjectDocument,
+): void {
   if (!activeDb) throw new Error("startController: persistence not booted");
   activeProjectId = previewDocument ? null : projectId;
   setBuiltInDemo(!!previewDocument);
@@ -110,7 +119,8 @@ function startController(projectId: string, previewDocument?: ProjectDocument): 
   void activeDb
     .getRecord(projectId)
     .then((row) => {
-      if (row && activeProjectId === projectId && !builtInDemo()) setLastSavedAt(row.updatedAt);
+      if (row && activeProjectId === projectId && !builtInDemo())
+        setLastSavedAt(row.updatedAt);
     })
     .catch(() => undefined);
 }
@@ -121,16 +131,37 @@ function startController(projectId: string, previewDocument?: ProjectDocument): 
  * target project. The document itself is loaded by the caller — AFTER this
  * call, so the old row can never receive the new bytes.
  */
-export async function switchToProject(projectId: string, options: { requireSaved?: boolean } = {}): Promise<void> {
+export async function switchToProject(
+  projectId: string,
+  options: { requireSaved?: boolean } = {},
+): Promise<void> {
   if (!activeDb) throw new Error("switchToProject: persistence not booted");
   disableAgentAccess();
   await controller?.stop();
-  if (options.requireSaved && controller && (controller.getStatus() === "error" || controller.isPending())) {
+  if (
+    options.requireSaved &&
+    controller &&
+    (controller.getStatus() === "error" || controller.isPending())
+  ) {
     // A failed final flush must keep the old project and its autosave active.
     if (activeProjectId) startController(activeProjectId);
-    throw new Error("Current work could not be saved. The current project is still open.");
+    throw new Error(
+      "Current work could not be saved. The current project is still open.",
+    );
   }
   startController(projectId);
+}
+
+/** Song links import into their own row, including links opened in this tab. */
+export async function importSharedSong(): Promise<boolean> {
+  const db = activeDb;
+  if (!db) return false;
+  return checkAndLoadShareUrlOnBoot(async (doc) => {
+    const id = crypto.randomUUID();
+    await saveProject(db, id, doc);
+    await switchToProject(id, { requireSaved: true });
+    loadDocument(doc);
+  });
 }
 
 /** Preview built-in content; first document edit promotes it to an autosaved copy. */
@@ -138,7 +169,10 @@ export async function openBuiltInDemo(id: DemoId): Promise<void> {
   if (!activeDb) throw new Error("Persistence is not ready");
   disableAgentAccess();
   await controller?.stop();
-  if (controller && (controller.getStatus() === "error" || controller.isPending())) {
+  if (
+    controller &&
+    (controller.getStatus() === "error" || controller.isPending())
+  ) {
     if (activeProjectId) startController(activeProjectId);
     throw new Error("Current work could not be saved");
   }
@@ -306,7 +340,7 @@ export async function initPersistence(
     armFirstRunNudge();
   }
   startController(projectId, previewDocument);
-  void checkAndLoadShareUrlOnBoot();
+  if (await importSharedSong()) projectId = activeProjectId!;
   // Narrow for the result type (startController always assigns synchronously).
   const started = controller as AutosaveController;
   return {

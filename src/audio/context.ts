@@ -15,7 +15,7 @@ export interface AudioContextLike {
 
 export type AudioContextFactory = () => AudioContextLike;
 
-/** Default factory: real AudioContext at a fixed 44100 Hz with lowest hardware output latency. */
+/** Request interactive latency; the browser chooses the actual device buffer. */
 export const defaultAudioContextFactory: AudioContextFactory = () =>
   new AudioContext({
     sampleRate: DEFAULT_SAMPLE_RATE,

@@ -1,0 +1,66 @@
+[
+  {
+    "mode": "idle-edit",
+    "work": {}
+  },
+  {
+    "mode": "playing-edit",
+    "work": {
+      "Booth": {
+        "calls": 60,
+        "ms": 1.8000001907348633
+      },
+      "grid/renderer": {
+        "calls": 60,
+        "ms": 13.300000190734863
+      },
+      "soundingFollow": {
+        "calls": 60,
+        "ms": 0.8999999165534973
+      }
+    }
+  },
+  {
+    "mode": "playing-song",
+    "work": {
+      "Booth": {
+        "calls": 61,
+        "ms": 2.200000286102295
+      },
+      "soundingFollow": {
+        "calls": 61,
+        "ms": 9.899999916553497
+      },
+      "grid/renderer": {
+        "calls": 2,
+        "ms": 0.09999996423721313
+      },
+      "other": {
+        "calls": 2,
+        "ms": 0.10000002384185791
+      }
+    }
+  },
+  {
+    "mode": "playing-mixer",
+    "work": {
+      "Booth": {
+        "calls": 61,
+        "ms": 1.7999998927116394
+      }
+    }
+  },
+  {
+    "mode": "playing-viz",
+    "work": {
+      "viz/renderer": {
+        "calls": 61,
+        "ms": 166.299999833107
+      }
+    }
+  },
+  {
+    "mode": "idle-mixer",
+    "work": {}
+  }
+]

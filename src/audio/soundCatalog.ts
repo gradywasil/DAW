@@ -1,4 +1,5 @@
 import { DRUM_KITS, PRESET_LIBRARY, type WaveKind } from "./presets";
+import { STUDIO_DESCRIPTIONS } from "./studioPresets";
 import { DRUM_CHARACTERS } from "./drumCharacters";
 import { soundFamily } from "../components/laneMeta";
 
@@ -57,6 +58,9 @@ const WAVE_TONE: Readonly<Record<WaveKind, SoundCharacter>> = {
   reed: "Bright",
   mallet: "Bright",
   noise: "Bright",
+  epiano: "Dark",
+  ensemble: "Bright",
+  fm: "Bright",
 };
 export const SOUND_CATALOG: readonly CatalogSound[] = [
   ...Object.values(PRESET_LIBRARY)
@@ -79,7 +83,9 @@ export const SOUND_CATALOG: readonly CatalogSound[] = [
         category,
         drums: false,
         characters,
-        description: `${characters.join(" · ")} · ${p.voiceType === "sample" ? "Recorded" : "Synthesized"}`,
+        description:
+          STUDIO_DESCRIPTIONS[p.id] ??
+          `${characters.join(" · ")} · ${p.voiceType === "sample" ? "Recorded" : "Synthesized"}`,
       };
     }),
   ...Object.values(DRUM_KITS).map((kit): CatalogSound => {

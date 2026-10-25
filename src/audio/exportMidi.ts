@@ -75,6 +75,7 @@ import {
 import { effectiveScale, degreeToMidi } from "../document/scales";
 import { getPreset } from "./presets";
 import { CURATED_PRESETS } from "./curatedPresets";
+import { STUDIO_PRESETS } from "./studioPresets";
 import { ADDITIONAL_PRESETS } from "./additionalPresets";
 import { laneCycleSteps, resolveChainPatterns } from "./song";
 import { computeLoopSteps } from "./render";
@@ -148,7 +149,7 @@ export const LANE_OCTAVE_FALLBACK: Readonly<
  */
 export const PRESET_GM_PROGRAMS: Readonly<Record<string, number>> = {
   ...Object.fromEntries(
-    [...CURATED_PRESETS, ...ADDITIONAL_PRESETS].map((p) => {
+    [...CURATED_PRESETS, ...ADDITIONAL_PRESETS, ...STUDIO_PRESETS].map((p) => {
       const family = p.id.split("-")[1];
       const programs: Readonly<Record<string, number>> = {
         bass: p.wave === "pluck" ? 34 : 38,

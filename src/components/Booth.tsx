@@ -10,7 +10,15 @@ import ThemeSelector from "./ThemeSelector";
  * state (playing, loop, bpm…) rides Solid signals fed by transport.subscribe.
  */
 
-import { Show, Suspense, createEffect, createSignal, lazy, onCleanup, onMount } from "solid-js";
+import {
+  Show,
+  Suspense,
+  createEffect,
+  createSignal,
+  lazy,
+  onCleanup,
+  onMount,
+} from "solid-js";
 import type { Position } from "../audio/time";
 import { getSession } from "../engine/session";
 import {
@@ -31,8 +39,6 @@ import {
 } from "../state/store";
 import { announceScale, projectScaleChipLabel } from "../state/scaleChip";
 import { dismissFirstRunNudge, firstRunNudge } from "../state/firstRun";
-import { openHelp } from "../state/helpOverlay";
-import { helpMode, toggleHelp } from "../state/helpMode";
 import { openViz, vizMode } from "../state/vizMode";
 import { registerHelp } from "../help/registry";
 import ScalePopover from "./ScalePopover";
@@ -40,35 +46,19 @@ import SaveIndicator from "./SaveIndicator";
 import Projects from "./Projects";
 import { DesktopPageNavigation } from "./PhonePageToggle";
 import { notePreview, toggleNotePreview } from "../state/notePreview";
-import { IconMinus, IconPlus, IconMidi, IconUndo, IconRedo, IconHistory, IconJam, IconScissors, IconChord, IconCompressor, IconKaoss, IconMic, IconShare, IconDjDeck, IconModular } from "./icons";
-const SampleSlicerModal = lazy(() => import("./SampleSlicerModal"));
-const ChordGeneratorModal = lazy(() => import("./ChordGeneratorModal"));
-const SidechainModal = lazy(() => import("./SidechainModal"));
-const KaossModal = lazy(() => import("./KaossModal"));
-const AudioRecorderModal = lazy(() => import("./AudioRecorderModal"));
-const ShareModal = lazy(() => import("./ShareModal"));
-const DjDeckModal = lazy(() => import("./DjDeckModal"));
-const ModularCanvasModal = lazy(() => import("./ModularCanvasModal"));
-const JamDrawer = lazy(() => import("./JamDrawer"));
+import { IconMinus, IconPlus, IconUndo, IconRedo, IconHistory } from "./icons";
 const HistoryDrawer = lazy(() => import("./HistoryDrawer"));
 
-import { isSlicerOpen, setIsSlicerOpen } from "../audio/sampleSlicer";
-import { isModularCanvasOpen, setIsModularCanvasOpen } from "../audio/modularSynth";
-import { isDjDeckOpen, setIsDjDeckOpen } from "../audio/djDeck";
-import { isShareModalOpen, setIsShareModalOpen } from "../persist/shareUrl";
-import { isRecorderOpen, setIsRecorderOpen } from "../audio/audioRecorder";
-import { isKaossOpen, setIsKaossOpen } from "../audio/kaossPad";
-import { isSidechainOpen, setIsSidechainOpen } from "../audio/sidechain";
-import { isChordGeneratorOpen, setIsChordGeneratorOpen } from "../audio/chordProgression";
-import { isJamDrawerOpen, setIsJamDrawerOpen, toggleJamDrawer, jamPeers, jamPulse } from "../collab/jamSession";
-import { canUndo, canRedo, isHistoryDrawerOpen, setIsHistoryDrawerOpen, toggleHistoryDrawer, undo, redo } from "../state/historyState";
-import MidiPopover from "./MidiPopover";
 import {
-  midiStatus,
-  midiActivityPulse,
-  midiPopoverOpen,
-  setMidiPopoverOpen,
-} from "../midi/midiState";
+  canUndo,
+  canRedo,
+  isHistoryDrawerOpen,
+  setIsHistoryDrawerOpen,
+  toggleHistoryDrawer,
+  undo,
+  redo,
+} from "../state/historyState";
+import { SessionTools } from "./StudioTools";
 
 const session = getSession();
 
@@ -114,58 +104,6 @@ function IconPreview() {
     </svg>
   );
 }
-function IconKeys() {
-  return (
-    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-      <rect
-        x="2"
-        y="4"
-        width="12"
-        height="8"
-        rx="1.3"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.2"
-      />
-      <circle cx="4.6" cy="7" r="0.55" fill="currentColor" />
-      <circle cx="8" cy="7" r="0.55" fill="currentColor" />
-      <circle cx="11.4" cy="7" r="0.55" fill="currentColor" />
-      <line
-        x1="4.5"
-        y1="9.6"
-        x2="11.5"
-        y2="9.6"
-        stroke="currentColor"
-        stroke-width="1.2"
-        stroke-linecap="round"
-      />
-    </svg>
-  );
-}
-function IconInfo() {
-  return (
-    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-      <circle
-        cx="8"
-        cy="8"
-        r="6.2"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.3"
-      />
-      <circle cx="8" cy="5.1" r="0.9" fill="currentColor" />
-      <line
-        x1="8"
-        y1="7.4"
-        x2="8"
-        y2="11.2"
-        stroke="currentColor"
-        stroke-width="1.3"
-        stroke-linecap="round"
-      />
-    </svg>
-  );
-}
 function IconViz() {
   return (
     <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
@@ -201,7 +139,9 @@ function BoothPercentEdit(props: {
     if (settled) return;
     settled = true;
     const n = Number.parseInt(text(), 10);
-    props.onCommit(Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : props.value);
+    props.onCommit(
+      Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : props.value,
+    );
   };
   const cancel = () => {
     if (settled) return;
@@ -296,17 +236,7 @@ registerHelp([
   {
     id: "booth.jam",
     title: "JAM ENSEMBLE",
-    text: "Opens the real-time collaborative jamming drawer. Connect with peers across tabs, local network, or direct WebRTC P2P to sync notes, sound presets, and transport play/stop in real time.",
-  },
-  {
-    id: "booth.modular",
-    title: "MODULAR NODE CANVAS",
-    text: "Opens the Max/MSP and PureData style visual modular audio patchbay. Drag custom VCO, LFO, VCF, and VCA modules across the canvas and connect inputs and outputs with glowing Bezier patch cords to design custom synthesizer architectures.",
-  },
-  {
-    id: "booth.djdeck",
-    title: "PERFORMANCE DJ DECK",
-    text: "Opens the Fullscreen Performance DJ Deck and Dual-Platter Studio. Features dual turntable platters with vinyl motor brake, 3-band isolator EQs with full frequency kill switches (-inf dB), pitch nudging, slip loop rolls (1/2 to 1/16), and equal-power or scratch crossfader curves.",
+    text: "Opens the real-time collaborative jamming drawer. Share a room across tabs in this browser profile. Direct WebRTC uses a manual connection exchange; a shared room code alone does not connect remote devices.",
   },
   {
     id: "booth.share",
@@ -319,24 +249,14 @@ registerHelp([
     text: "Opens the live microphone recording studio. Capture voice, percussion, or acoustic instruments directly into the browser, normalize, trim silence, and instantly route takes into the Sample Slicer for MPC chops.",
   },
   {
-    id: "booth.kaoss",
-    title: "KAOSS FX & STUTTER",
-    text: "Opens the 2D XY Kaoss FX Pad and Live Beat Stutter Studio. Touch or drag to morph resonant filter sweeps, spatial delay, bitcrush, and tape flanger, or trigger momentary 1/2 to 1/32 beat repeaters and vinyl tape stops.",
-  },
-  {
-    id: "booth.compressor",
-    title: "GLUE & SIDECHAIN",
-    text: "Opens the Master Bus Glue Compressor & Sidechain Ducking Studio. Configure 4-on-the-floor or transient sidechain ducking across bass, chords, and melodic tracks with real-time analog VU meter feedback.",
-  },
-  {
     id: "booth.chordGenerator",
     title: "CHORD GENERATOR",
-    text: "Opens the scale-aware chord progression generator. Choose musical progressions (Neo-Soul, Lofi, Synthwave, City Pop), customize voicings (7ths, 9ths, Drop-2), and write full chord patterns directly into the Chords lane.",
+    text: "Opens the scale-aware chord progression generator. Choose a progression and rhythm for the selected Chords pattern. Uses the lane's diatonic triads and can replace the selected Bass pattern in the same undoable edit.",
   },
   {
     id: "booth.slicer",
     title: "SAMPLE CHOPPER",
-    text: "Opens the sample slicer and transient chopper. Slice breaks, loops, or audio files into drum chops, fine-tune waveform slice boundaries, audition pads with keys 1-8, and commit chops directly to the drum pattern.",
+    text: "Opens the sample slicer and transient chopper. Slice imported audio, preview slices with keys 1-8, and export a slice as WAV. Slices are not inserted into the song.",
   },
   {
     id: "booth.history",
@@ -516,236 +436,10 @@ export function BoothOptions(props: BoothOptionsProps) {
         >
           <IconPreview />
         </button>
-        {/* M-2: phone-stage render guard — KEYS ? / INFO ? leave the DOM
-            (and the a11y tree) entirely on the phone stage; the `?`/I
-            keyboard twins stay live (KeyboardShortcuts). */}
+        <SessionTools />
         <Show when={!props.compact}>
-          <button
-            type="button"
-            class="booth-btn booth-btn-icon booth-btn-help"
-            data-help="booth.keys"
-            aria-haspopup="dialog"
-            aria-label="Keyboard shortcuts"
-            title="Keyboard shortcuts"
-            onClick={(e) => openHelp(e.currentTarget)}
-          >
-            <IconKeys />
-          </button>
-          <button
-            type="button"
-            class="booth-btn booth-btn-icon booth-btn-info"
-            classList={{ "is-on": helpMode() }}
-            data-help="booth.info"
-            aria-pressed={helpMode()}
-            aria-label="Info mode"
-            title="Info mode"
-            onClick={toggleHelp}
-          >
-            <IconInfo />
-          </button>
+          <VisualizerButton />
         </Show>
-        <span class="midi-pop-wrap">
-          <button
-            type="button"
-            class="booth-btn booth-btn-icon booth-btn-midi"
-            classList={{
-              "is-active": midiStatus() === "connected",
-              "has-pulse": midiActivityPulse(),
-            }}
-            data-help="midi.connect"
-            aria-haspopup="dialog"
-            aria-expanded={midiPopoverOpen()}
-            aria-label="Web MIDI Controller"
-            title="Web MIDI Controller"
-            onClick={() => setMidiPopoverOpen(!midiPopoverOpen())}
-          >
-            <IconMidi size={13} />
-          </button>
-          <Show when={midiPopoverOpen()}>
-            <MidiPopover onClose={() => setMidiPopoverOpen(false)} />
-          </Show>
-        </span>
-        <span class="jam-pop-wrap">
-          <button
-            type="button"
-            class="booth-btn booth-btn-icon booth-btn-jam"
-            classList={{
-              "is-active": isJamDrawerOpen(),
-              "has-peers": jamPeers().length > 0,
-              "has-pulse": jamPulse(),
-            }}
-            data-help="booth.jam"
-            aria-haspopup="dialog"
-            aria-expanded={isJamDrawerOpen()}
-            aria-label="Collaborative Jam Session"
-            title="Collaborative Jam Session"
-            onClick={toggleJamDrawer}
-          >
-            <IconJam size={13} />
-          </button>
-          <Show when={isJamDrawerOpen()}>
-            <Suspense fallback={null}>
-              <JamDrawer onClose={() => setIsJamDrawerOpen(false)} />
-            </Suspense>
-          </Show>
-        </span>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-slicer"
-          classList={{ "is-active": isSlicerOpen() }}
-          data-help="booth.slicer"
-          aria-haspopup="dialog"
-          aria-expanded={isSlicerOpen()}
-          aria-label="Sample Slicer & Beat Chopper"
-          title="Sample Slicer & Beat Chopper"
-          onClick={() => setIsSlicerOpen(true)}
-        >
-          <IconScissors size={13} />
-        </button>
-        <Show when={isSlicerOpen()}>
-          <Suspense fallback={null}>
-            <SampleSlicerModal onClose={() => setIsSlicerOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-chord"
-          classList={{ "is-active": isChordGeneratorOpen() }}
-          data-help="booth.chordGenerator"
-          aria-haspopup="dialog"
-          aria-expanded={isChordGeneratorOpen()}
-          aria-label="Scale-Aware Chord Generator"
-          title="Scale-Aware Chord Generator"
-          onClick={() => setIsChordGeneratorOpen(true)}
-        >
-          <IconChord size={13} />
-        </button>
-        <Show when={isChordGeneratorOpen()}>
-          <Suspense fallback={null}>
-            <ChordGeneratorModal onClose={() => setIsChordGeneratorOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-sidechain"
-          classList={{ "is-active": isSidechainOpen() }}
-          data-help="booth.compressor"
-          aria-haspopup="dialog"
-          aria-expanded={isSidechainOpen()}
-          aria-label="Master Glue & Sidechain Ducking"
-          title="Master Glue & Sidechain Ducking"
-          onClick={() => setIsSidechainOpen(true)}
-        >
-          <IconCompressor size={13} />
-        </button>
-        <Show when={isSidechainOpen()}>
-          <Suspense fallback={null}>
-            <SidechainModal onClose={() => setIsSidechainOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-kaoss"
-          classList={{ "is-active": isKaossOpen() }}
-          data-help="booth.kaoss"
-          aria-haspopup="dialog"
-          aria-expanded={isKaossOpen()}
-          aria-label="XY Kaoss FX Pad & Beat Stutter"
-          title="XY Kaoss FX Pad & Beat Stutter"
-          onClick={() => setIsKaossOpen(true)}
-        >
-          <IconKaoss size={13} />
-        </button>
-        <Show when={isKaossOpen()}>
-          <Suspense fallback={null}>
-            <KaossModal onClose={() => setIsKaossOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-recorder"
-          classList={{ "is-active": isRecorderOpen() }}
-          data-help="booth.recorder"
-          aria-haspopup="dialog"
-          aria-expanded={isRecorderOpen()}
-          aria-label="Microphone & Vocal Sampler"
-          title="Microphone & Vocal Sampler"
-          onClick={() => setIsRecorderOpen(true)}
-        >
-          <IconMic size={13} />
-        </button>
-        <Show when={isRecorderOpen()}>
-          <Suspense fallback={null}>
-            <AudioRecorderModal onClose={() => setIsRecorderOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-modular"
-          classList={{ "is-active": isModularCanvasOpen() }}
-          data-help="booth.modular"
-          aria-haspopup="dialog"
-          aria-expanded={isModularCanvasOpen()}
-          aria-label="Modular Audio Node Canvas"
-          title="Modular Audio Node Canvas"
-          onClick={() => setIsModularCanvasOpen(true)}
-        >
-          <IconModular size={13} />
-        </button>
-        <Show when={isModularCanvasOpen()}>
-          <Suspense fallback={null}>
-            <ModularCanvasModal onClose={() => setIsModularCanvasOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-djdeck"
-          classList={{ "is-active": isDjDeckOpen() }}
-          data-help="booth.djdeck"
-          aria-haspopup="dialog"
-          aria-expanded={isDjDeckOpen()}
-          aria-label="Performance DJ Deck"
-          title="Performance DJ Deck"
-          onClick={() => setIsDjDeckOpen(true)}
-        >
-          <IconDjDeck size={13} />
-        </button>
-        <Show when={isDjDeckOpen()}>
-          <Suspense fallback={null}>
-            <DjDeckModal onClose={() => setIsDjDeckOpen(false)} />
-          </Suspense>
-        </Show>
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-share"
-          classList={{ "is-active": isShareModalOpen() }}
-          data-help="booth.share"
-          aria-haspopup="dialog"
-          aria-expanded={isShareModalOpen()}
-          aria-label="Share Song Link"
-          title="Share Song Link"
-          onClick={() => setIsShareModalOpen(true)}
-        >
-          <IconShare size={13} />
-        </button>
-        <Show when={isShareModalOpen()}>
-          <Suspense fallback={null}>
-            <ShareModal onClose={() => setIsShareModalOpen(false)} />
-          </Suspense>
-        </Show>
-        {/* VZ-IM-2: the VIZ page entry toggle. */}
-        <button
-          type="button"
-          class="booth-btn booth-btn-icon booth-btn-viz"
-          classList={{ "is-on": vizMode() }}
-          data-help="booth.viz"
-          aria-pressed={vizMode()}
-          aria-label="Visualizer"
-          title="Visualizer"
-          onClick={(e) => openViz(e.currentTarget)}
-        >
-          <IconViz />
-        </button>
       </div>
 
       {/* Undo / Redo / History Time Travel */}
@@ -1001,6 +695,21 @@ export function BoothOptions(props: BoothOptionsProps) {
  * stage — the phone Booth's in-group copy is render-guarded away by
  * `compact`, never duplicated.
  */
+export function VisualizerButton(props: { class?: string }) {
+  return (
+    <button
+      type="button"
+      class={`booth-btn booth-btn-viz ${props.class ?? ""}`}
+      data-help="booth.viz"
+      aria-label="Visualizer"
+      aria-pressed={vizMode()}
+      onClick={(e) => openViz(e.currentTarget)}
+    >
+      <IconViz /> Visuals
+    </button>
+  );
+}
+
 export function PlayStopButton() {
   const [playing, setPlaying] = createSignal(false);
   onMount(() => {
@@ -1078,7 +787,7 @@ export default function Booth(props: BoothProps) {
       if (announceEl) announceEl.textContent = "";
     }
 
-    if (!playing()) {
+    if (!playing() || vizMode()) {
       writeStoppedPosition();
       return;
     }

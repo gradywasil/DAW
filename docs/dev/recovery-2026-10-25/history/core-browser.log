@@ -1,0 +1,55 @@
+
+ RUN  v4.1.11 C:/Users/arran/Projects/DAW
+
+ ✓ |browser (chromium)| tests/browser/e2e-happy-path.test.ts > HW-4 e2e happy path (built app, wiped IDB, full journey) > first-run → play → edit → chain → arrange → lazy exports → reload → determinism 13354ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > bypasses transparently and pans the channel without leaking left 71ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > attenuates low frequencies with EQ and reduces loud signals with compression 82ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > bounds both channels even under severe overload without nonfinite samples 729ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > exports the same channel processing and preserves legacy default output 345ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > master filter processes the summed output and bypass restores the dry signal 110ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > flexible EQ audio > renders converted legacy bands identically to old documents 67ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > flexible EQ audio > applies changed types and positions, and bypasses individual or removed bands 136ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > a sample-voice project renders bit-identically twice (decode-before-render, no seeds) 197ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > PS-4 + FX: sample lane through its per-lane FX chain still deterministic 134ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > energy windows: onsets at exact step times; note LENGTH is audible (SC-2 for samples) 102ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > kit coverage: all four sample kits render the drum grid exactly (onset count = hits) 224ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — selection journey on the real stepper > zero audio fetches before selection; one click on a sample kit = selected + fetched + decoded + auditioned + provenance 102ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — selection journey on the real stepper > a failing asset load surfaces ONE sticky toast; the app keeps working 29ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — preset identity reference > the six pitched sample presets resolve with measured roots 2ms
+ ✓ |browser (chromium)| tests/browser/sound-browser.test.tsx > sound browser selection flow > previews real audio without editing, then applies only Use sound 152ms
+ ✓ |browser (chromium)| tests/browser/sound-browser.test.tsx > sound browser selection flow > filters by category and character, keeps favorites separate from document state, and closes without applying 142ms
+ ✓ |browser (chromium)| tests/browser/sound-browser.test.tsx > sound browser selection flow > reports a failed preview, supports retry, and refuses to apply until it succeeds 129ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the bass track remains audible after previewing and applying synth and recorded sounds 7995ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the drums track remains audible after previewing and applying synth and recorded sounds 7804ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the chords track remains audible after previewing and applying synth and recorded sounds 7828ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the lead track remains audible after previewing and applying synth and recorded sounds 7852ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the built app plays each soloed track after Use sound 18082ms
+5:15:07 PM [vite] (client) [console.error] [failure detail] plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot: timed out waiting for demo cue labels in the rail (first-run demo)
+stderr | tests/browser/viz-composition-journeys.test.tsx > built composition journeys > plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot
+[failure detail] plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot: timed out waiting for demo cue labels in the rail (first-run demo)
+stdout | tests/browser/viz-composition-journeys.test.tsx > built composition journeys > plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot
+[failure screenshot] plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot: __screenshots__/failures/1356720349_0_0.png
+ × |browser (chromium)| tests/browser/viz-composition-journeys.test.tsx > built composition journeys > plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot 10522ms
+   → timed out waiting for demo cue labels in the rail (first-run demo)
+ ✓ |browser (chromium)| tests/browser/studio-palette.test.ts > recovery sound palette > every pick exists, including natural instrument and drum choices 5ms
+ ✓ |browser (chromium)| tests/browser/studio-palette.test.ts > recovery sound palette > renders all authored instruments through the real worklet with distinct, finite audio 1054ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |browser (chromium)| tests/browser/viz-composition-journeys.test.tsx > built composition journeys > plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot
+Error: timed out waiting for demo cue labels in the rail (first-run demo)
+ ❯ check tests/browser/viz-harness.ts:123:22
+    121|       if (cond()) return resolve();
+    122|       if (performance.now() - t0 > timeoutMs)
+    123|         return reject(new Error(`timed out waiting for ${what}`));
+       |                      ^
+    124|       setTimeout(check, 50);
+    125|     };
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 25 passed (26)
+   Start at  17:13:43
+   Duration  85.58s (transform 0ms, setup 45ms, import 2.12s, tests 77.25s, environment 0ms)

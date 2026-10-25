@@ -1,0 +1,142 @@
+check-bundle: building (tsc --noEmit && vite build)…
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 327 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    3.26 kB │ gzip:   1.41 kB
+dist/assets/drums-acoustic-kick-BsWqprxd.ogg       4.51 kB
+dist/assets/mixerLimiter-BpoLcDSZ.js               4.64 kB
+dist/assets/press-start-2p-400-ClsvrIBJ.woff2      4.70 kB
+dist/assets/drums-808-hat2-sfmMuYkQ.ogg            4.76 kB
+dist/assets/drums-dusty-tom-C4NadiyN.ogg           4.93 kB
+dist/assets/drums-dusty-clap-7RAfy85C.ogg          5.28 kB
+dist/assets/drums-punch-tom-DNCXCUBj.ogg           5.41 kB
+dist/assets/drums-punch-hat-B7mIeQrx.ogg           5.46 kB
+dist/assets/drums-808-snare-Dx1Ug-OG.ogg           5.52 kB
+dist/assets/drums-acoustic-hat-Ddowhqqq.ogg        5.71 kB
+dist/assets/drums-dusty-hat-BSB0PQgV.ogg           5.79 kB
+dist/assets/departure-mono-400-YazmgA1T.woff2      5.89 kB
+dist/assets/drums-808-snare2-DSeL00-P.ogg          5.89 kB
+dist/assets/voice-bass-lowtone-BcCmPFyk.ogg        5.95 kB
+dist/assets/drums-acoustic-tom-BMiN0vAo.ogg        5.98 kB
+dist/assets/drums-808-hat-BB1aRssw.ogg             6.12 kB
+dist/assets/voice-lead-highup-tyK4bR4o.ogg         6.13 kB
+dist/assets/drums-808-openhat-Bz-8Sthp.ogg         6.30 kB
+dist/assets/voice-chords-tone-Ck_V4K92.ogg         6.63 kB
+dist/assets/voice-lead-phaserup-rODiGQL5.ogg       6.89 kB
+dist/assets/vt323-400-EhPR265H.woff2               7.19 kB
+dist/assets/voice-chords-threetone-Cxp11XWl.ogg    7.36 kB
+dist/assets/voice-chords-twotone-Dz5bNUHe.ogg      7.36 kB
+dist/assets/drums-acoustic-openhat-BLrWkzNa.ogg    7.89 kB
+dist/assets/drums-dusty-kick-BW0X-6qL.ogg          7.89 kB
+dist/assets/drums-dusty-snare-D_Zxw_dj.ogg         8.07 kB
+dist/assets/drums-808-tom-C74VGumt.ogg             9.09 kB
+dist/assets/drums-punch-openhat-Cvg--dHx.ogg       9.54 kB
+dist/assets/ibm-plex-mono-400-BJoXLJYV.woff2      10.05 kB
+dist/assets/ibm-plex-mono-500-C820gu2e.woff2      10.06 kB
+dist/assets/drums-punch-snare-G2Pu-bVC.ogg        11.56 kB
+dist/assets/drums-acoustic-snare-DJtoFP3x.ogg     12.79 kB
+dist/assets/drums-punch-kick-CwM9kl1E.ogg         17.30 kB
+dist/assets/drums-808-clap-XcuMeuxC.ogg           17.33 kB
+dist/assets/drums-dusty-openhat-BCwTLzRf.ogg      18.91 kB
+dist/assets/voiceEngine-BOcgGvXU.js               20.16 kB
+dist/assets/drums-acoustic-clap-BTvBd92O.ogg      24.06 kB
+dist/assets/drums-punch-clap-CR0zXkem.ogg         25.45 kB
+dist/assets/drums-808-kick-BFK6rFsp.ogg           31.27 kB
+dist/assets/drums-808-kick2-_REfwWQN.ogg          40.00 kB
+dist/assets/bitbounce-logo-BhGnMtrv.svg           67.94 kB │ gzip:   8.39 kB
+dist/assets/bitbounce-favicon-C5VOKZYn.svg        68.01 kB │ gzip:   8.41 kB
+dist/assets/barlow-500-Apw_3I1e.ttf               81.92 kB
+dist/assets/barlow-400-D9VpUvlI.ttf               82.62 kB
+dist/assets/barlow-600-S-AH7y_S.ttf               85.87 kB
+dist/assets/barlow-700-CqhdknQi.ttf              108.22 kB
+dist/assets/unbounded-500-DOHeubRJ.ttf           347.34 kB
+dist/assets/VizPage-Dp1Y0X1A.css                   1.20 kB │ gzip:   0.53 kB
+dist/assets/InstrumentsPage-ChbFfCXs.css           1.30 kB │ gzip:   0.54 kB
+dist/assets/ShareModal-BWGO-deu.css                2.82 kB │ gzip:   0.88 kB
+dist/assets/MidiPopover-BcQwbwfx.css               3.92 kB │ gzip:   1.05 kB
+dist/assets/AudioRecorderModal-CB3_5tmD.css        4.17 kB │ gzip:   1.30 kB
+dist/assets/ChordGeneratorModal-BGLpTzRL.css       4.41 kB │ gzip:   1.10 kB
+dist/assets/SampleSlicerModal-C4oZGdsP.css         4.54 kB │ gzip:   1.20 kB
+dist/assets/HistoryDrawer-CHMY10ZO.css             5.50 kB │ gzip:   1.28 kB
+dist/assets/JamDrawer-DTqQqM--.css                 5.92 kB │ gzip:   1.30 kB
+dist/assets/index-BSa99g3v.css                   181.08 kB │ gzip:  37.16 kB
+dist/assets/downloadSample-ChYKwFE_.js             0.41 kB │ gzip:   0.32 kB
+dist/assets/wav-BaRrCcyg.js                        0.96 kB │ gzip:   0.53 kB
+dist/assets/laneMeta-C20iuxrd.js                   1.16 kB │ gzip:   0.64 kB
+dist/assets/midiMapping-DrqIZrys.js                1.17 kB │ gzip:   0.59 kB
+dist/assets/exportWav-aND220HA.js                  1.24 kB │ gzip:   0.66 kB
+dist/assets/ShareModal-CG6khGZr.js                 1.75 kB │ gzip:   0.98 kB
+dist/assets/InstrumentsPage-M1p6QFvW.js            1.87 kB │ gzip:   0.98 kB
+dist/assets/exportStems-BHZCg7YF.js                3.23 kB │ gzip:   1.45 kB
+dist/assets/ChordGeneratorModal-DDSaxJbG.js        3.47 kB │ gzip:   1.49 kB
+dist/assets/autoMix-BBMrg4le.js                    3.76 kB │ gzip:   1.77 kB
+dist/assets/codec-CL-2hG3p.js                      3.83 kB │ gzip:   1.76 kB
+dist/assets/HistoryDrawer-BYgPadJx.js              4.37 kB │ gzip:   1.76 kB
+dist/assets/MidiPopover-BXbJR1IM.js                4.86 kB │ gzip:   1.97 kB
+dist/assets/projectName-C-YGY8BF.js                4.92 kB │ gzip:   1.94 kB
+dist/assets/sessionTools-BnmWEGFd.js               5.66 kB │ gzip:   2.49 kB
+dist/assets/JamDrawer-DAz06PTb.js                  5.73 kB │ gzip:   2.34 kB
+dist/assets/AudioRecorderModal-k6hJvctp.js         6.63 kB │ gzip:   2.99 kB
+dist/assets/SampleSlicerModal-C8gnAJ7B.js          7.93 kB │ gzip:   3.40 kB
+dist/assets/content-C0y8tQN6.js                   11.01 kB │ gzip:   2.73 kB
+dist/assets/solid-Cbl2_wJ0.js                     12.92 kB │ gzip:   5.12 kB
+dist/assets/mixer-8G2-wfCL.js                     14.89 kB │ gzip:   5.42 kB
+dist/assets/scales-BuxEbiCQ.js                    18.12 kB │ gzip:   6.04 kB
+dist/assets/exportMidi-DXJs9Ly6.js                18.28 kB │ gzip:   5.98 kB
+dist/assets/store-RpfFf6WN.js                     20.10 kB │ gzip:   7.04 kB
+dist/assets/tools-BFbUfuIN.js                     25.92 kB │ gzip:   9.36 kB
+dist/assets/MixerPage-D1GmKauq.js                 43.26 kB │ gzip:  15.10 kB
+dist/assets/presets-xRTs3aaM.js                   48.44 kB │ gzip:  15.38 kB
+dist/assets/VizPage-C7G9Dbh0.js                   49.71 kB │ gzip:  17.51 kB
+dist/assets/exportVideo-xNh3Fkhi.js              208.64 kB │ gzip:  52.97 kB
+dist/assets/index-foh5LOQD.js                    349.64 kB │ gzip: 109.73 kB
+
+[INEFFECTIVE_DYNAMIC_IMPORT] src/persist/newProject.ts is dynamically imported by src/webmcp/access.ts but also statically imported by src/components/Projects.tsx, src/persist/boot.ts, dynamic import will not move module into another chunk.
+
+[INEFFECTIVE_DYNAMIC_IMPORT] src/persist/boot.ts is dynamically imported by src/webmcp/access.ts but also statically imported by src/App.tsx, src/components/Projects.tsx, src/components/SaveIndicator.tsx, dynamic import will not move module into another chunk.
+
+✓ built in 1.66s
+
+Bundle breakdown (TH-2 gate):
+  initial-load JS (entry + eager chunks, gz):
+    assets/codec-CL-2hG3p.js             1.72 KB
+    assets/index-foh5LOQD.js           106.30 KB
+    assets/laneMeta-C20iuxrd.js          0.63 KB
+    assets/midiMapping-DrqIZrys.js       0.58 KB
+    assets/mixer-8G2-wfCL.js             5.29 KB
+    assets/presets-xRTs3aaM.js          14.88 KB
+    assets/projectName-C-YGY8BF.js       1.89 KB
+    assets/scales-BuxEbiCQ.js            5.89 KB
+    assets/solid-Cbl2_wJ0.js             4.96 KB
+    assets/store-RpfFf6WN.js             6.86 KB
+    ---------------------------------- ---------
+    TOTAL                              148.99 KB
+  lazy chunks (dynamic import, on demand, gz):
+    assets/AudioRecorderModal-k6hJvctp.js   2.92 KB
+    assets/ChordGeneratorModal-DDSaxJbG.js   1.46 KB
+    assets/HistoryDrawer-BYgPadJx.js     1.72 KB
+    assets/InstrumentsPage-M1p6QFvW.js   0.96 KB
+    assets/JamDrawer-DAz06PTb.js         2.29 KB
+    assets/MidiPopover-BXbJR1IM.js       1.93 KB
+    assets/MixerPage-D1GmKauq.js        14.62 KB
+    assets/SampleSlicerModal-C8gnAJ7B.js   3.32 KB
+    assets/ShareModal-CG6khGZr.js        0.96 KB
+    assets/VizPage-C7G9Dbh0.js          16.99 KB
+    assets/autoMix-BBMrg4le.js           1.73 KB
+    assets/content-C0y8tQN6.js           2.67 KB
+    assets/downloadSample-ChYKwFE_.js    0.31 KB
+    assets/exportMidi-DXJs9Ly6.js        5.82 KB
+    assets/exportStems-BHZCg7YF.js       1.42 KB
+    assets/exportVideo-xNh3Fkhi.js      51.22 KB
+    assets/exportWav-aND220HA.js         0.65 KB
+    assets/mixerLimiter-BpoLcDSZ.js      1.21 KB
+    assets/sessionTools-BnmWEGFd.js      2.43 KB
+    assets/tools-BFbUfuIN.js             9.10 KB
+    assets/voiceEngine-BOcgGvXU.js       6.51 KB  (worklet: fetched at first play)
+    assets/wav-BaRrCcyg.js               0.52 KB
+  fonts (woff2, raw): 5 files, 37.02 KB — budget ≤ 50 KB ok
+  css (info, not gated): AudioRecorderModal-CB3_5tmD.css 1.27 KB gz
+
+Gate: initial JS 148.99 KB gz ≤ 300 KB gz → PASS

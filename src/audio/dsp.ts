@@ -82,6 +82,38 @@ export function tonalSample(
   dt: number,
 ): number {
   const angle = phase * 2 * Math.PI;
+  if (wave === 13) {
+    let piano = Math.sin(angle) * 0.76;
+    if (dt * 2 < 0.48)
+      piano += Math.sin(angle * 2) * duty * 0.24 * Math.exp(-t * 3);
+    if (dt * 3 < 0.48)
+      piano += Math.sin(angle * 3) * duty * 0.14 * Math.exp(-t * 7);
+    if (dt * 7 < 0.48)
+      piano += Math.sin(angle * 7) * duty * 0.1 * Math.exp(-t * 22);
+    return piano;
+  }
+  if (wave === 14) {
+    const spread = 0.35 + duty * 1.2;
+    const left = (((phase + t * spread) % 1) + 1) % 1;
+    const right = (((phase - t * spread) % 1) + 1) % 1;
+    const saw =
+      (2 * phase -
+        1 -
+        polyblep(phase, dt) +
+        2 * left -
+        1 -
+        polyblep(left, dt) +
+        2 * right -
+        1 -
+        polyblep(right, dt)) /
+      3;
+    return saw * duty + Math.sin(angle) * (1 - duty) * 0.7;
+  }
+  if (wave === 15) {
+    const index =
+      Math.max(0, Math.min(duty * 4, (0.48 / dt - 3) / 2)) * Math.exp(-t * 5);
+    return Math.sin(angle + index * Math.sin(angle * 2));
+  }
   if (wave === 6) return Math.sin(angle);
   if (wave === 7)
     return (

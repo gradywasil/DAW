@@ -4,12 +4,7 @@
  * and vinyl tape stop emulation.
  */
 
-import {
-  createSignal,
-  onMount,
-  onCleanup,
-  type JSX,
-} from "solid-js";
+import { createSignal, onMount, onCleanup, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
 import {
   kaossState,
@@ -28,7 +23,8 @@ export default function KaossModal(props: KaossModalProps): JSX.Element {
   let dialogRef!: HTMLDialogElement;
   let surfaceRef!: HTMLDivElement;
 
-  const [activeStutter, setActiveStutter] = createSignal<StutterDivision | null>(null);
+  const [activeStutter, setActiveStutter] =
+    createSignal<StutterDivision | null>(null);
   const [tapeStopActive, setTapeStopActive] = createSignal(false);
 
   const params = () =>
@@ -112,7 +108,9 @@ export default function KaossModal(props: KaossModalProps): JSX.Element {
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="kaoss-dialog"
         role="dialog"
         aria-label="XY Kaoss FX Pad & Beat Stutter Studio"
@@ -171,7 +169,9 @@ export default function KaossModal(props: KaossModalProps): JSX.Element {
           {/* Interactive XY Touch Surface */}
           <div class="kaoss-pad-container">
             <div
-              ref={surfaceRef}
+              ref={(el) => {
+                surfaceRef = el;
+              }}
               class="kaoss-surface"
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
@@ -209,9 +209,7 @@ export default function KaossModal(props: KaossModalProps): JSX.Element {
                 type="button"
                 class="preset-chip"
                 classList={{ "is-active": kaossState().hold }}
-                onClick={() =>
-                  setKaossState((s) => ({ ...s, hold: !s.hold }))
-                }
+                onClick={() => setKaossState((s) => ({ ...s, hold: !s.hold }))}
               >
                 {kaossState().hold ? "HOLD: LOCKED" : "HOLD: OFF"}
               </button>

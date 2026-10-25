@@ -32,6 +32,7 @@ import type { LaneId } from "../document/schema";
 import { getSession, type VizNoteOn } from "../engine/session";
 import { docStore } from "./store";
 import { vizMode } from "./vizMode";
+import { phonePage } from "./phonePage";
 
 export type MeterAxis = "x" | "y";
 
@@ -96,10 +97,14 @@ function fire(lane: LaneId, key: number): void {
   const set = meters.get(lane);
   if (!set) return;
   lastStrikeAt.set(lane, now);
-  const steps = Math.max(1, Math.round(level(bucket.peak, bucket.count) * SEGMENTS));
+  const steps = Math.max(
+    1,
+    Math.round(level(bucket.peak, bucket.count) * SEGMENTS),
+  );
   const q = steps / SEGMENTS;
   for (const m of set) {
-    const scale = (v: number) => (m.axis === "y" ? `scaleY(${v})` : `scaleX(${v})`);
+    const scale = (v: number) =>
+      m.axis === "y" ? `scaleY(${v})` : `scaleX(${v})`;
     live.get(m.el)?.cancel();
     live.set(
       m.el,
@@ -117,6 +122,12 @@ function fire(lane: LaneId, key: number): void {
 
 function onNoteOn(hit: VizNoteOn): void {
   if (reducedMotion() || vizMode() || document.hidden) return;
+  const page = phonePage();
+  if (
+    page !== "edit" &&
+    !(page === "instruments" && hit.lane.startsWith("extra"))
+  )
+    return;
   if (!meters.has(hit.lane) || !audible(hit.lane)) return;
   const session = getSession();
   if (!session.engine.created) return;
@@ -145,7 +156,8 @@ function onNoteOn(hit: VizNoteOn): void {
 
 function clearPending(): void {
   for (const lanePending of pending.values())
-    for (const bucket of lanePending.values()) window.clearTimeout(bucket.timer);
+    for (const bucket of lanePending.values())
+      window.clearTimeout(bucket.timer);
   pending.clear();
 }
 
@@ -166,7 +178,10 @@ function connect(): void {
     if (!snap.playing) cancelAll();
   });
   // Scroll events do not bubble; capture sees every scroller's.
-  document.addEventListener("scroll", onScroll, { capture: true, passive: true });
+  document.addEventListener("scroll", onScroll, {
+    capture: true,
+    passive: true,
+  });
 }
 
 function disconnect(): void {
@@ -180,7 +195,11 @@ function disconnect(): void {
 }
 
 /** Register a lit meter bar for `lane`; returns its unregister. */
-export function registerMeter(lane: LaneId, el: HTMLElement, axis: MeterAxis): () => void {
+export function registerMeter(
+  lane: LaneId,
+  el: HTMLElement,
+  axis: MeterAxis,
+): () => void {
   const meter: Meter = { el, axis };
   let set = meters.get(lane);
   if (!set) {

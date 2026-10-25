@@ -2,8 +2,7 @@
  * SampleSlicerModal — Interactive Audio Sample Slicer & Transient Chopper Studio.
  * Allows producers to import loops or use synthetic factory breakbeats,
  * visualize audio waveforms, detect transient attack points, fine-tune slice
- * boundaries, audition pads with keyboard shortcuts, and commit chopped breaks
- * directly to the drum pattern.
+ * boundaries, audition pads with keyboard shortcuts, and export individual slices.
  */
 
 import {
@@ -16,7 +15,10 @@ import {
   type JSX,
 } from "solid-js";
 import { Portal } from "solid-js/web";
-import { sharedSlicerSource, setSharedSlicerSource } from "../audio/audioRecorder";
+import {
+  sharedSlicerSource,
+  setSharedSlicerSource,
+} from "../audio/audioRecorder";
 import {
   calculateSlices,
   generateSyntheticBreakbeat,
@@ -25,8 +27,7 @@ import {
   type SlicingMode,
 } from "../audio/sampleSlicer";
 import { getSession } from "../engine/session";
-import { toggleDrumStep } from "../state/store";
-import { type DrumPiece } from "../document/schema";
+import { downloadSample } from "../audio/downloadSample";
 import { IconScissors, IconClose } from "./icons";
 import "../styles/sample-slicer.css";
 
@@ -34,7 +35,9 @@ interface SampleSlicerModalProps {
   onClose: () => void;
 }
 
-export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.Element {
+export default function SampleSlicerModal(
+  props: SampleSlicerModalProps,
+): JSX.Element {
   let dialogRef!: HTMLDialogElement;
   let canvasRef!: HTMLCanvasElement;
   let fileInputRef!: HTMLInputElement;
@@ -45,24 +48,21 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
   const [sampleName, setSampleName] = createSignal("Synthetic Funk Breakbeat");
   const [slices, setSlices] = createSignal<AudioSlice[]>([]);
   const [selectedSliceIndex, setSelectedSliceIndex] = createSignal(0);
-  const [playingSliceIndex, setPlayingSliceIndex] = createSignal<number | null>(null);
+  const [playingSliceIndex, setPlayingSliceIndex] = createSignal<number | null>(
+    null,
+  );
   const [playheadRatio, setPlayheadRatio] = createSignal<number | null>(null);
-  const [isDraggingSlice, setIsDraggingSlice] = createSignal<number | null>(null);
+  const [isDraggingSlice, setIsDraggingSlice] = createSignal<number | null>(
+    null,
+  );
 
   // Web Audio Context
   let activeAudioCtx: AudioContext | null = null;
   let activeSourceNode: AudioBufferSourceNode | null = null;
 
   const getAudioContext = (): AudioContext => {
-    if (!activeAudioCtx) {
-      try {
-        const session = getSession();
-        activeAudioCtx = (session as any).audioContext ?? new (window.AudioContext || (window as any).webkitAudioContext)();
-      } catch {
-        activeAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      }
-    }
-    return activeAudioCtx!;
+    activeAudioCtx ??= getSession().engine.getContext() as AudioContext;
+    return activeAudioCtx;
   };
 
   const loadDefaultBreakbeat = (bpm = 130) => {
@@ -131,20 +131,12 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
       const source = ctx.createBufferSource();
       source.buffer = sliceBuffer;
 
-      // Pitch shift via playbackRate
-      if (slice.pitchSemitones !== 0) {
-        source.playbackRate.value = Math.pow(2, slice.pitchSemitones / 12);
-      }
-
-      const gainNode = ctx.createGain();
-      gainNode.gain.value = slice.gain;
-      source.connect(gainNode);
-      gainNode.connect(ctx.destination);
+      source.connect(ctx.destination);
 
       activeSourceNode = source;
       setPlayingSliceIndex(sliceIndex);
 
-      const durationMs = (slice.end - slice.start) * 1000;
+      const durationMs = sliceBuffer.duration * 1000;
       setPlayheadRatio(slice.start / buffer.duration);
 
       source.onended = () => {
@@ -155,11 +147,14 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
       };
 
       source.start();
-      setTimeout(() => {
-        if (playingSliceIndex() === sliceIndex) {
-          setPlayingSliceIndex(null);
-        }
-      }, Math.max(80, durationMs));
+      setTimeout(
+        () => {
+          if (playingSliceIndex() === sliceIndex) {
+            setPlayingSliceIndex(null);
+          }
+        },
+        Math.max(80, durationMs),
+      );
     } catch {
       // Audio playback mock fallback
     }
@@ -168,7 +163,9 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
   const handleToggleReverse = (sliceIndex: number, e: MouseEvent) => {
     e.stopPropagation();
     setSlices((prev) =>
-      prev.map((s, idx) => (idx === sliceIndex ? { ...s, reverse: !s.reverse } : s)),
+      prev.map((s, idx) =>
+        idx === sliceIndex ? { ...s, reverse: !s.reverse } : s,
+      ),
     );
   };
 
@@ -262,7 +259,8 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
       }
 
       // Vertical marker line
-      ctx.strokeStyle = idx === selectedSliceIndex() ? "#00f5d4" : "rgba(255, 255, 255, 0.4)";
+      ctx.strokeStyle =
+        idx === selectedSliceIndex() ? "#00f5d4" : "rgba(255, 255, 255, 0.4)";
       ctx.lineWidth = idx === selectedSliceIndex() ? 2 : 1;
       ctx.beginPath();
       ctx.moveTo(startX, 0);
@@ -270,7 +268,8 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
       ctx.stroke();
 
       // Slice index badge
-      ctx.fillStyle = idx === selectedSliceIndex() ? "#00f5d4" : "rgba(255, 255, 255, 0.7)";
+      ctx.fillStyle =
+        idx === selectedSliceIndex() ? "#00f5d4" : "rgba(255, 255, 255, 0.7)";
       ctx.font = "bold 9px monospace";
       ctx.fillText(String(idx + 1), startX + 4, 12);
     });
@@ -356,6 +355,7 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
       props.onClose();
       return;
     }
+    if ((e.target as HTMLElement)?.matches("input, textarea, select")) return;
     const num = parseInt(e.key, 10);
     if (!isNaN(num)) {
       const sliceIdx = num === 0 ? 9 : num - 1;
@@ -365,41 +365,14 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
     }
   };
 
-  // Commit Chops to Drum Pattern: arranges slices onto drum track steps
-  const handleCommitToDrumPattern = () => {
-    const currentSlices = slices();
-    if (currentSlices.length === 0) return;
-
-    // Pattern map: Kick on beat 1 & 3, Snare on beat 2 & 4, Hats/Chops on intervening steps
-    const drumPatternOrder: DrumPiece[] = [
-      "kick",
-      "hat",
-      "hat",
-      "hat",
-      "snare",
-      "hat",
-      "kick",
-      "hat",
-      "kick",
-      "hat",
-      "snare",
-      "hat",
-      "kick",
-      "hat",
-      "snare",
-      "hat2",
-    ];
-
-    try {
-      const stepsToFill = Math.min(16, currentSlices.length);
-      for (let step = 0; step < stepsToFill; step++) {
-        const piece = drumPatternOrder[step] ?? "kick";
-        toggleDrumStep(piece, step);
-      }
-      props.onClose();
-    } catch {
-      props.onClose();
-    }
+  const exportSelectedSlice = () => {
+    const buffer = audioBuffer();
+    const slice = slices()[selectedSliceIndex()];
+    if (buffer && slice)
+      downloadSample(
+        renderSliceBuffer(getAudioContext(), buffer, slice),
+        `${sampleName()}-slice-${selectedSliceIndex() + 1}`,
+      );
   };
 
   onMount(() => {
@@ -437,7 +410,9 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="sample-slicer-dialog"
         role="dialog"
         aria-label="Sample Slicer and Drum Chopper"
@@ -445,7 +420,9 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
         <div class="sample-slicer-header">
           <div class="sample-slicer-title-wrap">
             <IconScissors size={16} />
-            <span class="sample-slicer-title">SAMPLE CHOPPER & TRANSIENT SLICER</span>
+            <span class="sample-slicer-title">
+              SAMPLE CHOPPER & TRANSIENT SLICER
+            </span>
           </div>
           <button
             type="button"
@@ -462,12 +439,19 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
           {/* Waveform Canvas Visualizer */}
           <div class="waveform-container">
             <canvas
-              ref={canvasRef}
+              ref={(el) => {
+                canvasRef = el;
+              }}
               class="waveform-canvas"
               width={880}
               height={150}
-              onMouseDown={handleCanvasMouseDown}
-              onMouseMove={handleCanvasMouseMove}
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                handleCanvasMouseDown(e);
+              }}
+              onPointerMove={handleCanvasMouseMove}
+              onPointerUp={handleCanvasMouseUp}
+              onPointerCancel={handleCanvasMouseUp}
             />
           </div>
 
@@ -520,7 +504,9 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
                   max="0.9"
                   step="0.05"
                   value={sensitivity()}
-                  onInput={(e) => handleSensitivityChange(Number(e.currentTarget.value))}
+                  onInput={(e) =>
+                    handleSensitivityChange(Number(e.currentTarget.value))
+                  }
                 />
                 <span>{Math.round(sensitivity() * 100)}%</span>
               </div>
@@ -543,7 +529,9 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
                 TRAP 808
               </button>
               <input
-                ref={fileInputRef}
+                ref={(el) => {
+                  fileInputRef = el;
+                }}
                 type="file"
                 accept="audio/*"
                 style={{ display: "none" }}
@@ -609,14 +597,16 @@ export default function SampleSlicerModal(props: SampleSlicerModalProps): JSX.El
         {/* Modal Footer Actions */}
         <div class="sample-slicer-footer">
           <div style={{ "font-size": "11px", color: "var(--color-ink)" }}>
-            <strong>{sampleName()}</strong> &bull; {slices().length} Chops Ready &bull; Press 1-8 to Audition
+            <strong>{sampleName()}</strong> &bull; {slices().length} slices.
+            Preview or export audio. The song stays unchanged.
           </div>
           <button
             type="button"
             class="slicer-commit-btn"
-            onClick={handleCommitToDrumPattern}
+            disabled={!slices().length}
+            onClick={exportSelectedSlice}
           >
-            COMMIT CHOPS TO DRUM PATTERN
+            EXPORT SELECTED SLICE WAV
           </button>
         </div>
       </dialog>

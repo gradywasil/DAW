@@ -38,6 +38,28 @@ function createMockAudioContext(sampleRate = 44100): AudioContext {
 }
 
 describe("Sample Slicer & Transient Chopper Engine", () => {
+  it("bakes pitch and gain into exported audio as well as previews", () => {
+    const source = createMockAudioBuffer(1, 8, 44100);
+    source.getChannelData(0).set([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]);
+    const slice: AudioSlice = {
+      id: "pitch",
+      index: 0,
+      start: 0,
+      end: 8 / 44100,
+      gain: 0.5,
+      reverse: false,
+      pitchSemitones: 12,
+      energy: 0.5,
+    };
+    const rendered = renderSliceBuffer(createMockAudioContext(), source, slice);
+    expect(rendered.length).toBe(4);
+    expect([...rendered.getChannelData(0)]).toEqual([
+      0,
+      expect.closeTo(0.1),
+      expect.closeTo(0.2),
+      expect.closeTo(0.3),
+    ]);
+  });
   const sampleRate = 44100;
   const duration = 2.0; // 2 seconds
   const totalSamples = Math.floor(sampleRate * duration);

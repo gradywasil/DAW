@@ -1,0 +1,40 @@
+
+ RUN  v4.1.11 C:/Users/arran/Projects/DAW
+
+x······x······
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| tests/chordProgression.test.ts > Scale-Aware Chord Progression & Voicing Generator > changes the selected pattern, preserves other patterns, and supports one undo
+ProjectValidationError: Invalid project document (3 issues)
+ ❯ validateProject src/document/validate.ts:123:11
+    121|   const issues = semanticIssues(doc);
+    122|   if (issues.length > 0) {
+    123|     throw new ProjectValidationError(
+       |           ^
+    124|       `Invalid project document (${issues.length} issues)`,
+    125|       issues,
+ ❯ commit src/state/store.ts:169:3
+ ❯ loadDocument src/state/store.ts:1739:3
+ ❯ tests/chordProgression.test.ts:17:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |unit| tests/shareUrl.test.ts > Compact Project Cloud Links & URL Project Sharing Engine > drains compression while writing a large project-sized payload
+Error: Test timed out in 2000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/shareUrl.test.ts:13:3
+     11|
+     12| describe("Compact Project Cloud Links & URL Project Sharing Engine", (…
+     13|   it("drains compression while writing a large project-sized payload",…
+       |   ^
+     14|     let state = 47;
+     15|     const text = Array.from({ length: 250_000 }, () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 12 passed (14)
+   Start at  16:50:28
+   Duration  2.62s (transform 510ms, setup 0ms, import 747ms, tests 2.04s, environment 0ms)

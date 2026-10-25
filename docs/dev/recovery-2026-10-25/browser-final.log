@@ -1,0 +1,54 @@
+
+ RUN  v4.1.11 C:/Users/arran/Projects/DAW
+
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the bass track remains audible after previewing and applying synth and recorded sounds 8076ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the drums track remains audible after previewing and applying synth and recorded sounds 7831ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the chords track remains audible after previewing and applying synth and recorded sounds 7847ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the lead track remains audible after previewing and applying synth and recorded sounds 7815ms
+ ✓ |browser (chromium)| tests/browser/sound-swap-playback.test.tsx > the built app plays each soloed track after Use sound 19004ms
+ ✓ |browser (chromium)| tests/browser/e2e-happy-path.test.ts > HW-4 e2e happy path (built app, wiped IDB, full journey) > first-run → play → edit → chain → arrange → lazy exports → reload → determinism 13707ms
+stdout | tests/browser/viz-composition-journeys.test.tsx > built composition journeys > plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot
+Composition frame intervals ms {
+  "median": 19.69999998807907,
+  "p95": 28.400000035762787,
+}
+ ✓ |browser (chromium)| tests/browser/viz-composition-journeys.test.tsx > built composition journeys > plays real MIDI visuals, rerolls during playback, returns focus, and restores the composition on a fresh boot 6555ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > hold then drag scrolls a four-bar grid without adding notes 602ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > hold pans an eight-bar bass grid without document writes 584ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > hold pans an eight-bar drums grid without document writes 609ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > lost capture cancels a hold and releases pan feedback 592ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > navigation reaches both ends and Scroll mode never edits 212ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > quick pull draws, edge pull resizes, and cancellation discards the hold 611ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > trusted touch holds pan over empty cells and notes without changing the document 1187ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > navigation controls fit phone, landscape and desktop 1211ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > horizontal scrollend preserves the seated register without rebuilding cells 409ms
+ ✓ |browser (chromium)| tests/browser/grid-navigation.test.tsx > editing during playback preserves a manually scrolled pitch register 671ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > bypasses transparently and pans the channel without leaking left 54ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > attenuates low frequencies with EQ and reduces loud signals with compression 68ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > bounds both channels even under severe overload without nonfinite samples 584ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > shared mixer DSP > exports the same channel processing and preserves legacy default output 325ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > master filter processes the summed output and bypass restores the dry signal 91ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > flexible EQ audio > renders converted legacy bands identically to old documents 59ms
+ ✓ |browser (chromium)| tests/browser/mixer-audio.test.ts > flexible EQ audio > applies changed types and positions, and bypasses individual or removed bands 98ms
+ ✓ |browser (chromium)| tests/browser/mobile-transport.test.ts > M-3 phone transport — pinned centered always-visible play/stop > 390×844 + 360×800: play centered ±8px and visible at scroll-top AND scroll-bottom, hit ≥44×44, exactly one button 1087ms
+ ✓ |browser (chromium)| tests/browser/mobile-transport.test.ts > M-3 phone transport — pinned centered always-visible play/stop > desktop 1280×800: the Booth play button is the one button, in the Playback group; no phone transport row 233ms
+ ✓ |browser (chromium)| tests/browser/studio-palette.test.ts > recovery sound palette > every pick exists, including natural instrument and drum choices 4ms
+ ✓ |browser (chromium)| tests/browser/studio-palette.test.ts > recovery sound palette > renders all authored instruments through the real worklet with distinct, finite audio 969ms
+ ✓ |browser (chromium)| tests/browser/mobile-options-drawer.test.tsx > M-4 phone options drawer — collapsible, zero-DOM closed, operable open > 390×844: collapsed zero drawer DOM + no tool Tab stops; open: transport undisplaced, every tool operable, Escape/outside-tap close with focus return 164ms
+ ✓ |browser (chromium)| tests/browser/mobile-options-drawer.test.tsx > M-4 phone options drawer — collapsible, zero-DOM closed, operable open > M-8 cross-surface probe 390×844: playing + register shifted + drawer open + help mode coexist — transport stays centered/pinned, readout holds the shifted window, drawer tools operable, cancel-first Escape peels help before the drawer 297ms
+ ✓ |browser (chromium)| tests/browser/mobile-options-drawer.test.tsx > M-4 phone options drawer — collapsible, zero-DOM closed, operable open > desktop 1280×800: no phone transport/OPTIONS/drawer — the Booth keeps its own tools (m4 fallback law) 257ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > a sample-voice project renders bit-identically twice (decode-before-render, no seeds) 114ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > PS-4 + FX: sample lane through its per-lane FX chain still deterministic 127ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > energy windows: onsets at exact step times; note LENGTH is audible (SC-2 for samples) 83ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — offline render parity + determinism > kit coverage: all four sample kits render the drum grid exactly (onset count = hits) 186ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — selection journey on the real stepper > zero audio fetches before selection; one click on a sample kit = selected + fetched + decoded + auditioned + provenance 103ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — selection journey on the real stepper > a failing asset load surfaces ONE sticky toast; the app keeps working 27ms
+ ✓ |browser (chromium)| tests/browser/sample-voice.test.tsx > PS-4 sample voices — preset identity reference > the six pitched sample presets resolve with measured roots 1ms
+ ✓ |browser (chromium)| tests/browser/sound-browser.test.tsx > sound browser selection flow > previews real audio without editing, then applies only Use sound 91ms
+ ✓ |browser (chromium)| tests/browser/sound-browser.test.tsx > sound browser selection flow > filters by category and character, keeps favorites separate from document state, and closes without applying 128ms
+ ✓ |browser (chromium)| tests/browser/sound-browser.test.tsx > sound browser selection flow > reports a failed preview, supports retry, and refuses to apply until it succeeds 137ms
+
+ Test Files  10 passed (10)
+      Tests  41 passed (41)
+   Start at  17:31:35
+   Duration  89.52s (transform 0ms, setup 47ms, import 2.16s, tests 82.81s, environment 0ms)

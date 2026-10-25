@@ -393,12 +393,14 @@ export class Session {
       const refs = [
         ...new Set(Object.values(this.laneSounds).flatMap(sampleRefsForSound)),
       ];
-      if (refs.length > 0) {
+      if (refs.length > 0 || this.lanePlayback.length > 0) {
         this.preparingPlayback = true;
         try {
           const host = await this.ensureVoiceEngine();
-          const samples = await host?.ensureSampleVoice();
-          await samples?.preload(refs);
+          if (refs.length > 0) {
+            const samples = await host?.ensureSampleVoice();
+            await samples?.preload(refs);
+          }
         } finally {
           if (token === this.playStartToken) this.preparingPlayback = false;
         }
@@ -435,7 +437,6 @@ export class Session {
       // follow starts at the chain's slot 0 (imminent entry), never parked on
       // the previous play's last-sounded slot.
       for (const ledger of this.soundingLedger) if (ledger) ledger.length = 0;
-      if (this.lanePlayback.length > 0) void this.ensureVoiceEngine();
       this.transport.play();
     }
   }
@@ -1268,7 +1269,7 @@ export class Session {
   private deliverLaneEvents(step: number, when: number): void {
     if (this.lanePlayback.length === 0) return;
     this.lastDeliveredStep = Math.max(this.lastDeliveredStep, step);
-    void this.ensureVoiceEngine().then((host) => {
+    const deliver = (host: LaneVoiceRouter | null) => {
       if (!host) return;
       this.applySectionFollow(step);
       const laneCount = LANE_IDS.length;
@@ -1366,7 +1367,10 @@ export class Session {
         }
         pb.lastStep = step;
       }
-    });
+    };
+    // The first step has a shorter lead than refills. Post before UI observers run.
+    if (step === 0 && this.voiceRouter) deliver(this.voiceRouter);
+    else void this.ensureVoiceEngine().then(deliver);
   }
 
   // -------------------------------------------------------------------------
@@ -1468,8 +1472,9 @@ export class Session {
     const host = this.voiceRouter ?? (await this.ensureVoiceEngine());
     if (!host || this.laneSounds[laneId] !== sound) return;
 
-    const when = this.engine.getContext().currentTime + MIDI_TRIGGER_LEAD_SECONDS;
-    const events = this.buildMidiNoteEvents(
+    const when =
+      this.engine.getContext().currentTime + MIDI_TRIGGER_LEAD_SECONDS;
+    let events = this.buildMidiNoteEvents(
       laneId,
       midiNote,
       velocity,
@@ -1487,6 +1492,13 @@ export class Session {
       const sampleHost = await host.ensureSampleVoice().catch(() => null);
       if (this.laneSounds[laneId] !== sound) return;
       if (sampleHost) await sampleHost.preload(refs).catch(() => undefined);
+      events = this.buildMidiNoteEvents(
+        laneId,
+        midiNote,
+        velocity,
+        this.engine.getContext().currentTime + MIDI_TRIGGER_LEAD_SECONDS,
+        options,
+      );
     }
     if (this.laneSounds[laneId] !== sound) return;
     host.sendEvents(LANE_IDS.indexOf(laneId), events);
@@ -1640,7 +1652,10 @@ export class Session {
       await sample.preload(refs);
     }
     if (generation !== this.soundPreviewGeneration) return;
-    host.sendEvents(0, build(this.engine.getContext().currentTime + AUDITION_LEAD_SECONDS));
+    host.sendEvents(
+      0,
+      build(this.engine.getContext().currentTime + AUDITION_LEAD_SECONDS),
+    );
   }
 
   stopSoundPreview(): void {
@@ -2211,7 +2226,8 @@ let shared: Session | null = null;
 
 /** The app's single engine session (lazy; safe to import anywhere). */
 export function getSession(): Session {
-  shared ??= new Session();
+  // Voice and sample loading finishes before play; keep only a short clock margin.
+  shared ??= new Session({ startDelaySeconds: 0.025 });
   return shared;
 }
 

@@ -1,6 +1,13 @@
-import { IconClose, IconChevronLeft, IconFolder, IconStar, IconClock } from "./icons";
+import {
+  IconClose,
+  IconChevronLeft,
+  IconFolder,
+  IconStar,
+  IconClock,
+} from "./icons";
 import {
   createMemo,
+  createEffect,
   createSignal,
   For,
   onCleanup,
@@ -16,6 +23,7 @@ import {
   type SoundCharacter,
 } from "../audio/soundCatalog";
 import { type LaneId } from "../document/schema";
+import { STUDIO_SOUND_IDS } from "../audio/studioPresets";
 import { getSession } from "../engine/session";
 import {
   rememberSound,
@@ -41,9 +49,9 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
   const [category, setCategory] = createSignal(
     previous?.category ?? current()?.category ?? "",
   );
-  const [view, setView] = createSignal<"Browse" | "Favorites" | "Recent">(
-    "Browse",
-  );
+  const [view, setView] = createSignal<
+    "Picks" | "Browse" | "Favorites" | "Recent"
+  >("Picks");
   const [query, setQuery] = createSignal("");
   const [characters, setCharacters] = createSignal<SoundCharacter[]>(
     previous?.characters ?? [],
@@ -57,6 +65,7 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
   );
   const [loading, setLoading] = createSignal(false);
   const [ready, setReady] = createSignal(false);
+  const [shown, setShown] = createSignal(48);
   let request = 0;
   let dialog!: HTMLDialogElement;
   let resultsPanel!: HTMLDivElement;
@@ -74,9 +83,15 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
           ? soundBrowserPreferences().favorites
           : view() === "Recent"
             ? soundBrowserPreferences().recent
-            : undefined,
+            : view() === "Picks" && !query().trim()
+              ? STUDIO_SOUND_IDS
+              : undefined,
     }),
   );
+  createEffect(() => {
+    results();
+    setShown(48);
+  });
   const selected = () => sounds.find((s) => s.id === candidate());
   const availableTags = createMemo(
     () =>
@@ -198,7 +213,11 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
             type="button"
             onClick={close}
           >
-            <IconClose size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Close
+            <IconClose
+              size={12}
+              style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+            />
+            Close
           </button>
         </header>
         <div class="sound-browser-tools">
@@ -219,12 +238,16 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
             />
           </label>
           <nav class="sound-browser-views" aria-label="Sound library views">
-            <For each={["Browse", "Favorites", "Recent"] as const}>
+            <For each={["Picks", "Browse", "Favorites", "Recent"] as const}>
               {(name) => (
                 <button
                   type="button"
                   aria-pressed={view() === name}
-                  style={{ display: "inline-flex", "align-items": "center", gap: "4px" }}
+                  style={{
+                    display: "inline-flex",
+                    "align-items": "center",
+                    gap: "4px",
+                  }}
                   onClick={() => {
                     setView(name);
                     setQuery("");
@@ -232,7 +255,9 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                     resetResults();
                   }}
                 >
-                  {name === "Browse" && <IconFolder size={12} />}
+                  {(name === "Picks" || name === "Browse") && (
+                    <IconFolder size={12} />
+                  )}
                   {name === "Favorites" && <IconStar size={12} filled={true} />}
                   {name === "Recent" && <IconClock size={12} />}
                   <span>{name}</span>
@@ -288,7 +313,11 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                   class="sound-category-back"
                   onClick={() => chooseCategory("")}
                 >
-                  <IconChevronLeft size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />Categories
+                  <IconChevronLeft
+                    size={11}
+                    style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+                  />
+                  Categories
                 </button>
               </Show>
               <h3>
@@ -352,7 +381,7 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                   </p>
                 }
               >
-                <For each={results()}>
+                <For each={results().slice(0, shown())}>
                   {(sound) => (
                     <div
                       class="sound-result"
@@ -389,12 +418,23 @@ export default function SoundBrowser(props: SoundBrowserProps): JSX.Element {
                       >
                         <IconStar
                           size={18}
-                          filled={soundBrowserPreferences().favorites.includes(sound.id)}
+                          filled={soundBrowserPreferences().favorites.includes(
+                            sound.id,
+                          )}
                         />
                       </button>
                     </div>
                   )}
                 </For>
+                <Show when={results().length > shown()}>
+                  <button
+                    type="button"
+                    class="sound-show-more"
+                    onClick={() => setShown((n) => n + 48)}
+                  >
+                    Show more sounds, {results().length - shown()} remaining
+                  </button>
+                </Show>
               </Show>
             </div>
           </section>

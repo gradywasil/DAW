@@ -5,9 +5,33 @@ import {
   CHORD_PROGRESSIONS,
   applyProgressionToProject,
 } from "../src/audio/chordProgression";
-import { docStore } from "../src/state/store";
+import { docStore, loadDocument } from "../src/state/store";
+import { createDemoProject } from "../src/document/demoSong";
+import { selectPattern } from "../src/state/selection";
 
 describe("Scale-Aware Chord Progression & Voicing Generator", () => {
+  it("changes the selected pattern, preserves other patterns, and supports one undo", () => {
+    const doc = createDemoProject();
+    const original = doc.patterns.chords[0];
+    const selected = { ...original, id: "chords-selected", name: "B" };
+    loadDocument({
+      ...doc,
+      patterns: { ...doc.patterns, chords: [...doc.patterns.chords, selected] },
+    });
+    selectPattern("chords", selected.id);
+    const before = docStore.getState().doc;
+    applyProgressionToProject(CHORD_PROGRESSIONS[0], "whole-bar", false);
+    const after = docStore.getState().doc;
+    expect(after.patterns.chords[0]).toBe(before.patterns.chords[0]);
+    const generated = after.patterns.chords.at(-1);
+    if (generated?.kind === "pitched")
+      expect(generated.notes).toHaveLength(generated.bars);
+    expect(after.patterns.chords.at(-1)).not.toEqual(
+      before.patterns.chords.at(-1),
+    );
+    docStore.temporal.getState().undo();
+    expect(docStore.getState().doc).toEqual(before);
+  });
   it("builds correct chord degrees for triad voicings", () => {
     const degrees = buildChordDegrees(0, "triad");
     expect(degrees).toEqual([0, 2, 4]);
@@ -39,7 +63,12 @@ describe("Scale-Aware Chord Progression & Voicing Generator", () => {
     const neoSoul = CHORD_PROGRESSIONS.find((p) => p.id === "neo-soul")!;
     expect(neoSoul).toBeDefined();
 
-    const wholeBarNotes = generateChordNotes(neoSoul, "seventh", "whole-bar", 2);
+    const wholeBarNotes = generateChordNotes(
+      neoSoul,
+      "seventh",
+      "whole-bar",
+      2,
+    );
     // 2 bars with 4 notes per chord = 8 notes total
     expect(wholeBarNotes.length).toBe(8);
     // First chord starts at step 0, second chord at step 16
@@ -65,7 +94,7 @@ describe("Scale-Aware Chord Progression & Voicing Generator", () => {
 
   it("applies chord progression and accompanying bassline to docStore cleanly", () => {
     const lofi = CHORD_PROGRESSIONS.find((p) => p.id === "lofi-chill")!;
-    applyProgressionToProject(lofi, "seventh", "half-bar", true);
+    applyProgressionToProject(lofi, "half-bar", true);
 
     const updatedDoc = docStore.getState().doc;
     const chordsPattern = updatedDoc.patterns.chords[0];

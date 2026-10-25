@@ -1,0 +1,25 @@
+
+ RUN  v4.1.11 C:/Users/arran/Projects/DAW
+
+ ❯ |unit| tests/session-sample-start.test.ts (4 tests | 1 failed) 12ms
+   × hands the first note to a ready engine before transport UI work consumes its lead 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| tests/session-sample-start.test.ts > hands the first note to a ready engine before transport UI work consumes its lead
+AssertionError: expected 10.025 to be greater than 10.2
+ ❯ tests/session-sample-start.test.ts:75:31
+     73|   await playing;
+     74|   expect(dispatched).toHaveLength(1);
+     75|   expect(dispatched[0]!.when).toBeGreaterThan(dispatched[0]!.now);
+       |                               ^
+     76|   unsubscribe();
+     77|   await session.togglePlay();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  17:29:35
+   Duration  818ms (transform 381ms, setup 0ms, import 517ms, tests 12ms, environment 0ms)

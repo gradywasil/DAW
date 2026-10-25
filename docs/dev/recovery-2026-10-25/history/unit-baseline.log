@@ -1,0 +1,53 @@
+
+ RUN  v4.1.11 C:/Users/arran/Projects/DAW
+
+stderr | tests/historyDrawer.test.ts
+computations created outside a `createRoot` or `render` will never be disposed
+
+stderr | tests/historyState.test.ts
+computations created outside a `createRoot` or `render` will never be disposed
+
+stderr | tests/helpLanguage.test.ts
+computations created outside a `createRoot` or `render` will never be disposed
+
+stderr | tests/quarantine.test.ts > boot quarantine flow (fake db) > bad row → renamed not deleted → fresh default loads → toast with RECOVER
+[persist] stored project failed validation; quarantining ProjectValidationError: Invalid project document (1 issue)
+    at validateProject (C:/Users/arran/Projects/DAW/src/document/validate.ts:115:11)
+    at decode (C:/Users/arran/Projects/DAW/src/document/codec.ts:226:10)
+    at initPersistence (C:/Users/arran/Projects/DAW/src/persist/boot.ts:247:20)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Users/arran/Projects/DAW/tests/quarantine.test.ts:120:18
+    at file:///C:/Users/arran/Projects/DAW/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20 {
+  issues: [ 'transport.bpm: Invalid value: Expected <=200 but received 9999' ]
+}
+
+stderr | tests/quarantine.test.ts > boot quarantine flow (fake db) > a second boot does not trip over the quarantined row
+[persist] stored project failed validation; quarantining ProjectValidationError: Invalid project document (1 issue)
+    at validateProject (C:/Users/arran/Projects/DAW/src/document/validate.ts:115:11)
+    at decode (C:/Users/arran/Projects/DAW/src/document/codec.ts:226:10)
+    at initPersistence (C:/Users/arran/Projects/DAW/src/persist/boot.ts:247:20)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:/Users/arran/Projects/DAW/tests/quarantine.test.ts:155:5
+    at file:///C:/Users/arran/Projects/DAW/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20 {
+  issues: [ 'transport.bpm: Invalid value: Expected <=200 but received 9999' ]
+}
+
+····················································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································stdout | tests/lp1-perf-spike.test.ts > LP-1 (c): bounded step lookup replaces the O(steps) scans > RECORDED (c): scan vs bounded cost at 2048 steps — per-call and projected per-frame
+[LP-1 (c) time-math @2048 steps] scan avg 31572 ns/call, scan worst 76988 ns/call, bounded 132.7 ns/call | projected per rAF frame (9 lookups): scan 284 µs (worst 693 µs) vs bounded 1.2 µs
+
+·stdout | tests/lp1-perf-spike.test.ts > LP-1 (c): compile cost at 128 bars (per-edit recompile path) > RECORDED: compileLaneSchedule max-dense 128-bar lead — scan vs bounded, identical output
+[LP-1 (c) compile @128 bars max-dense] 30,720 notes → 30,720 events | stepOfTime scan 64.3 ms vs bounded 36.5 ms per compile (every content edit recompiles the lane)
+[LP-1 (c) compile @128 bars musical density] 7,680 notes | scan 4.6 ms vs bounded 7.6 ms per edit-recompile
+
+·············stdout | tests/lp1-perf-spike.test.ts > LP-1 (d, pure half): export expansion cost at the LCM loop > RECORDED: expandLaneEventsForLoop at 2048-step loop, dense schedule
+[LP-1 (d) export expansion @128-bar LCM] one dense lane: 30,720 events expanded in 13.0 ms
+
+····································································································stdout | tests/lp1-perf-spike.test.ts > LP-1 (e): codec round-trip at the dense-128-bar scale > RECORDED: encode/decode wall-time + size of the max-dense v3 doc
+[LP-1 (e) codec] max-dense 128-bar doc: 2,341,450 canonical chars (SV-1 measured 2,693,153) | encode 102 ms, decode 138 ms round-trip
+
+·················································································································································································································································································
+
+ Test Files  125 passed (125)
+      Tests  2039 passed (2039)
+   Start at  16:44:09
+   Duration  22.86s (transform 8.88s, setup 0ms, import 22.78s, tests 29.16s, environment 15ms)

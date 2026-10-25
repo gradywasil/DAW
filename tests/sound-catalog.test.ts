@@ -8,8 +8,8 @@ import {
 describe("sound browser catalog", () => {
   it("covers every kit and pitched sound with a category and one tag per character dimension", () => {
     expect(SOUND_CATALOG.filter((s) => s.drums)).toHaveLength(80);
-    expect(SOUND_CATALOG.filter((s) => !s.drums)).toHaveLength(836);
-    expect(new Set(SOUND_CATALOG.map((s) => s.id)).size).toBe(916);
+    expect(SOUND_CATALOG.filter((s) => !s.drums)).toHaveLength(848);
+    expect(new Set(SOUND_CATALOG.map((s) => s.id)).size).toBe(928);
     expect(
       new Set(SOUND_CATALOG.filter((s) => s.drums).map((s) => s.category)).size,
     ).toBe(8);

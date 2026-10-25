@@ -6,11 +6,10 @@ import {
   jamMyPeer,
   jamPeers,
   jamLastNudge,
-  jamSyncDoc,
   setJamSyncDoc,
-  jamSyncTransport,
   setJamSyncTransport,
   type JamPeer,
+  type JamMessage,
 } from "../src/collab/jamSession";
 import { docStore } from "../src/state/store";
 import { createDefaultProject } from "../src/document/schema";
@@ -67,7 +66,9 @@ describe("JamSession Collaborative P2P Engine", () => {
     };
 
     // Simulate incoming HELLO
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "HELLO",
       sender: remotePeer,
       timestamp: Date.now(),
@@ -91,13 +92,17 @@ describe("JamSession Collaborative P2P Engine", () => {
       lastActive: Date.now(),
     };
 
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "HELLO",
       sender: remotePeer,
       timestamp: Date.now(),
     });
 
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "HEARTBEAT",
       senderId: "peer-pulse-1",
       activeLane: "bass",
@@ -109,7 +114,9 @@ describe("JamSession Collaborative P2P Engine", () => {
     expect(jamPeers()[0]!.activeStep).toBe(7);
 
     // Simulate LEAVE
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "LEAVE",
       senderId: "peer-pulse-1",
       timestamp: Date.now(),
@@ -121,7 +128,9 @@ describe("JamSession Collaborative P2P Engine", () => {
   it("receives and dispatches jam nudges and audio/visual pings", () => {
     session.connect("jam-nudge-room");
 
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "NUDGE",
       senderId: "peer-hype-2",
       senderName: "Solar Beat",
@@ -141,7 +150,9 @@ describe("JamSession Collaborative P2P Engine", () => {
     const testProject = createDefaultProject();
     testProject.name = "Collaborative Anthem";
 
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "SYNC_DOC",
       senderId: "peer-sync-author",
       doc: testProject,
@@ -160,7 +171,9 @@ describe("JamSession Collaborative P2P Engine", () => {
     const testProject = createDefaultProject();
     testProject.name = "Ignored Remote Project";
 
-    (session as any).handleIncomingMessage({
+    (
+      session as unknown as { handleIncomingMessage(message: JamMessage): void }
+    ).handleIncomingMessage({
       type: "SYNC_DOC",
       senderId: "peer-sync-author",
       doc: testProject,

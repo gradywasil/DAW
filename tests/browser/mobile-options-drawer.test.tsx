@@ -110,10 +110,8 @@ async function bootIframe(
   // the phone branch's).
   await poll(
     () =>
-      $$(".head-ctl-value").some(
-        (v) =>
-          (v as HTMLSelectElement).selectedOptions?.[0]?.textContent?.trim() ===
-          "SOFT STEP",
+      $$(".head-sound-browse").some((v) =>
+        v.textContent?.includes("SOFT STEP"),
       ),
     5_000,
     "demo loaded",
@@ -171,7 +169,6 @@ async function teardown(iframe: HTMLIFrameElement): Promise<void> {
 const DRAWER_TOOLS = [
   "booth.loop",
   "booth.metronome",
-  "booth.viz",
   "booth.tempo",
   "booth.scale",
   "booth.swing",

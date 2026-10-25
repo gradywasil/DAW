@@ -47,28 +47,28 @@ describe("expanded sound library", () => {
       ).toBe(hash);
     }
   });
-  it("doubles every pitched category and offers exactly 836 presets on every track", () => {
+  it("doubles every pitched category and offers 848 presets, preserving the original 836 on every track", () => {
     const options = soundOptionsFor("bass");
     const families = new Set(options.map((p) => p.family));
     expect(families.size).toBe(18);
     expect(families.has("Other")).toBe(false);
-    expect(options).toHaveLength(836);
+    expect(options).toHaveLength(848);
     const expected: Record<string, number> = {
-      Bass: 66,
-      Bells: 48,
-      "Bowed strings": 40,
+      Bass: 68,
+      Bells: 49,
+      "Bowed strings": 41,
       Brass: 48,
       Chords: 60,
       Guitars: 40,
-      Keys: 42,
-      Leads: 68,
-      Mallets: 40,
+      Keys: 45,
+      Leads: 69,
+      Mallets: 41,
       Organs: 40,
-      Pads: 52,
-      "Plucked strings": 44,
+      Pads: 53,
+      "Plucked strings": 45,
       "Sound effects": 48,
       "Synth vocals": 40,
-      Synths: 40,
+      Synths: 41,
       Textures: 40,
       Woodwinds: 40,
       World: 40,

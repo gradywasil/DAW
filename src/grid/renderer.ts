@@ -519,6 +519,7 @@ export class DomGridRenderer implements GridRenderer {
   private rowSpans: readonly (readonly Span[])[] = [];
   private playheadEl: HTMLElement | null = null;
   private raf = 0;
+  private animating = true;
   private lastQuantized: number | null = null;
   private glowTimers = new Set<number>();
   private rovingCell: HTMLElement | null = null;
@@ -750,8 +751,29 @@ export class DomGridRenderer implements GridRenderer {
       this.mountPending = true;
     }
     this.seedRoving();
+    document.addEventListener("visibilitychange", this.onVisibilityChange);
     this.loop();
   }
+
+  /** Keep editor state mounted without polling a stopped or covered grid. */
+  setAnimating(active: boolean): void {
+    const wasAnimating = this.animating;
+    this.animating = active;
+    if (!active || document.hidden) {
+      cancelAnimationFrame(this.raf);
+      this.raf = 0;
+      if (wasAnimating) {
+        this.opts.onStepPulse?.(null);
+        this.setPlayhead(null);
+        this.clearColumnHighlight();
+        this.lastQuantized = null;
+      }
+    } else if (!this.raf && !this.disposed) {
+      this.loop();
+    }
+  }
+
+  private onVisibilityChange = (): void => this.setAnimating(this.animating);
 
   // -- construction ---------------------------------------------------------
 
@@ -1982,6 +2004,7 @@ export class DomGridRenderer implements GridRenderer {
     this.disposed = true;
     this.cancelGesture();
     cancelAnimationFrame(this.raf);
+    document.removeEventListener("visibilitychange", this.onVisibilityChange);
     this.clearSnapSettle();
     // i7 N-4: a mid-pinch teardown leaves no armed surface behind.
     this.pinchPointers.clear();
@@ -2884,9 +2907,14 @@ export class DomGridRenderer implements GridRenderer {
   }
 
   private loop = (): void => {
-    if (this.opts.isVisible?.() === false) {
+    this.raf = 0;
+    if (
+      this.disposed ||
+      !this.animating ||
+      document.hidden ||
+      this.opts.isVisible?.() === false
+    ) {
       this.lastQuantized = null;
-      this.raf = requestAnimationFrame(this.loop);
       return;
     }
     // LL-1: the mount may run before first layout (clientWidth 0 → fallback

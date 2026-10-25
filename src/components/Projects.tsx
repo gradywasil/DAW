@@ -1,4 +1,13 @@
-import { IconFolder, IconFilePlus, IconWaveform, IconLayers, IconMidi, IconDisk, IconPencil, IconTrash } from "./icons";
+import {
+  IconFolder,
+  IconFilePlus,
+  IconWaveform,
+  IconLayers,
+  IconMidi,
+  IconDisk,
+  IconPencil,
+  IconTrash,
+} from "./icons";
 /**
  * Projects (HU-3, absorbing MF-3's FileIO): one booth-corner "PROJECTS" button
  * opening a popover with every saved project (name + relative time, from
@@ -35,7 +44,17 @@ import { IconFolder, IconFilePlus, IconWaveform, IconLayers, IconMidi, IconDisk,
  * includes the rename <input> so the editor joins the cycle.
  */
 
-import { For, createSignal, onCleanup, onMount, type JSX } from "solid-js";
+import {
+  For,
+  Show,
+  Suspense,
+  lazy,
+  createSignal,
+  onCleanup,
+  onMount,
+  type JSX,
+} from "solid-js";
+const ShareModal = lazy(() => import("./ShareModal"));
 import AgentAccess from "./AgentAccess";
 import { docStore, loadDocument, setProjectName } from "../state/store";
 import { exportProjectFile, importProjectFile } from "../persist/fileIO";
@@ -142,6 +161,7 @@ registerHelp([
 
 export default function Projects(): JSX.Element {
   const [open, setOpen] = createSignal(false);
+  const [sharing, setSharing] = createSignal(false);
   const [busy, setBusy] = createSignal(false);
   const [items, setItems] = createSignal<readonly ProjectMeta[]>([]);
   /** i6 §2.5: the saved row whose inline rename editor is mounted (null = none). */
@@ -574,7 +594,8 @@ export default function Projects(): JSX.Element {
       }
     } catch {
       showError("MIDI export could not start.", {
-        suggestion: "The app may have been updated — reload the page, then try again.",
+        suggestion:
+          "The app may have been updated — reload the page, then try again.",
       });
     } finally {
       setBusy(false);
@@ -620,7 +641,11 @@ export default function Projects(): JSX.Element {
         disabled={busy()}
         onClick={toggle}
       >
-        <IconFolder size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />PROJECTS
+        <IconFolder
+          size={11}
+          style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+        />
+        PROJECTS
       </button>
       {open() && (
         <div
@@ -685,7 +710,14 @@ export default function Projects(): JSX.Element {
                         disabled={busy()}
                         onClick={() => startRename(meta)}
                       >
-                        <IconPencil size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />RENAME
+                        <IconPencil
+                          size={11}
+                          style={{
+                            "margin-right": "3px",
+                            "vertical-align": "-1px",
+                          }}
+                        />
+                        RENAME
                       </button>
                       <button
                         type="button"
@@ -695,7 +727,14 @@ export default function Projects(): JSX.Element {
                         disabled={busy()}
                         onClick={() => startConfirm(meta.id)}
                       >
-                        <IconTrash size={11} style={{ "margin-right": "3px", "vertical-align": "-1px" }} />DELETE
+                        <IconTrash
+                          size={11}
+                          style={{
+                            "margin-right": "3px",
+                            "vertical-align": "-1px",
+                          }}
+                        />
+                        DELETE
                       </button>
                     </div>
                   )}
@@ -727,11 +766,26 @@ export default function Projects(): JSX.Element {
             <button
               type="button"
               class="booth-btn projects-action"
+              disabled={busy()}
+              onClick={() => {
+                close();
+                setSharing(true);
+              }}
+            >
+              SHARE SONG LINK
+            </button>
+            <button
+              type="button"
+              class="booth-btn projects-action"
               data-help="projects.new"
               disabled={busy()}
               onClick={() => void handleNew()}
             >
-              <IconFilePlus size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />NEW
+              <IconFilePlus
+                size={11}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
+              NEW
             </button>
             <button
               type="button"
@@ -740,7 +794,11 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportWav()}
             >
-              <IconWaveform size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT WAV
+              <IconWaveform
+                size={11}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
+              EXPORT WAV
             </button>
             <button
               type="button"
@@ -749,7 +807,11 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportStems()}
             >
-              <IconLayers size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT STEMS
+              <IconLayers
+                size={11}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
+              EXPORT STEMS
             </button>
             <button
               type="button"
@@ -758,7 +820,11 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => void handleExportMidi()}
             >
-              <IconMidi size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />EXPORT SONG MIDI
+              <IconMidi
+                size={11}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
+              EXPORT SONG MIDI
             </button>
             <button
               type="button"
@@ -766,7 +832,11 @@ export default function Projects(): JSX.Element {
               data-help="projects.save"
               onClick={handleSave}
             >
-              <IconDisk size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />SAVE FILE
+              <IconDisk
+                size={11}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
+              SAVE FILE
             </button>
             <button
               type="button"
@@ -775,7 +845,11 @@ export default function Projects(): JSX.Element {
               disabled={busy()}
               onClick={() => fileInput?.click()}
             >
-              <IconFolder size={11} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />OPEN FILE
+              <IconFolder
+                size={11}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
+              OPEN FILE
             </button>
           </div>
           <p class="projects-note">
@@ -784,6 +858,16 @@ export default function Projects(): JSX.Element {
           </p>
         </div>
       )}
+      <Show when={sharing()}>
+        <Suspense fallback={null}>
+          <ShareModal
+            onClose={() => {
+              setSharing(false);
+              anchorBtn?.focus();
+            }}
+          />
+        </Suspense>
+      </Show>
       <input
         ref={(el) => {
           fileInput = el;

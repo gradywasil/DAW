@@ -1,0 +1,31 @@
+
+ RUN  v4.1.11 C:/Users/arran/Projects/DAW
+
+x··
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| tests/session-sample-start.test.ts > waits for a cold synth worklet before starting the transport clock
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/session-sample-start.test.ts:31:46
+     29|   const playing = session.togglePlay();
+     30|   await loading;
+     31|   expect(session.transport.snapshot.playing).toBe(false);
+       |                                              ^
+     32|   release();
+     33|   await playing;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  17:21:13
+   Duration  834ms (transform 373ms, setup 0ms, import 498ms, tests 13ms, environment 0ms)

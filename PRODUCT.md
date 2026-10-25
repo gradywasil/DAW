@@ -1,10 +1,24 @@
 # Product
 
+## Recovery update, 2026-10-25
+
+The main header keeps transport, history, tempo, scale, swing and master controls. Session tools contains MIDI, local tab collaboration and help. Drums has Sample tools; Chords has Chord tools; Projects contains Share song link. Mobile has one workspace navigation row and a direct Visuals button. Double pattern is inside Bars.
+
+The sound browser opens on Picks, with 16 pitched choices and six contrasting kits. Twelve authored synth instruments add tine keys, FM basses and leads, a damped pluck, ensemble sounds and a wood mallet. The full library remains available, with 848 pitched presets. Search results load 48 rows at a time. Existing sound IDs and recipes remain unchanged.
+
+Chord generation writes roots into the selected Chords pattern because the canonical compiler expands roots into triads. It can replace the selected Bass pattern in the same undoable edit. Preview uses the actual lane sound and scale. Extended voicings are not offered by this tool.
+
+Recorder and slicer are sample preparation tools. They preview, trim, normalize, slice and export WAV audio; takes stay in memory until exported. They do not claim to install arbitrary recorded slices into the song. They share the session audio context, and the recorder requests a microphone only when Record is pressed.
+
+Collaboration explicitly joins and leaves a local browser-tab session. Cross-device WebRTC controls and the unconnected DJ deck, modular canvas, XY effects and sidechain studio are excluded from the production interface. Their source remains for later development. The working Mixer retains EQ, compression and creative effects.
+
+Song links open a separate local project, including hash links opened in the same tab. The previous project is preserved. Grids stop polling while stopped or covered; the visualizer and mixer load on demand. The live singleton's transport start margin is 25 ms after sound loading. This is scheduling time, not a physical output-latency promise.
+
 ## Pattern building and live arrangement
 
 Song arrangement groups each vertical column of blocks beneath a section launch header. The matrix scrolls as one unit so the headers and lanes stay aligned. A section launches its participating lanes together on the next bar, or after all their current patterns finish. Lanes without a block in that column keep playing. Sections can be named and configured to launch another section or stop all lanes after 1 to 128 bars. Hold progression suspends automatic changes while keeping manual launches available.
 
-Each block has a separate playback panel. Copy takes an app-local snapshot; Paste after, Paste at the end of a lane, and Duplicate block create an independent pattern and an arrangement block in one undoable edit. Reuse pattern deliberately shares an existing pattern. Ctrl/Cmd+C and Ctrl/Cmd+V work on focused arrangement blocks, and D duplicates into the arrangement. Clipboard paste stays within its source lane. Double ×2 beside Bars doubles the current pattern and repeats every note, including arbitrary lengths such as 3 to 6 bars, up to 128 bars. It is one undoable edit.
+Each block has a separate playback panel. Copy takes an app-local snapshot; Paste after, Paste at the end of a lane, and Duplicate block create an independent pattern and an arrangement block in one undoable edit. Reuse pattern deliberately shares an existing pattern. Ctrl/Cmd+C and Ctrl/Cmd+V work on focused arrangement blocks, and D duplicates into the arrangement. Clipboard paste stays within its source lane. Double ×2 inside Bars doubles the current pattern and repeats every note, including arbitrary lengths such as 3 to 6 bars, up to 128 bars. It is one undoable edit.
 
 Block playback can last a chosen number of bars or pattern repeats, or continue until triggered. Follow actions are Next, Previous, Go to a block, Random other with optional chosen alternatives, Return to the block that led here, and Stop lane. Bar durations are exact, including partial final repeats. Block settings persist separately from pattern contents and follow their blocks through insertions and removals. Manual cues override automatic block transitions. Audible playback displays the current bar and queued destinations.
 
@@ -38,7 +52,7 @@ Touch grids have Back and Forward controls with a visible step range. Draw mode 
 
 ## Instrument library and optional tracks
 
-The preset name opens a sound browser with category and character filtering, search, Favorites and Recent. All pitched tracks share 836 presets in 18 categories; drums offer 80 kits in eight families. Tapping a result previews a phrase or kit rhythm without editing the track. Use sound applies the candidate as one undoable edit; closing discards it. Minus and plus apply sounds from the last chosen result set. Browser preferences persist locally outside project files and undo.
+The preset name opens a sound browser with category and character filtering, search, Favorites and Recent. All pitched tracks share 848 presets in 18 categories; drums offer 80 kits in eight families. Tapping a result previews a phrase or kit rhythm without editing the track. Use sound applies the candidate as one undoable edit; closing discards it. Minus and plus apply sounds from the last chosen result set. Browser preferences persist locally outside project files and undo.
 
 Desktop opens with Instruments 1–4 and Instruments 5–8 tabs, followed by Song arrangement and Mixer. Users can add up to four independent pitched tracks, for eight tracks total. Each extra track has its own notes, preset, octave, scale override, mix and effects. The Instruments page is a second four-quadrant editor, using the same grid component and sizing as Edit notes. Each empty quadrant adds its own fixed track slot when clicked; populated quadrants select and edit in place. Phones edit one track at a time, selected from the default row and a second row of added instrument tabs in the header. Add new instrument fills up to four extra lanes. The phone workspace navigation exposes Instruments, Song and Mixer; SONG/NOTES also switches between editing and arrangement while retaining the selected track. Song arrangement includes every active track. Adding and removing tracks is undoable, and optional lane data persists in project files and autosaves. WAV export includes all active tracks; each active track’s patterns can be exported individually as MIDI. Existing four-track projects remain valid without adding empty slots to their files.
 

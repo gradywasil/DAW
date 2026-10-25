@@ -1,0 +1,171 @@
+{
+  "browser": "151.0.7922.34",
+  "cpuThrottle": 4,
+  "physicalOutputLatencyMeasured": false,
+  "samples": [
+    {
+      "run": 0,
+      "state": "cold",
+      "clickToScheduledAudioMs": 274.5999999642372,
+      "leadAtDispatchMs": -169.93197278911566,
+      "requestedTimestampMs": 104.66802717512155,
+      "clickToFirstDispatchMs": 274.5999999642372
+    },
+    {
+      "run": 0,
+      "state": "warm",
+      "clickToScheduledAudioMs": 95.75510204081635,
+      "leadAtDispatchMs": 47.75510204081635,
+      "requestedTimestampMs": 95.75510204081635,
+      "clickToFirstDispatchMs": 48.00000000000001
+    },
+    {
+      "run": 1,
+      "state": "cold",
+      "clickToScheduledAudioMs": 276.5,
+      "leadAtDispatchMs": -169.93197278911566,
+      "requestedTimestampMs": 106.56802721088434,
+      "clickToFirstDispatchMs": 276.5
+    },
+    {
+      "run": 1,
+      "state": "warm",
+      "clickToScheduledAudioMs": 94.94013607826362,
+      "leadAtDispatchMs": 30.340136054421762,
+      "requestedTimestampMs": 94.94013607826362,
+      "clickToFirstDispatchMs": 64.60000002384186
+    },
+    {
+      "run": 2,
+      "state": "cold",
+      "clickToScheduledAudioMs": 213.19999998807907,
+      "leadAtDispatchMs": -108.97959183673473,
+      "requestedTimestampMs": 104.22040815134434,
+      "clickToFirstDispatchMs": 213.19999998807907
+    },
+    {
+      "run": 2,
+      "state": "warm",
+      "clickToScheduledAudioMs": 100.94013601865898,
+      "leadAtDispatchMs": 30.340136054421762,
+      "requestedTimestampMs": 100.94013601865898,
+      "clickToFirstDispatchMs": 70.59999996423721
+    },
+    {
+      "run": 3,
+      "state": "cold",
+      "clickToScheduledAudioMs": 235,
+      "leadAtDispatchMs": -132.19954648526078,
+      "requestedTimestampMs": 102.80045351473922,
+      "clickToFirstDispatchMs": 235
+    },
+    {
+      "run": 3,
+      "state": "warm",
+      "clickToScheduledAudioMs": 93.13265306122442,
+      "leadAtDispatchMs": 21.632653061224417,
+      "requestedTimestampMs": 93.13265306122442,
+      "clickToFirstDispatchMs": 71.5
+    },
+    {
+      "run": 4,
+      "state": "cold",
+      "clickToScheduledAudioMs": 222.19999998807907,
+      "leadAtDispatchMs": -108.97959183673467,
+      "requestedTimestampMs": 113.2204081513444,
+      "clickToFirstDispatchMs": 222.19999998807907
+    },
+    {
+      "run": 4,
+      "state": "warm",
+      "clickToScheduledAudioMs": 100.63764171143501,
+      "leadAtDispatchMs": 27.437641723355945,
+      "requestedTimestampMs": 100.63764171143501,
+      "clickToFirstDispatchMs": 73.19999998807907
+    },
+    {
+      "run": 5,
+      "state": "cold",
+      "clickToScheduledAudioMs": 225.79999995231628,
+      "leadAtDispatchMs": -114.78458049886619,
+      "requestedTimestampMs": 111.0154194534501,
+      "clickToFirstDispatchMs": 225.79999995231628
+    },
+    {
+      "run": 5,
+      "state": "warm",
+      "clickToScheduledAudioMs": 97.7401360305799,
+      "leadAtDispatchMs": 30.340136054421762,
+      "requestedTimestampMs": 97.7401360305799,
+      "clickToFirstDispatchMs": 67.39999997615814
+    },
+    {
+      "run": 6,
+      "state": "cold",
+      "clickToScheduledAudioMs": 211.80000001192093,
+      "leadAtDispatchMs": -100.27210884353738,
+      "requestedTimestampMs": 111.52789116838355,
+      "clickToFirstDispatchMs": 211.80000001192093
+    },
+    {
+      "run": 6,
+      "state": "warm",
+      "clickToScheduledAudioMs": 99.5426303974084,
+      "leadAtDispatchMs": 33.24263038548747,
+      "requestedTimestampMs": 99.5426303974084,
+      "clickToFirstDispatchMs": 66.30000001192093
+    },
+    {
+      "run": 7,
+      "state": "cold",
+      "clickToScheduledAudioMs": 227.0999999642372,
+      "leadAtDispatchMs": -120.58956916099773,
+      "requestedTimestampMs": 106.51043080323949,
+      "clickToFirstDispatchMs": 227.0999999642372
+    },
+    {
+      "run": 7,
+      "state": "warm",
+      "clickToScheduledAudioMs": 92.14761901185621,
+      "leadAtDispatchMs": 39.047619047618994,
+      "requestedTimestampMs": 92.14761901185621,
+      "clickToFirstDispatchMs": 53.09999996423721
+    },
+    {
+      "run": 8,
+      "state": "cold",
+      "clickToScheduledAudioMs": 178.19999998807907,
+      "leadAtDispatchMs": -71.24716553287979,
+      "requestedTimestampMs": 106.95283445519928,
+      "clickToFirstDispatchMs": 178.19999998807907
+    },
+    {
+      "run": 8,
+      "state": "warm",
+      "clickToScheduledAudioMs": 94.44761902377714,
+      "leadAtDispatchMs": 39.047619047618994,
+      "requestedTimestampMs": 94.44761902377714,
+      "clickToFirstDispatchMs": 55.39999997615814
+    },
+    {
+      "run": 9,
+      "state": "cold",
+      "clickToScheduledAudioMs": 169,
+      "leadAtDispatchMs": -59.6371882086168,
+      "requestedTimestampMs": 109.3628117913832,
+      "clickToFirstDispatchMs": 169
+    },
+    {
+      "run": 9,
+      "state": "warm",
+      "clickToScheduledAudioMs": 105.14013606634269,
+      "leadAtDispatchMs": 30.340136054421762,
+      "requestedTimestampMs": 105.14013606634269,
+      "clickToFirstDispatchMs": 74.80000001192093
+    }
+  ],
+  "coldMedianMs": 223.99999997019768,
+  "warmMedianMs": 96.74761903569814,
+  "lateFirstDispatches": 10,
+  "note": "The original requested timestamps preceded dispatch on every cold run. This summary bounds possible onset at dispatch instead of treating a past timestamp as achieved latency."
+}

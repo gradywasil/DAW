@@ -1,5 +1,3 @@
-import InstrumentsPage from "./components/InstrumentsPage";
-import MixerPage from "./components/MixerPage";
 import "./styles/mixer.css";
 /**
  * App shell — Hybrid Performance Console: the booth (transport) is fixed at
@@ -13,8 +11,9 @@ import "./styles/mixer.css";
  * off; TH-4 c asserts it on every frame-budget run).
  */
 
-import { createEffect, on, Show } from "solid-js";
-import Booth, { PlayStopButton } from "./components/Booth";
+import { createEffect, on, Show, Suspense, lazy } from "solid-js";
+import Booth, { PlayStopButton, VisualizerButton } from "./components/Booth";
+import { StudioDialogs } from "./components/StudioTools";
 import {
   OptionsBackdrop,
   OptionsButton,
@@ -23,19 +22,20 @@ import {
 import InfoView from "./components/InfoView";
 import KeyboardShortcuts from "./components/KeyboardShortcuts";
 import PatternRail from "./components/PatternRail";
-import PhonePageToggle from "./components/PhonePageToggle";
 import { phonePage, showPhonePage } from "./state/phonePage";
 import StageFloor, { LaneSwitcher } from "./components/StageFloor";
 import Toasts from "./components/Toasts";
 import AudioStatus from "./components/AudioStatus";
 import SupportBanners from "./components/Banner";
-import VizPage from "./components/VizPage";
+const VizPage = lazy(() => import("./components/VizPage"));
+const MixerPage = lazy(() => import("./components/MixerPage"));
+const InstrumentsPage = lazy(() => import("./components/InstrumentsPage"));
 import { helpMode } from "./state/helpMode";
-import { vizMode } from "./state/vizMode";
+import { closeViz, vizMode } from "./state/vizMode";
 import { optionsOpen } from "./state/optionsDrawer";
 import { activeLane, stageMode } from "./state/selection";
 import { isDefaultLane } from "./document/schema";
-import { initPersistence } from "./persist/boot";
+import { initPersistence, importSharedSong } from "./persist/boot";
 import "./styles/app.css";
 import "./styles/chassis.css";
 import "./styles/grid.css";
@@ -69,7 +69,14 @@ void initPersistence()
   })
   .then(() => {
     const stop = startAutomaticAgentAccess();
-    import.meta.hot?.dispose(stop);
+    const onSharedSong = () => {
+      void importSharedSong();
+    };
+    window.addEventListener("hashchange", onSharedSong);
+    import.meta.hot?.dispose(() => {
+      stop();
+      window.removeEventListener("hashchange", onSharedSong);
+    });
   });
 
 export default function App() {
@@ -171,7 +178,7 @@ export default function App() {
           <div class="phone-transport">
             <OptionsButton />
             <PlayStopButton />
-            <PhonePageToggle />
+            <VisualizerButton class="phone-viz-button" />
           </div>
           <nav
             class="phone-mixer-nav"
@@ -237,10 +244,14 @@ export default function App() {
           stageMode() !== "phone" && phonePage() === "instruments" && !vizMode()
         }
       >
-        <InstrumentsPage />
+        <Suspense fallback={<p role="status">Opening instruments…</p>}>
+          <InstrumentsPage />
+        </Suspense>
       </Show>
       <Show when={phonePage() === "mixer" && !vizMode()}>
-        <MixerPage />
+        <Suspense fallback={<p role="status">Opening mixer…</p>}>
+          <MixerPage />
+        </Suspense>
       </Show>
       <AudioStatus />
       <Show when={stageMode() === "phone" && !vizMode()}>
@@ -249,6 +260,7 @@ export default function App() {
         </div>
       </Show>
       <Toasts />
+      <StudioDialogs />
       {/* HP-1: the info region mounts ONLY while help mode is on (Show
           unmounts it — and its listeners — the instant the mode turns off). */}
       <Show when={helpMode()}>
@@ -259,7 +271,18 @@ export default function App() {
           clause); transport-isolated by construction (VizPage never touches
           the engine). */}
       <Show when={vizMode()}>
-        <VizPage />
+        <Suspense
+          fallback={
+            <div class="viz-loading">
+              <p role="status">Opening visuals…</p>
+              <button type="button" onClick={closeViz}>
+                Return to workspace
+              </button>
+            </div>
+          }
+        >
+          <VizPage />
+        </Suspense>
       </Show>
       <KeyboardShortcuts />
     </div>

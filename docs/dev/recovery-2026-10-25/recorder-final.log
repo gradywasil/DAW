@@ -1,0 +1,14 @@
+{
+  "browser": "151.0.7922.34",
+  "syntheticInputOnly": true,
+  "requestedOnRecord": true,
+  "capturedAndDecoded": {
+    "duration": 1.56,
+    "peak": 1.031807541847229
+  },
+  "normalizeAndTrim": true,
+  "wavDownloaded": true,
+  "sentToSlicer": true,
+  "tracksStoppedOnClose": true,
+  "errors": []
+}

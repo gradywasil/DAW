@@ -1,0 +1,38 @@
+[
+  {
+    "browser": "chromium",
+    "version": "151.0.7922.34"
+  },
+  {
+    "width": 320,
+    "height": 667,
+    "playbackAcrossViews": true,
+    "sounds": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "playbackAcrossViews": true,
+    "sounds": true,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "playbackAcrossViews": true,
+    "sounds": true,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "playbackAcrossViews": true,
+    "sounds": true,
+    "errors": []
+  },
+  {
+    "sharedSongUsesSeparateProject": true,
+    "previousSavedProjectPreserved": true
+  }
+]

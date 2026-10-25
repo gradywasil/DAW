@@ -1,4 +1,11 @@
-import { IconMinus, IconPlus, IconChevronLeft, IconChevronRight, IconPencil, IconHand } from "./icons";
+import {
+  IconMinus,
+  IconPlus,
+  IconChevronLeft,
+  IconChevronRight,
+  IconPencil,
+  IconHand,
+} from "./icons";
 import { vizMode } from "../state/vizMode";
 import { phonePage } from "../state/phonePage";
 import {
@@ -1599,6 +1606,18 @@ function GridSurface(props: {
     });
 
     rendererRef = renderer;
+    const [playing, setPlaying] = createSignal(
+      session.transport.snapshot.playing,
+    );
+    onCleanup(session.subscribe((snapshot) => setPlaying(snapshot.playing)));
+    createEffect(() => {
+      const page = phonePage();
+      const visible =
+        !vizMode() &&
+        (page === "edit" ||
+          (page === "instruments" && lane.startsWith("extra")));
+      renderer.setAnimating(playing() && visible);
+    });
     navigationRenderer = renderer;
     container.addEventListener("scroll", updateHorizontal, true);
     const navigationObserver = new ResizeObserver(updateHorizontal);
@@ -1900,8 +1919,8 @@ function GridSurface(props: {
             <IconChevronLeft size={14} />
           </button>
           <output class="grid-position" aria-live="polite">
-            Steps {horizontal().first}–{horizontal().last} /{" "}
-            {props.pattern.bars * 16}
+            <span class="grid-position-label">Steps </span>
+            {horizontal().first}–{horizontal().last} / {props.pattern.bars * 16}
           </output>
           <button
             type="button"
@@ -1926,7 +1945,10 @@ function GridSurface(props: {
                 navigationRenderer?.setPanMode(false);
               }}
             >
-              <IconPencil size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
+              <IconPencil
+                size={12}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
               Draw
             </button>
             <button
@@ -1938,7 +1960,10 @@ function GridSurface(props: {
                 navigationRenderer?.setPanMode(true);
               }}
             >
-              <IconHand size={12} style={{ "margin-right": "4px", "vertical-align": "-1px" }} />
+              <IconHand
+                size={12}
+                style={{ "margin-right": "4px", "vertical-align": "-1px" }}
+              />
               Scroll
             </button>
           </div>

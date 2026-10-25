@@ -447,14 +447,15 @@ describe("HW-4 e2e happy path (built app, wiped IDB, full journey)", () => {
         // Param tweak: native range stepping + input event (module DOM is
         // rebuilt per commit, so re-query fresh each press).
         const readout = () =>
-          $<HTMLInputElement>(".fx-param-slider")
-            .closest("label")
-            ?.querySelector(".fx-param-readout")?.textContent ?? "";
+          $<HTMLInputElement>('.fx-strip[data-lane="bass"] .mixer-param input')
+            .value;
         const readoutBefore = readout();
         for (let i = 0; i < 5; i++) {
-          const slider = $<HTMLInputElement>(".fx-param-slider");
+          const slider = $<HTMLInputElement>(
+            '.fx-strip[data-lane="bass"] .mixer-param input',
+          );
           slider.stepUp();
-          slider.dispatchEvent(new Event("input", { bubbles: true }));
+          slider.dispatchEvent(new Event("change", { bubbles: true }));
         }
         await poll(
           () => readout() !== readoutBefore,

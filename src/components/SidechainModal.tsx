@@ -4,13 +4,7 @@
  * target routing, and glue compressor styling.
  */
 
-import {
-  createSignal,
-  onMount,
-  onCleanup,
-  For,
-  type JSX,
-} from "solid-js";
+import { createSignal, onMount, onCleanup, For, type JSX } from "solid-js";
 import { Portal } from "solid-js/web";
 import {
   currentSidechain,
@@ -33,7 +27,9 @@ interface SidechainModalProps {
   onClose: () => void;
 }
 
-export default function SidechainModal(props: SidechainModalProps): JSX.Element {
+export default function SidechainModal(
+  props: SidechainModalProps,
+): JSX.Element {
   let dialogRef!: HTMLDialogElement;
   const [selectedPresetId, setSelectedPresetId] = createSignal<string>(
     SIDECHAIN_PRESETS[0]!.id,
@@ -71,7 +67,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
   return (
     <Portal>
       <dialog
-        ref={dialogRef}
+        ref={(el) => {
+          dialogRef = el;
+        }}
         class="sidechain-dialog"
         role="dialog"
         aria-label="Master Bus Glue & Sidechain Studio"
@@ -79,7 +77,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
         <div class="sidechain-header">
           <div class="sidechain-title-wrap">
             <IconCompressor size={16} />
-            <span class="sidechain-title">MASTER BUS GLUE & SIDECHAIN DUCKING</span>
+            <span class="sidechain-title">
+              MASTER BUS GLUE & SIDECHAIN DUCKING
+            </span>
           </div>
           <button
             type="button"
@@ -118,16 +118,80 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
               />
 
               {/* Ticks & Labels */}
-              <text x="50" y="78" fill="#f5b041" font-size="7" font-family="monospace">-20</text>
-              <text x="80" y="60" fill="#f5b041" font-size="7" font-family="monospace">-10</text>
-              <text x="120" y="48" fill="#f5b041" font-size="7" font-family="monospace">-5</text>
-              <text x="150" y="44" fill="#f5b041" font-size="7" font-family="monospace">-3</text>
-              <text x="180" y="45" fill="#f5b041" font-size="7" font-family="monospace">-1</text>
-              <text x="210" y="52" fill="#e74c3c" font-size="8" font-weight="bold" font-family="monospace">0</text>
-              <text x="245" y="72" fill="#e74c3c" font-size="7" font-family="monospace">+3</text>
+              <text
+                x="50"
+                y="78"
+                fill="#f5b041"
+                font-size="7"
+                font-family="monospace"
+              >
+                -20
+              </text>
+              <text
+                x="80"
+                y="60"
+                fill="#f5b041"
+                font-size="7"
+                font-family="monospace"
+              >
+                -10
+              </text>
+              <text
+                x="120"
+                y="48"
+                fill="#f5b041"
+                font-size="7"
+                font-family="monospace"
+              >
+                -5
+              </text>
+              <text
+                x="150"
+                y="44"
+                fill="#f5b041"
+                font-size="7"
+                font-family="monospace"
+              >
+                -3
+              </text>
+              <text
+                x="180"
+                y="45"
+                fill="#f5b041"
+                font-size="7"
+                font-family="monospace"
+              >
+                -1
+              </text>
+              <text
+                x="210"
+                y="52"
+                fill="#e74c3c"
+                font-size="8"
+                font-weight="bold"
+                font-family="monospace"
+              >
+                0
+              </text>
+              <text
+                x="245"
+                y="72"
+                fill="#e74c3c"
+                font-size="7"
+                font-family="monospace"
+              >
+                +3
+              </text>
 
               {/* Center Pivot Pivot */}
-              <circle cx="150" cy="98" r="8" fill="#222" stroke="#5a4b32" stroke-width="2" />
+              <circle
+                cx="150"
+                cy="98"
+                r="8"
+                fill="#222"
+                stroke="#5a4b32"
+                stroke-width="2"
+              />
 
               {/* Animated Needle */}
               <g transform={`rotate(${needleAngle()} 150 98)`}>
@@ -144,13 +208,19 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
               </g>
             </svg>
             <div class="vu-meter-label">
-              GAIN REDUCTION {liveReductionDb() < -0.1 ? `${liveReductionDb().toFixed(1)} dB` : "0.0 dB"}
+              GAIN REDUCTION{" "}
+              {liveReductionDb() < -0.1
+                ? `${liveReductionDb().toFixed(1)} dB`
+                : "0.0 dB"}
             </div>
           </div>
 
           {/* Preset Selector Chips */}
           <div class="sidechain-param-row">
-            <span class="sidechain-param-name" style={{ "font-weight": "bold" }}>
+            <span
+              class="sidechain-param-name"
+              style={{ "font-weight": "bold" }}
+            >
               STYLE PRESETS:
             </span>
             <div class="sidechain-presets-row">
@@ -159,7 +229,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                   <button
                     type="button"
                     class="preset-chip"
-                    classList={{ "is-active": preset.id === selectedPresetId() }}
+                    classList={{
+                      "is-active": preset.id === selectedPresetId(),
+                    }}
                     onClick={() => handleSelectPreset(preset)}
                   >
                     {preset.name}
@@ -202,7 +274,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                     }))
                   }
                 >
-                  <option value="four-on-the-floor">4-On-The-Floor Pulse</option>
+                  <option value="four-on-the-floor">
+                    4-On-The-Floor Pulse
+                  </option>
                   <option value="kick-transient">Kick Drum Transient</option>
                 </select>
               </div>
@@ -268,7 +342,10 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
               </div>
 
               <div>
-                <span class="sidechain-param-name" style={{ "font-size": "10px" }}>
+                <span
+                  class="sidechain-param-name"
+                  style={{ "font-size": "10px" }}
+                >
                   DUCKING TARGETS:
                 </span>
                 <div class="sidechain-targets-grid">
@@ -288,7 +365,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                   <button
                     type="button"
                     class="target-btn"
-                    classList={{ "is-active": currentSidechain().targets.chords }}
+                    classList={{
+                      "is-active": currentSidechain().targets.chords,
+                    }}
                     onClick={() =>
                       setCurrentSidechain((s) => ({
                         ...s,
@@ -314,7 +393,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                   <button
                     type="button"
                     class="target-btn"
-                    classList={{ "is-active": currentSidechain().targets.master }}
+                    classList={{
+                      "is-active": currentSidechain().targets.master,
+                    }}
                     onClick={() =>
                       setCurrentSidechain((s) => ({
                         ...s,
@@ -382,7 +463,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                     }))
                   }
                 />
-                <span class="sidechain-param-val">{currentGlue().threshold} dB</span>
+                <span class="sidechain-param-val">
+                  {currentGlue().threshold} dB
+                </span>
               </div>
 
               <div class="sidechain-param-row">
@@ -420,7 +503,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                     }))
                   }
                 />
-                <span class="sidechain-param-val">{currentGlue().sidechainHpHz} Hz</span>
+                <span class="sidechain-param-val">
+                  {currentGlue().sidechainHpHz} Hz
+                </span>
               </div>
 
               <div class="sidechain-param-row">
@@ -439,7 +524,9 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
                     }))
                   }
                 />
-                <span class="sidechain-param-val">+{currentGlue().makeup} dB</span>
+                <span class="sidechain-param-val">
+                  +{currentGlue().makeup} dB
+                </span>
               </div>
             </div>
           </div>
@@ -455,7 +542,11 @@ export default function SidechainModal(props: SidechainModalProps): JSX.Element 
             AUDITION DUCK PULSE
           </button>
           <div style={{ "font-size": "11px", color: "var(--color-ink)" }}>
-            Sidechain: <strong>{currentSidechain().enabled ? "ENABLED" : "BYPASSED"}</strong> | Glue:{" "}
+            Sidechain:{" "}
+            <strong>
+              {currentSidechain().enabled ? "ENABLED" : "BYPASSED"}
+            </strong>{" "}
+            | Glue:{" "}
             <strong>{currentGlue().enabled ? "ENABLED" : "BYPASSED"}</strong>
           </div>
         </div>

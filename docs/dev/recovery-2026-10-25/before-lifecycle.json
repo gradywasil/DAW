@@ -1,0 +1,100 @@
+[
+  {
+    "mode": "idle-edit",
+    "work": {
+      "grid/renderer": {
+        "calls": 60,
+        "ms": 10.20000022649765
+      }
+    }
+  },
+  {
+    "mode": "playing-edit",
+    "work": {
+      "grid/renderer": {
+        "calls": 61,
+        "ms": 13.900000095367432
+      },
+      "Booth": {
+        "calls": 61,
+        "ms": 0.7999999523162842
+      },
+      "soundingFollow": {
+        "calls": 61,
+        "ms": 0.5
+      }
+    }
+  },
+  {
+    "mode": "playing-song",
+    "work": {
+      "grid/renderer": {
+        "calls": 63,
+        "ms": 1.100000023841858
+      },
+      "Booth": {
+        "calls": 61,
+        "ms": 1.6000001430511475
+      },
+      "soundingFollow": {
+        "calls": 61,
+        "ms": 9.299999952316284
+      },
+      "other": {
+        "calls": 2,
+        "ms": 0
+      }
+    }
+  },
+  {
+    "mode": "playing-mixer",
+    "work": {
+      "Booth": {
+        "calls": 61,
+        "ms": 2.200000047683716
+      },
+      "grid/renderer": {
+        "calls": 61,
+        "ms": 0.6000000834465027
+      },
+      "soundingFollow": {
+        "calls": 61,
+        "ms": 0.699999988079071
+      }
+    }
+  },
+  {
+    "mode": "playing-viz",
+    "work": {
+      "Booth": {
+        "calls": 61,
+        "ms": 2.5
+      },
+      "grid/renderer": {
+        "calls": 63,
+        "ms": 0.2999999523162842
+      },
+      "soundingFollow": {
+        "calls": 61,
+        "ms": 7.800000011920929
+      },
+      "viz/renderer": {
+        "calls": 61,
+        "ms": 179.59999990463257
+      },
+      "other": {
+        "calls": 2,
+        "ms": 0.09999996423721313
+      }
+    }
+  },
+  {
+    "mode": "idle-mixer",
+    "work": {
+      "grid/renderer": {
+        "calls": 60,
+        "ms": 1.9999999403953552
+      }
+    }
+  }
+]

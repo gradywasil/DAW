@@ -80,7 +80,9 @@ export default function HistoryDrawer(props: HistoryDrawerProps) {
 
   return (
     <div
-      ref={popoverRef}
+      ref={(el) => {
+        popoverRef = el;
+      }}
       class="history-pop"
       role="dialog"
       aria-label="Undo and Redo History Timeline"
@@ -131,7 +133,9 @@ export default function HistoryDrawer(props: HistoryDrawerProps) {
 
         <div class="history-scrubber-current-label">
           <span class="history-scrubber-current-tag">NOW</span>
-          <span class="history-entry-text">{currentItem()?.label ?? "Current state"}</span>
+          <span class="history-entry-text">
+            {currentItem()?.label ?? "Current state"}
+          </span>
         </div>
       </div>
 

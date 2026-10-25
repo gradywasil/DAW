@@ -1,0 +1,62 @@
+[
+  {
+    "name": "TINE PIANO",
+    "id": "preset-keys-tine",
+    "startsAtSeconds": 0
+  },
+  {
+    "name": "FELT KEYS",
+    "id": "preset-keys-felt",
+    "startsAtSeconds": 3
+  },
+  {
+    "name": "FM REED KEYS",
+    "id": "preset-keys-fm",
+    "startsAtSeconds": 6
+  },
+  {
+    "name": "STUDIO SUB",
+    "id": "preset-bass-studio-sub",
+    "startsAtSeconds": 9
+  },
+  {
+    "name": "ROUND FM BASS",
+    "id": "preset-bass-round-fm",
+    "startsAtSeconds": 12
+  },
+  {
+    "name": "UPRIGHT PLUCK",
+    "id": "preset-strings-upright",
+    "startsAtSeconds": 15
+  },
+  {
+    "name": "BOW ENSEMBLE",
+    "id": "preset-bowed-chamber",
+    "startsAtSeconds": 18
+  },
+  {
+    "name": "AIR ENSEMBLE",
+    "id": "preset-pads-studio-air",
+    "startsAtSeconds": 21
+  },
+  {
+    "name": "SAW UNISON",
+    "id": "preset-synths-unison",
+    "startsAtSeconds": 24
+  },
+  {
+    "name": "GLASS FM",
+    "id": "preset-bells-fm-glass",
+    "startsAtSeconds": 27
+  },
+  {
+    "name": "WOOD MALLET",
+    "id": "preset-mallets-studio-wood",
+    "startsAtSeconds": 30
+  },
+  {
+    "name": "STUDIO REED",
+    "id": "preset-lead-studio-reed",
+    "startsAtSeconds": 33
+  }
+]

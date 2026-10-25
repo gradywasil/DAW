@@ -10,6 +10,15 @@ import {
 import { createDemoProject } from "../src/document/demoSong";
 
 describe("Compact Project Cloud Links & URL Project Sharing Engine", () => {
+  it("drains compression while writing a large project-sized payload", async () => {
+    let state = 47;
+    const text = Array.from({ length: 250_000 }, () => {
+      state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+      return String.fromCharCode(32 + ((state >>> 16) % 90));
+    }).join("");
+    const compressed = await compressStringToUrlSafe(text);
+    expect(await decompressStringFromUrlSafe(compressed)).toBe(text);
+  }, 2000);
   it("encodes and decodes arbitrary byte arrays into URL-safe base64 strings", () => {
     const original = new Uint8Array([0, 1, 2, 63, 64, 127, 128, 255]);
     const encoded = uint8ArrayToBase64Url(original);
@@ -25,7 +34,8 @@ describe("Compact Project Cloud Links & URL Project Sharing Engine", () => {
   });
 
   it("losslessly compresses and decompresses plain text using native deflate-raw", async () => {
-    const sample = "Bitbounce DAW — Fast, expressive in-browser music studio. ".repeat(20);
+    const sample =
+      "Bitbounce DAW — Fast, expressive in-browser music studio. ".repeat(20);
     const compressed = await compressStringToUrlSafe(sample);
 
     expect(compressed.length).toBeLessThan(sample.length);
@@ -37,7 +47,10 @@ describe("Compact Project Cloud Links & URL Project Sharing Engine", () => {
 
   it("round-trips a complete ProjectDocument through share URL encoding and decoding", async () => {
     const demo = createDemoProject();
-    const shareUrl = await encodeDocumentToShareUrl(demo, "https://bitbounce.app/");
+    const shareUrl = await encodeDocumentToShareUrl(
+      demo,
+      "https://bitbounce.app/",
+    );
 
     expect(shareUrl.startsWith("https://bitbounce.app/#song=")).toBe(true);
 
@@ -51,7 +64,10 @@ describe("Compact Project Cloud Links & URL Project Sharing Engine", () => {
 
   it("decodes share URLs formatted with search params (?song=...)", async () => {
     const demo = createDemoProject();
-    const shareUrl = await encodeDocumentToShareUrl(demo, "https://bitbounce.app/");
+    const shareUrl = await encodeDocumentToShareUrl(
+      demo,
+      "https://bitbounce.app/",
+    );
     const queryUrl = shareUrl.replace("#song=", "?song=");
 
     const decodedDoc = await decodeDocumentFromShareUrl(queryUrl);
@@ -60,7 +76,9 @@ describe("Compact Project Cloud Links & URL Project Sharing Engine", () => {
   });
 
   it("safely handles corrupted or invalid payloads without throwing", async () => {
-    const corrupt1 = await decodeDocumentFromShareUrl("https://bitbounce.app/#song=not-a-real-deflate-payload");
+    const corrupt1 = await decodeDocumentFromShareUrl(
+      "https://bitbounce.app/#song=not-a-real-deflate-payload",
+    );
     expect(corrupt1).toBeNull();
 
     const corrupt2 = await decodeDocumentFromShareUrl("");

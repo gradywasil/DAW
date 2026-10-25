@@ -1,0 +1,107 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 335 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    3.34 kB │ gzip:   1.42 kB
+dist/assets/drums-acoustic-kick-BsWqprxd.ogg       4.51 kB
+dist/assets/mixerLimiter-BpoLcDSZ.js               4.64 kB
+dist/assets/press-start-2p-400-ClsvrIBJ.woff2      4.70 kB
+dist/assets/drums-808-hat2-sfmMuYkQ.ogg            4.76 kB
+dist/assets/drums-dusty-tom-C4NadiyN.ogg           4.93 kB
+dist/assets/drums-dusty-clap-7RAfy85C.ogg          5.28 kB
+dist/assets/drums-punch-tom-DNCXCUBj.ogg           5.41 kB
+dist/assets/drums-punch-hat-B7mIeQrx.ogg           5.46 kB
+dist/assets/drums-808-snare-Dx1Ug-OG.ogg           5.52 kB
+dist/assets/drums-acoustic-hat-Ddowhqqq.ogg        5.71 kB
+dist/assets/drums-dusty-hat-BSB0PQgV.ogg           5.79 kB
+dist/assets/departure-mono-400-YazmgA1T.woff2      5.89 kB
+dist/assets/drums-808-snare2-DSeL00-P.ogg          5.89 kB
+dist/assets/voice-bass-lowtone-BcCmPFyk.ogg        5.95 kB
+dist/assets/drums-acoustic-tom-BMiN0vAo.ogg        5.98 kB
+dist/assets/drums-808-hat-BB1aRssw.ogg             6.12 kB
+dist/assets/voice-lead-highup-tyK4bR4o.ogg         6.13 kB
+dist/assets/drums-808-openhat-Bz-8Sthp.ogg         6.30 kB
+dist/assets/voice-chords-tone-Ck_V4K92.ogg         6.63 kB
+dist/assets/voice-lead-phaserup-rODiGQL5.ogg       6.89 kB
+dist/assets/vt323-400-EhPR265H.woff2               7.19 kB
+dist/assets/voice-chords-threetone-Cxp11XWl.ogg    7.36 kB
+dist/assets/voice-chords-twotone-Dz5bNUHe.ogg      7.36 kB
+dist/assets/drums-acoustic-openhat-BLrWkzNa.ogg    7.89 kB
+dist/assets/drums-dusty-kick-BW0X-6qL.ogg          7.89 kB
+dist/assets/drums-dusty-snare-D_Zxw_dj.ogg         8.07 kB
+dist/assets/drums-808-tom-C74VGumt.ogg             9.09 kB
+dist/assets/drums-punch-openhat-Cvg--dHx.ogg       9.54 kB
+dist/assets/ibm-plex-mono-400-BJoXLJYV.woff2      10.05 kB
+dist/assets/ibm-plex-mono-500-C820gu2e.woff2      10.06 kB
+dist/assets/drums-punch-snare-G2Pu-bVC.ogg        11.56 kB
+dist/assets/drums-acoustic-snare-DJtoFP3x.ogg     12.79 kB
+dist/assets/drums-punch-kick-CwM9kl1E.ogg         17.30 kB
+dist/assets/drums-808-clap-XcuMeuxC.ogg           17.33 kB
+dist/assets/drums-dusty-openhat-BCwTLzRf.ogg      18.91 kB
+dist/assets/voiceEngine-Ce69iaAE.js               19.18 kB
+dist/assets/drums-acoustic-clap-BTvBd92O.ogg      24.06 kB
+dist/assets/drums-punch-clap-CR0zXkem.ogg         25.45 kB
+dist/assets/drums-808-kick-BFK6rFsp.ogg           31.27 kB
+dist/assets/drums-808-kick2-_REfwWQN.ogg          40.00 kB
+dist/assets/bitbounce-logo-BhGnMtrv.svg           67.94 kB │ gzip:   8.39 kB
+dist/assets/bitbounce-favicon-C5VOKZYn.svg        68.01 kB │ gzip:   8.41 kB
+dist/assets/barlow-500-Apw_3I1e.ttf               81.92 kB
+dist/assets/barlow-400-D9VpUvlI.ttf               82.62 kB
+dist/assets/barlow-600-S-AH7y_S.ttf               85.87 kB
+dist/assets/barlow-700-CqhdknQi.ttf              108.22 kB
+dist/assets/unbounded-500-DOHeubRJ.ttf           347.34 kB
+dist/assets/ShareModal-BWGO-deu.css                2.82 kB │ gzip:   0.88 kB
+dist/assets/ModularCanvasModal-BCTQ6-98.css        3.33 kB │ gzip:   1.14 kB
+dist/assets/SidechainModal-xg83p6mF.css            4.14 kB │ gzip:   1.14 kB
+dist/assets/AudioRecorderModal-CB3_5tmD.css        4.17 kB │ gzip:   1.30 kB
+dist/assets/ChordGeneratorModal-BGLpTzRL.css       4.41 kB │ gzip:   1.10 kB
+dist/assets/KaossModal-CioQTfWy.css                4.45 kB │ gzip:   1.38 kB
+dist/assets/SampleSlicerModal-C4oZGdsP.css         4.54 kB │ gzip:   1.20 kB
+dist/assets/HistoryDrawer-CHMY10ZO.css             5.50 kB │ gzip:   1.28 kB
+dist/assets/JamDrawer-DTqQqM--.css                 5.92 kB │ gzip:   1.30 kB
+dist/assets/DjDeckModal-DOZuXvv_.css               6.15 kB │ gzip:   1.78 kB
+dist/assets/index-DWe6ZM15.css                   184.28 kB │ gzip:  37.65 kB
+dist/assets/wav-BaRrCcyg.js                        0.96 kB │ gzip:   0.53 kB
+dist/assets/midiMapping-DrqIZrys.js                1.17 kB │ gzip:   0.59 kB
+dist/assets/exportWav-K305y2M3.js                  1.27 kB │ gzip:   0.68 kB
+dist/assets/song-DJUyad4I.js                       2.48 kB │ gzip:   1.24 kB
+dist/assets/ShareModal-BAYLe169.js                 3.25 kB │ gzip:   1.52 kB
+dist/assets/exportStems-rtU6duee.js                3.26 kB │ gzip:   1.47 kB
+dist/assets/codec-CL-2hG3p.js                      3.83 kB │ gzip:   1.76 kB
+dist/assets/HistoryDrawer-BEA0S7PQ.js              4.39 kB │ gzip:   1.77 kB
+dist/assets/ChordGeneratorModal-Dm2-Vo1C.js        4.44 kB │ gzip:   1.83 kB
+dist/assets/projectName-C-YGY8BF.js                4.92 kB │ gzip:   1.94 kB
+dist/assets/KaossModal-D9l7be-E.js                 5.18 kB │ gzip:   1.85 kB
+dist/assets/ModularCanvasModal-DbYXW1oU.js         5.31 kB │ gzip:   2.11 kB
+dist/assets/sessionTools-B4AlfjSi.js               5.71 kB │ gzip:   2.51 kB
+dist/assets/AudioRecorderModal-C7Xeifry.js         5.88 kB │ gzip:   2.68 kB
+dist/assets/render-iRB-xbnm.js                     6.33 kB │ gzip:   3.02 kB
+dist/assets/JamDrawer-D2fnRvzc.js                  6.69 kB │ gzip:   2.65 kB
+dist/assets/SampleSlicerModal-DKi-Qw_V.js          8.22 kB │ gzip:   3.48 kB
+dist/assets/DjDeckModal-D-8Fs8WW.js                8.37 kB │ gzip:   2.59 kB
+dist/assets/SidechainModal-BTe3Hhix.js             9.15 kB │ gzip:   2.83 kB
+dist/assets/content-C0y8tQN6.js                   11.01 kB │ gzip:   2.73 kB
+dist/assets/solid-Cbl2_wJ0.js                     12.92 kB │ gzip:   5.12 kB
+dist/assets/mixer-C8NAGT1u.js                     14.89 kB │ gzip:   5.43 kB
+dist/assets/scales-BuxEbiCQ.js                    18.12 kB │ gzip:   6.04 kB
+dist/assets/exportMidi-aF2b07ks.js                18.34 kB │ gzip:   6.00 kB
+dist/assets/store-DtcS5FSW.js                     20.49 kB │ gzip:   7.12 kB
+dist/assets/tools-BZPow5Yh.js                     25.72 kB │ gzip:   9.28 kB
+dist/assets/preload-helper-DwnOMmSY.js            46.35 kB │ gzip:  14.36 kB
+dist/assets/exportVideo-NkUovDET.js              208.64 kB │ gzip:  52.97 kB
+dist/assets/index-DPYdpIb4.js                    457.78 kB │ gzip: 144.13 kB
+
+[INEFFECTIVE_DYNAMIC_IMPORT] src/persist/newProject.ts is dynamically imported by src/webmcp/access.ts but also statically imported by src/components/Projects.tsx, src/persist/boot.ts, dynamic import will not move module into another chunk.
+
+[INEFFECTIVE_DYNAMIC_IMPORT] src/persist/boot.ts is dynamically imported by src/webmcp/access.ts but also statically imported by src/App.tsx, src/components/Projects.tsx, src/components/SaveIndicator.tsx, dynamic import will not move module into another chunk.
+
+✓ built in 5.23s
+[PLUGIN_TIMINGS] Your build spent 82% of 5.2s inside plugin hooks (4.3s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - solid transform (46%, 2.4s, 335 calls)
+Those rows are 46% of the build; the rest of the 82% is below.
+Not measurable — 2 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:asset load (35 calls)
+  - vite:css transform (37 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.

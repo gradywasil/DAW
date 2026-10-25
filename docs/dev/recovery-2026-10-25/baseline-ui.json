@@ -1,0 +1,1466 @@
+[
+  {
+    "width": 390,
+    "scrollWidth": 390,
+    "buttons": [
+      {
+        "text": "PROJECTS",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Dark",
+        "label": "Switch to light theme",
+        "title": "Theme is saved on this device"
+      },
+      {
+        "text": "Drums",
+        "label": "Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "Bass",
+        "label": "Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "Chords",
+        "label": "Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "Leads",
+        "label": "Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "Add new instrument",
+        "label": "Add new instrument",
+        "title": "Add new instrument"
+      },
+      {
+        "text": "OPTIONS",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "PLAY",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "SONG",
+        "label": "Song arrangement",
+        "title": ""
+      },
+      {
+        "text": "Instruments",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Song",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Mixer",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Color",
+        "label": "Drums, track 1 track color",
+        "title": ""
+      },
+      {
+        "text": "MUTE",
+        "label": "Mute Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "SOLO",
+        "label": "Solo Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous kit for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "SOFT STEP",
+        "label": "Browse Drums, track 1 kits: SOFT STEP",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next kit for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "Double ×2",
+        "label": "Double pattern length and repeat notes",
+        "title": "Double the length and repeat every note. Undo restores the original."
+      },
+      {
+        "text": "PROJECT · C MIN",
+        "label": "Drums, track 1 effective scale: PROJECT · C MIN. Open scale selector.",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Shorter gate for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Longer gate for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "FILL",
+        "label": "Euclidean fill rails over the Drums, track 1 rows",
+        "title": ""
+      },
+      {
+        "text": "SAMPLE",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous drum sounds",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next drum sounds",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Scroll grid backward",
+        "title": "Scroll grid backward"
+      },
+      {
+        "text": "",
+        "label": "Scroll grid forward",
+        "title": "Scroll grid forward"
+      },
+      {
+        "text": "Draw",
+        "label": null,
+        "title": "Tap to place. Pull to lengthen. Hold to scroll."
+      },
+      {
+        "text": "Scroll",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for KICK fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for KICK fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to KICK row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for SNARE fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for SNARE fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to SNARE row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to HAT row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for OPEN HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for OPEN HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate OPEN HAT fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate OPEN HAT fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to OPEN HAT row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for CLAP fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for CLAP fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CLAP fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CLAP fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to CLAP row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate TOM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate TOM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to TOM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for KICK 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for KICK 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK 2 fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK 2 fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to KICK 2 row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for SNARE 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for SNARE 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE 2 fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE 2 fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to SNARE 2 row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for HAT 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for HAT 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT 2 fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT 2 fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to HAT 2 row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for MID TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for MID TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate MID TOM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate MID TOM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to MID TOM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for HIGH TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for HIGH TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HIGH TOM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HIGH TOM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to HIGH TOM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for RIM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for RIM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate RIM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate RIM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to RIM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for SHAKER fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for SHAKER fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SHAKER fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SHAKER fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to SHAKER row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for COWBELL fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for COWBELL fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate COWBELL fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate COWBELL fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to COWBELL row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for CRASH fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for CRASH fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CRASH fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CRASH fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to CRASH row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for PERC fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for PERC fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate PERC fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate PERC fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to PERC row",
+        "title": ""
+      },
+      {
+        "text": "NEXT",
+        "label": "Drums, track 1 slot 1, pattern A: plays once, then next",
+        "title": ""
+      }
+    ],
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "scrollWidth": 1440,
+    "buttons": [
+      {
+        "text": "PLAY",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "LOOP",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Metronome",
+        "title": "Metronome"
+      },
+      {
+        "text": "",
+        "label": "Preview",
+        "title": "Preview"
+      },
+      {
+        "text": "",
+        "label": "Keyboard shortcuts",
+        "title": "Keyboard shortcuts"
+      },
+      {
+        "text": "",
+        "label": "Info mode",
+        "title": "Info mode"
+      },
+      {
+        "text": "",
+        "label": "Web MIDI Controller",
+        "title": "Web MIDI Controller"
+      },
+      {
+        "text": "",
+        "label": "Collaborative Jam Session",
+        "title": "Collaborative Jam Session"
+      },
+      {
+        "text": "",
+        "label": "Sample Slicer & Beat Chopper",
+        "title": "Sample Slicer & Beat Chopper"
+      },
+      {
+        "text": "",
+        "label": "Scale-Aware Chord Generator",
+        "title": "Scale-Aware Chord Generator"
+      },
+      {
+        "text": "",
+        "label": "Master Glue & Sidechain Ducking",
+        "title": "Master Glue & Sidechain Ducking"
+      },
+      {
+        "text": "",
+        "label": "XY Kaoss FX Pad & Beat Stutter",
+        "title": "XY Kaoss FX Pad & Beat Stutter"
+      },
+      {
+        "text": "",
+        "label": "Microphone & Vocal Sampler",
+        "title": "Microphone & Vocal Sampler"
+      },
+      {
+        "text": "",
+        "label": "Modular Audio Node Canvas",
+        "title": "Modular Audio Node Canvas"
+      },
+      {
+        "text": "",
+        "label": "Performance DJ Deck",
+        "title": "Performance DJ Deck"
+      },
+      {
+        "text": "",
+        "label": "Share Song Link",
+        "title": "Share Song Link"
+      },
+      {
+        "text": "",
+        "label": "Visualizer",
+        "title": "Visualizer"
+      },
+      {
+        "text": "",
+        "label": "Undo edit (Ctrl+Z)",
+        "title": "Undo edit (Ctrl+Z)"
+      },
+      {
+        "text": "",
+        "label": "Redo edit (Ctrl+Y)",
+        "title": "Redo edit (Ctrl+Y)"
+      },
+      {
+        "text": "",
+        "label": "History Timeline and Time Travel",
+        "title": "History Timeline and Time Travel"
+      },
+      {
+        "text": "",
+        "label": "Decrease tempo one BPM",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Increase tempo one BPM",
+        "title": ""
+      },
+      {
+        "text": "C MIN",
+        "label": "Project scale: C MIN. Open scale selector.",
+        "title": ""
+      },
+      {
+        "text": "Instruments 1–4",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Instruments 5–8",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Song arrangement",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Mixer",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "PROJECTS",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "Dark",
+        "label": "Switch to light theme",
+        "title": "Theme is saved on this device"
+      },
+      {
+        "text": "MUTE",
+        "label": "Mute Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "SOLO",
+        "label": "Solo Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous kit for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "SOFT STEP",
+        "label": "Browse Drums, track 1 kits: SOFT STEP",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next kit for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "Color",
+        "label": "Drums, track 1 track color",
+        "title": ""
+      },
+      {
+        "text": "Double ×2",
+        "label": "Double pattern length and repeat notes",
+        "title": "Double the length and repeat every note. Undo restores the original."
+      },
+      {
+        "text": "PROJECT · C MIN",
+        "label": "Drums, track 1 effective scale: PROJECT · C MIN. Open scale selector.",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Shorter gate for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Longer gate for Drums, track 1",
+        "title": ""
+      },
+      {
+        "text": "FILL",
+        "label": "Euclidean fill rails over the Drums, track 1 rows",
+        "title": ""
+      },
+      {
+        "text": "SAMPLE",
+        "label": null,
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous drum sounds",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next drum sounds",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for KICK fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for KICK fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to KICK row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for SNARE fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for SNARE fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to SNARE row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to HAT row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for OPEN HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for OPEN HAT fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate OPEN HAT fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate OPEN HAT fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to OPEN HAT row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for CLAP fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for CLAP fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CLAP fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CLAP fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to CLAP row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate TOM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate TOM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to TOM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for KICK 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for KICK 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK 2 fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate KICK 2 fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to KICK 2 row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for SNARE 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for SNARE 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE 2 fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SNARE 2 fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to SNARE 2 row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for HAT 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for HAT 2 fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT 2 fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HAT 2 fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to HAT 2 row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for MID TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for MID TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate MID TOM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate MID TOM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to MID TOM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for HIGH TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for HIGH TOM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HIGH TOM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate HIGH TOM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to HIGH TOM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for RIM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for RIM fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate RIM fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate RIM fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to RIM row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for SHAKER fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for SHAKER fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SHAKER fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate SHAKER fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to SHAKER row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for COWBELL fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for COWBELL fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate COWBELL fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate COWBELL fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to COWBELL row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for CRASH fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for CRASH fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CRASH fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate CRASH fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to CRASH row",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Fewer pulses for PERC fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "More pulses for PERC fill",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate PERC fill back",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Rotate PERC fill forward",
+        "title": ""
+      },
+      {
+        "text": "SET",
+        "label": "Apply Euclidean fill to PERC row",
+        "title": ""
+      },
+      {
+        "text": "NEXT",
+        "label": "Drums, track 1 slot 1, pattern A: plays once, then next",
+        "title": ""
+      },
+      {
+        "text": "MUTE",
+        "label": "Mute Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "SOLO",
+        "label": "Solo Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous preset for Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "ROUND TRI",
+        "label": "Browse Bass, track 2 instrument sounds: ROUND TRI",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next preset for Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Transpose octave down for Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Transpose octave up for Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "Color",
+        "label": "Bass, track 2 track color",
+        "title": ""
+      },
+      {
+        "text": "Double ×2",
+        "label": "Double pattern length and repeat notes",
+        "title": "Double the length and repeat every note. Undo restores the original."
+      },
+      {
+        "text": "PROJECT · C MIN",
+        "label": "Bass, track 2 effective scale: PROJECT · C MIN. Open scale selector.",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Shorter gate for Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Longer gate for Bass, track 2",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Bass, track 2 octave view down",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Bass, track 2 octave view up",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Bass, track 2 semitone view down",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Bass, track 2 semitone view up",
+        "title": ""
+      },
+      {
+        "text": "1.00×RESET",
+        "label": "Bass, track 2 grid zoom 1.00× — tap to reset",
+        "title": ""
+      },
+      {
+        "text": "NEXT",
+        "label": "Bass, track 2 slot 1, pattern A: plays once, then next",
+        "title": ""
+      },
+      {
+        "text": "MUTE",
+        "label": "Mute Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "SOLO",
+        "label": "Solo Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous preset for Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "SOFT P25",
+        "label": "Browse Chords, track 3 instrument sounds: SOFT P25",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next preset for Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Transpose octave down for Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Transpose octave up for Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "Color",
+        "label": "Chords, track 3 track color",
+        "title": ""
+      },
+      {
+        "text": "Double ×2",
+        "label": "Double pattern length and repeat notes",
+        "title": "Double the length and repeat every note. Undo restores the original."
+      },
+      {
+        "text": "PROJECT · C MIN",
+        "label": "Chords, track 3 effective scale: PROJECT · C MIN. Open scale selector.",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Shorter gate for Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Longer gate for Chords, track 3",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Chords, track 3 octave view down",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Chords, track 3 octave view up",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Chords, track 3 semitone view down",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Chords, track 3 semitone view up",
+        "title": ""
+      },
+      {
+        "text": "1.00×RESET",
+        "label": "Chords, track 3 grid zoom 1.00× — tap to reset",
+        "title": ""
+      },
+      {
+        "text": "NEXT",
+        "label": "Chords, track 3 slot 1, pattern A: plays once, then next",
+        "title": ""
+      },
+      {
+        "text": "MUTE",
+        "label": "Mute Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "SOLO",
+        "label": "Solo Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Previous preset for Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "VIBRA TRI",
+        "label": "Browse Leads, track 4 instrument sounds: VIBRA TRI",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Next preset for Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Transpose octave down for Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Transpose octave up for Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "Color",
+        "label": "Leads, track 4 track color",
+        "title": ""
+      },
+      {
+        "text": "Double ×2",
+        "label": "Double pattern length and repeat notes",
+        "title": "Double the length and repeat every note. Undo restores the original."
+      },
+      {
+        "text": "PROJECT · C MIN",
+        "label": "Leads, track 4 effective scale: PROJECT · C MIN. Open scale selector.",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Shorter gate for Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Longer gate for Leads, track 4",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Leads, track 4 octave view down",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Leads, track 4 octave view up",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Leads, track 4 semitone view down",
+        "title": ""
+      },
+      {
+        "text": "",
+        "label": "Leads, track 4 semitone view up",
+        "title": ""
+      },
+      {
+        "text": "1.00×RESET",
+        "label": "Leads, track 4 grid zoom 1.00× — tap to reset",
+        "title": ""
+      },
+      {
+        "text": "NEXT",
+        "label": "Leads, track 4 slot 1, pattern A: plays once, then next",
+        "title": ""
+      }
+    ],
+    "errors": []
+  }
+]

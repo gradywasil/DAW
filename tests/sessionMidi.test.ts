@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { Session } from "../src/engine/session";
 import type { VoiceNoteOnEvent } from "../src/audio/presets";
 import {
@@ -24,7 +24,9 @@ function fakeEngine(): never {
   } as never;
 }
 
-function createTestSession() {
+function createTestSession(
+  options: { context?: AudioContextLike; preload?: () => Promise<void> } = {},
+) {
   const sent: VoiceNoteOnEvent[][] = [];
   const host: VoiceEngineHost = {
     outbox: new EventOutbox(4),
@@ -40,13 +42,15 @@ function createTestSession() {
     connect: () => {},
     allOff: () => {},
     dispose: () => {},
-    preload: async () => {},
+    preload: options.preload ?? (async () => {}),
     settled: async () => {},
     droppedCount: () => 0,
     stolenCount: () => 0,
   };
   const session = new Session({
-    engine: fakeEngine(),
+    engine: options.context
+      ? ({ getContext: () => options.context, unlock: async () => {} } as never)
+      : fakeEngine(),
     createVoiceEngineHost: async () => host,
     createSampleVoiceHost: async () => samples,
     setIntervalFn: () => 0,
@@ -57,6 +61,25 @@ function createTestSession() {
 }
 
 describe("Session.triggerMidiNote", () => {
+  it("timestamps a cold sample after decoding so the first MIDI note can sound", async () => {
+    let now = 10;
+    const context = {
+      ...fakeCtx(),
+      get currentTime() {
+        return now;
+      },
+    };
+    const { session, sent } = createTestSession({
+      context,
+      preload: async () => {
+        now += 0.2;
+      },
+    });
+    session.setLaneSound("bass", "preset-bass-13");
+    await session.triggerMidiNote("bass", 36);
+    expect(sent[0][0].sample).toBeDefined();
+    expect(sent[0][0].time).toBeGreaterThan(now);
+  });
   it("triggers drum hits using GM note mapping with velocity scaling", async () => {
     const { session, sent } = createTestSession();
 

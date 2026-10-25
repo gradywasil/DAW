@@ -99,7 +99,14 @@ async function bootIframe(
   // the demo loaded — and they never were the thing under test here. The
   // drums KIT readout is the stage-independent demo signal (it was already
   // the phone branch's).
-  await poll(() => $$(".head-ctl-value").some((v) => (v as HTMLSelectElement).selectedOptions?.[0]?.textContent?.trim() === "SOFT STEP"), 5_000, "demo loaded");
+  await poll(
+    () =>
+      $$(".head-sound-browse").some((v) =>
+        v.textContent?.includes("SOFT STEP"),
+      ),
+    5_000,
+    "demo loaded",
+  );
   // M-3: the pinned transport row is part of the phone boot signal — the
   // gate fails LOUD if the row (or its button) never renders.
   if (w < 768) {
@@ -161,7 +168,9 @@ function assertPinnedCentered(
   win: Window,
   where: string,
 ): void {
-  const btn = idoc().querySelector<HTMLElement>(".phone-transport .booth-btn-play");
+  const btn = idoc().querySelector<HTMLElement>(
+    ".phone-transport .booth-btn-play",
+  );
   if (!btn) throw new Error(`[${where}] pinned play button missing`);
   const r = btn.getBoundingClientRect();
   const vw = win.innerWidth;
@@ -180,7 +189,10 @@ function assertPinnedCentered(
   ).toBe(true);
   // Not just geometrically visible — the button actually receives the hit
   // at its center (no overlay/neighbor stealing the tap).
-  const hit = idoc().elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+  const hit = idoc().elementFromPoint(
+    r.left + r.width / 2,
+    r.top + r.height / 2,
+  );
   expect(
     hit === btn || (hit && btn.contains(hit)),
     `[${where}] elementFromPoint at the button center resolves ${
@@ -193,7 +205,9 @@ function assertPinnedCentered(
  * lattice-scanned strap region (the target-size measurement law, reduced to
  * the one control this gate owns). */
 function assertHitBox44(idoc: () => Document, win: Window): void {
-  const btn = idoc().querySelector<HTMLElement>(".phone-transport .booth-btn-play");
+  const btn = idoc().querySelector<HTMLElement>(
+    ".phone-transport .booth-btn-play",
+  );
   if (!btn) throw new Error("pinned play button missing");
   const doc = idoc();
   const belongs = (x: number, y: number) => {
@@ -322,22 +336,26 @@ describe("M-3 phone transport — pinned centered always-visible play/stop", () 
     },
   );
 
-  it("desktop 1280×800: the Booth play button is the one button, in the Playback group; no phone transport row", { timeout: 120_000 }, async () => {
-    const { iframe, win, $, $$ } = await bootIframe(1280, 800);
-    try {
-      expect($$(".booth-btn-play").length).toBe(1);
-      expect(
-        $(".booth .booth-group .booth-btn-play"),
-        "desktop play button must render inside the Booth Playback group",
-      ).toBeTruthy();
-      expect(
-        $$(".phone-transport").length,
-        "no phone transport row may render outside the phone stage",
-      ).toBe(0);
-      expect($$(".phone-chrome").length).toBe(0);
-      expect(win.innerWidth).toBe(1280);
-    } finally {
-      await teardown(iframe);
-    }
-  });
+  it(
+    "desktop 1280×800: the Booth play button is the one button, in the Playback group; no phone transport row",
+    { timeout: 120_000 },
+    async () => {
+      const { iframe, win, $, $$ } = await bootIframe(1280, 800);
+      try {
+        expect($$(".booth-btn-play").length).toBe(1);
+        expect(
+          $(".booth .booth-group .booth-btn-play"),
+          "desktop play button must render inside the Booth Playback group",
+        ).toBeTruthy();
+        expect(
+          $$(".phone-transport").length,
+          "no phone transport row may render outside the phone stage",
+        ).toBe(0);
+        expect($$(".phone-chrome").length).toBe(0);
+        expect(win.innerWidth).toBe(1280);
+      } finally {
+        await teardown(iframe);
+      }
+    },
+  );
 });

@@ -2,7 +2,7 @@
  * Jam Drawer Component — Real-Time Collaborative Jamming & Ensemble Controls.
  */
 
-import { Show, For, createSignal, onMount } from "solid-js";
+import { Show, For, createSignal, onCleanup } from "solid-js";
 import {
   getJamSession,
   jamConnected,
@@ -46,15 +46,8 @@ export default function JamDrawer(props: JamDrawerProps) {
   const [copied, setCopied] = createSignal(false);
   const [editingRoom, setEditingRoom] = createSignal(false);
   const [roomInput, setRoomInput] = createSignal(jamRoomId());
-  const [p2pOpen, setP2pOpen] = createSignal(false);
-  const [offerToken, setOfferToken] = createSignal("");
-  const [p2pStatus, setP2pStatus] = createSignal("");
-
-  onMount(() => {
-    if (!jamConnected()) {
-      session.connect();
-    }
-  });
+  let copyTimer: ReturnType<typeof setTimeout> | undefined;
+  onCleanup(() => clearTimeout(copyTimer));
 
   const handleCopyLink = () => {
     const url =
@@ -63,54 +56,29 @@ export default function JamDrawer(props: JamDrawerProps) {
         : `?jam=${jamRoomId()}`;
     navigator.clipboard?.writeText(url);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
+    clearTimeout(copyTimer);
+    copyTimer = setTimeout(() => setCopied(false), 1800);
   };
 
   const handleRoomSwitch = (e: Event) => {
     e.preventDefault();
-    const clean = roomInput().trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+    const clean = roomInput()
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "");
     if (clean) {
       session.connect(clean);
       setEditingRoom(false);
     }
   };
 
-  const handleCreateOffer = async () => {
-    try {
-      setP2pStatus("Generating P2P Invite Token...");
-      const token = await session.createP2POffer();
-      setOfferToken(token);
-      setP2pStatus("Token Ready! Send this to your jam partner.");
-    } catch (err) {
-      setP2pStatus("Failed: " + String(err));
-    }
-  };
-
-  const handleAcceptOffer = async () => {
-    try {
-      setP2pStatus("Generating Answer Token...");
-      const token = await session.acceptP2POffer(offerToken());
-      setOfferToken(token);
-      setP2pStatus("Answer Ready! Send back to host.");
-    } catch (err) {
-      setP2pStatus("Failed: " + String(err));
-    }
-  };
-
   return (
-    <div
-      class="jam-pop"
-      role="dialog"
-      aria-label="Collaborative Jam Session"
-    >
+    <div class="jam-pop" role="dialog" aria-label="Collaborative Jam Session">
       <div class="jam-pop-header">
         <div class="jam-pop-title-wrap">
           <IconJam size={14} />
-          <span class="jam-pop-title">JAM ENSEMBLE</span>
-          <span
-            class="jam-badge"
-            classList={{ "is-online": jamConnected() }}
-          >
+          <span class="jam-pop-title">LOCAL TAB JAM</span>
+          <span class="jam-badge" classList={{ "is-online": jamConnected() }}>
             {jamConnected() ? "LIVE" : "OFFLINE"}
           </span>
         </div>
@@ -124,6 +92,19 @@ export default function JamDrawer(props: JamDrawerProps) {
         </button>
       </div>
 
+      <p>
+        Sync edits and transport between tabs in this browser profile. Room
+        links do not connect different devices.
+      </p>
+      <button
+        type="button"
+        class="jam-btn-small"
+        onClick={() =>
+          jamConnected() ? session.disconnect() : session.connect()
+        }
+      >
+        {jamConnected() ? "Leave session" : "Join local session"}
+      </button>
       {/* Room Identifier & Sharing */}
       <div class="jam-room-bar">
         <Show
@@ -149,7 +130,10 @@ export default function JamDrawer(props: JamDrawerProps) {
             </>
           }
         >
-          <form onSubmit={handleRoomSwitch} style={{ display: "flex", gap: "4px", width: "100%" }}>
+          <form
+            onSubmit={handleRoomSwitch}
+            style={{ display: "flex", gap: "4px", width: "100%" }}
+          >
             <input
               type="text"
               class="jam-self-name-input"
@@ -218,7 +202,8 @@ export default function JamDrawer(props: JamDrawerProps) {
                   "text-align": "center",
                 }}
               >
-                No other peers connected yet. Open another tab or share your link!
+                No other peers connected yet. Open another tab or share your
+                link!
               </div>
             }
           >
@@ -307,50 +292,6 @@ export default function JamDrawer(props: JamDrawerProps) {
             )}
           </For>
         </div>
-      </div>
-
-      {/* WebRTC Direct P2P Tunnel */}
-      <div>
-        <button
-          type="button"
-          class="jam-btn-small"
-          style={{ width: "100%", "text-align": "center" }}
-          onClick={() => setP2pOpen(!p2pOpen())}
-        >
-          {p2pOpen() ? "▲ HIDE DIRECT P2P TUNNEL" : "▼ DIRECT WEBRTC P2P TUNNEL"}
-        </button>
-
-        <Show when={p2pOpen()}>
-          <div class="jam-webrtc-box" style={{ "margin-top": "6px" }}>
-            <div style={{ display: "flex", gap: "6px" }}>
-              <button
-                type="button"
-                class="jam-btn-small"
-                onClick={handleCreateOffer}
-              >
-                GENERATE INVITE
-              </button>
-              <button
-                type="button"
-                class="jam-btn-small"
-                onClick={handleAcceptOffer}
-              >
-                ACCEPT INVITE
-              </button>
-            </div>
-            <textarea
-              class="jam-token-area"
-              placeholder="Paste or copy P2P token here..."
-              value={offerToken()}
-              onInput={(e) => setOfferToken(e.currentTarget.value)}
-            />
-            <Show when={p2pStatus()}>
-              <div style={{ "font-size": "10px", color: "var(--color-ink)" }}>
-                {p2pStatus()}
-              </div>
-            </Show>
-          </div>
-        </Show>
       </div>
     </div>
   );

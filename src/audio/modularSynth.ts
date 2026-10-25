@@ -49,7 +49,8 @@ export interface ModularPatchGraph {
   connections: ModularConnection[];
 }
 
-export const [isModularCanvasOpen, setIsModularCanvasOpen] = createSignal(false);
+export const [isModularCanvasOpen, setIsModularCanvasOpen] =
+  createSignal(false);
 
 const DEFAULT_NODES: ModularNode[] = [
   {
@@ -211,11 +212,17 @@ export function isValidConnection(
     return { valid: false, reason: "Cannot connect a node to itself." };
   }
   if (sourceJack.direction !== "out" || targetJack.direction !== "in") {
-    return { valid: false, reason: "Must connect an output jack to an input jack." };
+    return {
+      valid: false,
+      reason: "Must connect an output jack to an input jack.",
+    };
   }
   // Audio outputs can feed audio inputs or CV inputs; CV outputs should feed CV inputs
   if (sourceJack.type === "control" && targetJack.type === "audio") {
-    return { valid: false, reason: "Control voltages (CV) cannot directly feed audio inputs." };
+    return {
+      valid: false,
+      reason: "Control voltages (CV) cannot directly feed audio inputs.",
+    };
   }
   return { valid: true };
 }
@@ -237,7 +244,7 @@ export function deserializeModularGraph(rawJson: string): ModularPatchGraph {
       throw new Error("Invalid modular graph structure.");
     }
     return parsed as ModularPatchGraph;
-  } catch (e) {
+  } catch {
     return { nodes: DEFAULT_NODES, connections: DEFAULT_CONNECTIONS };
   }
 }

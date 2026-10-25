@@ -11,8 +11,8 @@ export interface AudioSlice {
   readonly id: string;
   readonly index: number;
   start: number; // in seconds
-  end: number;   // in seconds
-  gain: number;  // 0 to 2.0 (1.0 = normal)
+  end: number; // in seconds
+  gain: number; // 0 to 2.0 (1.0 = normal)
   reverse: boolean;
   pitchSemitones: number; // -12 to +12
   readonly energy: number; // 0 to 1
@@ -76,8 +76,11 @@ export function detectTransients(
   if (maxDiff === 0) return [0];
 
   // Invert sensitivity: 1.0 = highly sensitive (low threshold), 0.1 = low sensitivity (high threshold)
-  const threshold = maxDiff * (1.05 - Math.max(0.1, Math.min(0.95, sensitivity)));
-  const minHopDistance = Math.floor((minDistanceSeconds * sampleRate) / hopSize);
+  const threshold =
+    maxDiff * (1.05 - Math.max(0.1, Math.min(0.95, sensitivity)));
+  const minHopDistance = Math.floor(
+    (minDistanceSeconds * sampleRate) / hopSize,
+  );
 
   const onsetPoints: number[] = [0]; // always start with 0
   let lastHop = 0;
@@ -108,7 +111,7 @@ export function calculateSlices(
   sensitivity = 0.5,
 ): AudioSlice[] {
   const duration = buffer.duration;
-  let splitPoints: number[] = [];
+  let splitPoints: number[];
 
   if (mode === "grid-4") {
     splitPoints = [0, duration * 0.25, duration * 0.5, duration * 0.75];
@@ -154,8 +157,12 @@ export function renderSliceBuffer(
 ): AudioBuffer {
   const sampleRate = sourceBuffer.sampleRate;
   const startSample = Math.max(0, Math.floor(slice.start * sampleRate));
-  const endSample = Math.min(sourceBuffer.length, Math.ceil(slice.end * sampleRate));
-  const length = Math.max(1, endSample - startSample);
+  const endSample = Math.min(
+    sourceBuffer.length,
+    Math.ceil(slice.end * sampleRate),
+  );
+  const rate = 2 ** (slice.pitchSemitones / 12);
+  const length = Math.max(1, Math.round((endSample - startSample) / rate));
 
   const outputBuffer = audioCtx.createBuffer(
     sourceBuffer.numberOfChannels,
@@ -167,14 +174,19 @@ export function renderSliceBuffer(
     const srcData = sourceBuffer.getChannelData(ch);
     const destData = outputBuffer.getChannelData(ch);
 
-    if (slice.reverse) {
-      for (let i = 0; i < length; i++) {
-        destData[i] = (srcData[endSample - 1 - i] ?? 0) * slice.gain;
-      }
-    } else {
-      for (let i = 0; i < length; i++) {
-        destData[i] = (srcData[startSample + i] ?? 0) * slice.gain;
-      }
+    for (let i = 0; i < length; i++) {
+      const position = Math.max(
+        startSample,
+        Math.min(
+          endSample - 1,
+          slice.reverse ? endSample - 1 - i * rate : startSample + i * rate,
+        ),
+      );
+      const index = Math.floor(position);
+      const fraction = position - index;
+      const a = srcData[index] ?? 0;
+      const b = srcData[Math.min(endSample - 1, index + 1)] ?? 0;
+      destData[i] = (a + (b - a) * fraction) * slice.gain;
     }
   }
 
@@ -202,7 +214,10 @@ export function generateSyntheticBreakbeat(
   // Kick on 0, 7, 10
   // Snare on 4, 12, with ghost notes on 9, 15
   // Hi-hats on all 16ths
-  const hits: Array<{ step: number; type: "kick" | "snare" | "ghost" | "hat" }> = [
+  const hits: Array<{
+    step: number;
+    type: "kick" | "snare" | "ghost" | "hat";
+  }> = [
     { step: 0, type: "kick" },
     { step: 1, type: "hat" },
     { step: 2, type: "hat" },
@@ -236,7 +251,9 @@ export function generateSyntheticBreakbeat(
         right[hitStart + i]! += val;
       }
     } else if (hit.type === "snare" || hit.type === "ghost") {
-      const snareLen = Math.floor((hit.type === "snare" ? 0.18 : 0.08) * sampleRate);
+      const snareLen = Math.floor(
+        (hit.type === "snare" ? 0.18 : 0.08) * sampleRate,
+      );
       const amp = hit.type === "snare" ? 0.75 : 0.3;
       for (let i = 0; i < snareLen && hitStart + i < totalSamples; i++) {
         const t = i / sampleRate;

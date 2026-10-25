@@ -1,8 +1,10 @@
 import { createSignal } from "solid-js";
-import type { Note, PitchedPattern, ProjectDocument } from "../document/schema";
+import type { Note, PitchedPattern } from "../document/schema";
 import { commitDocumentEdit, docStore } from "../state/store";
+import { currentPatternFor } from "../state/selection";
 
-export const [isChordGeneratorOpen, setIsChordGeneratorOpen] = createSignal(false);
+export const [isChordGeneratorOpen, setIsChordGeneratorOpen] =
+  createSignal(false);
 
 export type VoicingStyle =
   | "triad"
@@ -52,7 +54,8 @@ export const CHORD_PROGRESSIONS: readonly ChordTemplate[] = [
     id: "pop-anthem",
     name: "Golden Anthem",
     genre: "Pop / Indie",
-    description: "The timeless 4-chord sequence behind hundreds of global hits.",
+    description:
+      "The timeless 4-chord sequence behind hundreds of global hits.",
     rootDegrees: [0, 4, 5, 3],
     chordNames: ["I", "V", "vi", "IV"],
   },
@@ -76,7 +79,8 @@ export const CHORD_PROGRESSIONS: readonly ChordTemplate[] = [
     id: "andalusian",
     name: "Spanish Cadence",
     genre: "Flamenco / Drama",
-    description: "Descending flamenco turnaround with high tension and resolution.",
+    description:
+      "Descending flamenco turnaround with high tension and resolution.",
     rootDegrees: [0, 6, 5, 4],
     chordNames: ["i", "VII", "VI", "V"],
   },
@@ -127,63 +131,23 @@ export function generateChordNotes(
   bars = 1,
 ): Note[] {
   const notes: Note[] = [];
-  const roots = progression.rootDegrees;
-  const numChords = roots.length;
   const maxSteps = bars * 16;
-
-  if (rhythm === "whole-bar") {
-    // 1 chord per 16 steps
-    const chordsToPlace = Math.min(bars, numChords);
-    for (let i = 0; i < chordsToPlace; i++) {
-      const root = roots[i % numChords]!;
-      const degrees = buildChordDegrees(root, voicing);
-      const start = i * 16;
-      const length = 15; // 15 sixteenths with 1-sixteenth breath
-      if (start < maxSteps) {
-        for (const deg of degrees) {
-          notes.push({ degree: deg, start, length });
-        }
-      }
-    }
-  } else if (rhythm === "half-bar") {
-    // If 1 bar: 4 chords fit at 4-step intervals (beats 1, 2, 3, 4)
-    // If >= 2 bars: chords fit at 8-step intervals (half-bars)
-    const stepInterval = bars === 1 ? 4 : 8;
-    const noteLength = bars === 1 ? 3.75 : 7.5;
-    const maxChords = Math.min(Math.floor(maxSteps / stepInterval), numChords);
-
-    for (let i = 0; i < maxChords; i++) {
-      const root = roots[i % numChords]!;
-      const degrees = buildChordDegrees(root, voicing);
-      const start = i * stepInterval;
-      if (start < maxSteps) {
-        for (const deg of degrees) {
-          notes.push({ degree: deg, start, length: noteLength });
-        }
-      }
-    }
-  } else if (rhythm === "syncopated") {
-    // 1-bar syncopation (steps 0, 3, 6, 8, 11, 14)
-    const syncPattern = [
-      { start: 0, length: 2.75 },
-      { start: 3, length: 2.75 },
-      { start: 6, length: 1.75 },
-      { start: 8, length: 2.75 },
-      { start: 11, length: 2.75 },
-      { start: 14, length: 1.75 },
-    ];
-    for (let i = 0; i < syncPattern.length; i++) {
-      const timing = syncPattern[i]!;
-      if (timing.start < maxSteps) {
-        const root = roots[i % numChords]!;
-        const degrees = buildChordDegrees(root, voicing);
-        for (const deg of degrees) {
-          notes.push({ degree: deg, start: timing.start, length: timing.length });
-        }
-      }
-    }
-  }
-
+  const interval = rhythm === "whole-bar" ? 16 : 8;
+  const timings =
+    rhythm === "syncopated"
+      ? Array.from({ length: bars }, (_, bar) =>
+          [0, 3, 6, 8, 11, 14].map((start) => bar * 16 + start),
+        ).flat()
+      : Array.from(
+          { length: Math.ceil(maxSteps / interval) },
+          (_, i) => i * interval,
+        );
+  timings.forEach((start, i) => {
+    const root = progression.rootDegrees[i % progression.rootDegrees.length];
+    const length = rhythm === "syncopated" ? 1.75 : interval - 0.5;
+    for (const degree of buildChordDegrees(root, voicing))
+      notes.push({ degree, start, length: Math.min(length, maxSteps - start) });
+  });
   return notes;
 }
 
@@ -193,81 +157,43 @@ export function generateChordNotes(
  */
 export function applyProgressionToProject(
   progression: ChordTemplate,
-  voicing: VoicingStyle,
   rhythm: ChordRhythm,
   includeBass = true,
 ): void {
   const currentDoc = docStore.getState().doc;
-
-  const chordsPatterns = currentDoc.patterns.chords;
-  if (!chordsPatterns || chordsPatterns.length === 0) return;
-
-  const activeChordsPattern = chordsPatterns[0] as PitchedPattern;
-  const bars = activeChordsPattern.bars;
-  const chordNotes = generateChordNotes(progression, voicing, rhythm, bars);
-
-  // Compute required row degrees so all chord notes are visible on the grid
-  const uniqueDegrees = Array.from(new Set(chordNotes.map((n) => n.degree))).sort(
-    (a, b) => a - b,
-  );
-
-  const updatedDoc: ProjectDocument = JSON.parse(JSON.stringify(currentDoc));
-
-  // Update Chords lane active pattern
-  const existingDegrees = new Set(activeChordsPattern.rowDegrees);
-  for (const deg of uniqueDegrees) {
-    existingDegrees.add(deg);
-  }
-  const combinedDegrees = Array.from(existingDegrees).sort((a, b) => a - b);
-
-  const nextChordsPattern: PitchedPattern = {
-    ...activeChordsPattern,
-    rowDegrees: combinedDegrees,
-    notes: chordNotes,
+  const chords = currentPatternFor("chords");
+  if (!chords || chords.kind !== "pitched") return;
+  const replace = (pattern: PitchedPattern, notes: Note[]): PitchedPattern => ({
+    ...pattern,
+    rowDegrees: [
+      ...new Set([...pattern.rowDegrees, ...notes.map((n) => n.degree)]),
+    ].sort((a, b) => a - b),
+    notes,
+  });
+  // Chords stores roots; the canonical compiler expands each root into a triad.
+  const notes = generateChordNotes(
+    progression,
+    "triad",
+    rhythm,
+    chords.bars,
+  ).filter((_, i) => i % 3 === 0);
+  const patterns = {
+    ...currentDoc.patterns,
+    chords: currentDoc.patterns.chords.map((p) =>
+      p.id === chords.id ? replace(chords, notes) : p,
+    ),
   };
-
-  const nextPatterns: Record<string, readonly any[]> = {
-    ...updatedDoc.patterns,
-    chords: [nextChordsPattern, ...chordsPatterns.slice(1)],
-  };
-
-  // Update Bass lane if requested
-  if (includeBass) {
-    const bassPatterns = updatedDoc.patterns.bass;
-    if (bassPatterns && bassPatterns.length > 0) {
-      const activeBassPattern = bassPatterns[0] as PitchedPattern;
-      const bassBars = activeBassPattern.bars;
-      const bassMaxSteps = bassBars * 16;
-      const bassNotes: Note[] = [];
-
-      const stepInterval = bassBars === 1 ? 4 : 8;
-      const bassLen = bassBars === 1 ? 3.75 : 7.0;
-      const maxChords = Math.min(Math.floor(bassMaxSteps / stepInterval), progression.rootDegrees.length);
-
-      for (let i = 0; i < maxChords; i++) {
-        const deg = progression.rootDegrees[i]!;
-        const start = i * stepInterval;
-        if (start < bassMaxSteps) {
-          bassNotes.push({ degree: deg, start, length: bassLen });
-        }
-      }
-
-      const existingBassDegrees = new Set(activeBassPattern.rowDegrees);
-      for (const n of bassNotes) {
-        existingBassDegrees.add(n.degree);
-      }
-
-      const nextBassPattern: PitchedPattern = {
-        ...activeBassPattern,
-        rowDegrees: Array.from(existingBassDegrees).sort((a, b) => a - b),
-        notes: bassNotes,
-      };
-
-      nextPatterns.bass = [nextBassPattern, ...bassPatterns.slice(1)];
-    }
+  const bass = currentPatternFor("bass");
+  if (includeBass && bass?.kind === "pitched") {
+    const bassNotes = generateChordNotes(
+      progression,
+      "triad",
+      rhythm,
+      bass.bars,
+    ).filter((_, i) => i % 3 === 0);
+    patterns.bass = currentDoc.patterns.bass.map((p) =>
+      p.id === bass.id ? replace(bass, bassNotes) : p,
+    );
   }
-
-  (updatedDoc as any).patterns = nextPatterns;
-
-  commitDocumentEdit(currentDoc, updatedDoc);
+  commitDocumentEdit(currentDoc, { ...currentDoc, patterns });
 }

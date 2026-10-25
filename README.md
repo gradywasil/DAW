@@ -17,7 +17,7 @@ A browser music studio with scale-aware note grids, a growing sound library, an 
 | Choose sounds and draw notes. | Turn patterns into an arrangement. | Balance tracks and shape their processing. | Build moving artwork driven by the music. |
 | Four core tracks plus four optional pitched instruments. | Copy, reuse, repeat, and launch blocks or sections. | Track/master effects, EQ, compression, and measured Auto Mix suggestions. | Per-instrument effects, color, scale, motion, and MP4 export. |
 
-The current library contains **836 pitched presets across 18 categories** and **80 drum kits with 16 slots each**. Projects save locally in your browser, with downloadable project files for backup and transfer. No account is required.
+The current library contains **848 pitched presets across 18 categories** and **80 drum kits with 16 slots each**. Projects save locally in your browser, with downloadable project files for backup and transfer. No account is required.
 
 ## Make your first track
 

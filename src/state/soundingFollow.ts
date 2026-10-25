@@ -15,11 +15,13 @@
  * the follow is ref-counted per consumer mount instead of living in the rail.
  */
 
-import { createSignal } from "solid-js";
+import { createEffect, createRoot, createSignal, on, untrack } from "solid-js";
 import type { LaneId } from "../document/schema";
 import { getSession } from "../engine/session";
 import { RAIL_ROWS } from "./patternRail";
 import { selectPattern } from "./selection";
+import { phonePage } from "./phonePage";
+import { vizMode } from "./vizMode";
 
 const [sounding, setSounding] = createSignal<{
   readonly [L in LaneId]: string | null;
@@ -57,6 +59,7 @@ const [soundingSlot, setSoundingSlot] = createSignal<{
 export { sounding, soundingSlot };
 
 let followFrame = 0;
+let following = false;
 /**
  * TH-4(b) zero-mid-gesture-mutations law: while a pointer gesture is ARMED
  * (button held — a strict superset of every drag window, rail or grid), the
@@ -114,15 +117,19 @@ function pollSounding(): void {
 /** (Re)align the follow loop with the transport: rAF while playing, one
  *  parked read while stopped. Idempotent — safe on every transport emit. */
 function syncSoundingFollow(): void {
-  cancelAnimationFrame(followFrame);
-  if (getSession().transport.snapshot.playing) {
+  const visible = !document.hidden && !vizMode() && phonePage() !== "mixer";
+  if (visible && getSession().transport.snapshot.playing) {
+    if (following) return;
+    following = true;
     const tick = () => {
-      if (heldPointers === 0) pollSounding();
-      followFrame = requestAnimationFrame(tick);
+      if (heldPointers === 0) untrack(pollSounding);
+      if (following) followFrame = requestAnimationFrame(tick);
     };
     tick();
   } else {
-    pollSounding();
+    following = false;
+    cancelAnimationFrame(followFrame);
+    if (visible) untrack(pollSounding);
   }
 }
 
@@ -163,10 +170,17 @@ export function mountSoundingFollow(): () => void {
   if (mounts === 1) {
     const unsubscribe = getSession().subscribe(() => syncSoundingFollow());
     const unwatch = watchHeldPointers();
-    syncSoundingFollow();
+    const stopVisibility = createRoot((dispose) => {
+      createEffect(on([phonePage, vizMode], syncSoundingFollow));
+      return dispose;
+    });
+    document.addEventListener("visibilitychange", syncSoundingFollow);
     teardown = () => {
       unsubscribe();
       unwatch();
+      stopVisibility();
+      document.removeEventListener("visibilitychange", syncSoundingFollow);
+      following = false;
       cancelAnimationFrame(followFrame);
       setSounding({
         drums: null,
